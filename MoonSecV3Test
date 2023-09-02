@@ -1,9 +1,5 @@
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 
---- Window
-
-local Window = OrionLib:MakeWindow({Name = "Harlen Hub V3", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
-
 --- Game Indentificar 
 
 if game.Id == 662417684 then
@@ -11,6 +7,10 @@ if game.Id == 662417684 then
 else
      game.Players.LocalPlayer:Kick("Para de usar script em lugar errado")
 end
+
+--- Window
+
+local Window = OrionLib:MakeWindow({Name = "Harlen Hub V3", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
 
 --- Tab
 
