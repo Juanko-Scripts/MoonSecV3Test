@@ -4,6 +4,14 @@ local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shl
 
 local Window = OrionLib:MakeWindow({Name = "Harlen Hub V3", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
 
+--- Game Indentificar 
+
+if game.Id == 662417684 then
+   loadstring(game:HttpGet("https://raw.githubusercontent.com/harlenscripts/Harlenscripts0/main/Lucky%20block%20By%20harlen"))()
+else
+     game.Players.LocalPlayer:Kick("Para de usar script em lugar errado")
+end
+
 --- Tab
 
 local Tab = Window:MakeTab({
