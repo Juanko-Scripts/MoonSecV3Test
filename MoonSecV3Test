@@ -15,7 +15,7 @@ local Tab = Window:MakeTab({
 --- Section
 
 local Section = Tab:AddSection({
-	Name = "By Harlen_Br0"
+	Name = "brazilian script By Harlen_Br0"
 })
 
 --- Notifier
