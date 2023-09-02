@@ -7,7 +7,7 @@ local Window = OrionLib:MakeWindow({Name = "Harlen Hub V3", HidePremium = false,
 --- Tab
 
 local Tab = Window:MakeTab({
-	Name = "🌟┃Lucky Block",
+	Name = "🎁┃Lucky Block",
 	Icon = "rbxassetid://4483345998",
 	PremiumOnly = false
 })
@@ -30,7 +30,7 @@ OrionLib:MakeNotification({
 --- meu Botao
 
 Tab:AddButton({
-	Name = "🌟 • Lucky Block, Don't Spam!",
+	Name = "🎁 • Lucky Block, Don't Spam!",
 	Callback = function()
       		game:GetService("ReplicatedStorage"):WaitForChild("SpawnLuckyBlock"):FireServer()
 
@@ -38,7 +38,7 @@ Tab:AddButton({
 })
 
 Tab:AddButton({
-	Name = "🌟 • Super Block, Don't Spam!",
+	Name = "🎁 • Super Block, Don't Spam!",
 	Callback = function()
       		game:GetService("ReplicatedStorage"):WaitForChild("SpawnSuperBlock"):FireServer()
 
@@ -46,14 +46,14 @@ Tab:AddButton({
 })
 
 Tab:AddButton({
-	Name = "🌟 • Diamond Block, Don't Spam!",
+	Name = "🎁 • Diamond Block, Don't Spam!",
 	Callback = function()
       		game:GetService("ReplicatedStorage"):WaitForChild("SpawnDiamondBlock"):FireServer() 
   	end    
 })
 
 Tab:AddButton({
-	Name = "🌟 • Rainbow Block, Don't Spam!",
+	Name = "🎁 • Rainbow Block, Don't Spam!",
 	Callback = function()
       		game:GetService("ReplicatedStorage"):WaitForChild("SpawnRainbowBlock"):FireServer()
 
@@ -61,7 +61,7 @@ Tab:AddButton({
 })
 
 Tab:AddButton({
-	Name = "🌟 • Galaxy Block, Don't Spam!",
+	Name = "🎁 • Galaxy Block, Don't Spam!",
 	Callback = function()
       		game:GetService("ReplicatedStorage"):WaitForChild("SpawnGalaxyBlock"):FireServer()
 
@@ -75,14 +75,14 @@ local Tab = Window:MakeTab({
 })
 
 Tab:AddButton({
-	Name = "✈️ • Fly",
+	Name = "✈️ • Fly",
 	Callback = function()
       		loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
   	end    
 })
 
 Tab:AddButton({
-	Name = "🎯 • Hit Box",
+	Name = "🗡️ • Hit Box",
 	Callback = function()
       		loadstring(game:HttpGet("https://raw.githubusercontent.com/harlenscripts/HitBox/main/hitbox0"))()
   	end    
