@@ -508,25 +508,7 @@ end
 local function onPlayerChatted(player, message)
     -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
     if player.Name == targetPlayerName and message == ".Greet" then
-KFOXJSNSOJXBAJA = 
- local oldcframe = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
- WaveAnim = Instance.new("Animation")
-			 if (game:GetService"Players".LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15) then
-				 WaveAnim.AnimationId = "rbxassetid://507770239"
-			 else
-				 WaveAnim.AnimationId = "rbxassetid://128777973"
-			 end
-			 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.javierdavid082.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -3)
-			 local CharPos = game.Players.LocalPlayer.Character.PrimaryPart.Position
-					 local tpos = game.Players.javierdavid082.Character:FindFirstChild("HumanoidRootPart").Position
-					 local TPos = Vector3.new(tpos.X,CharPos.Y,tpos.Z)
-					 local NewCFrame = CFrame.new(CharPos,TPos)
-					 Players.LocalPlayer.Character:SetPrimaryPartCFrame(NewCFrame)
- wave = game.Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid'):LoadAnimation(WaveAnim)
- wave:Play(-1, 5, -1)
- wait(1.6)
- wave:Stop()
- game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = oldcframe
+
     end
 end
 -- INFORMACION RANDOM EZ
