@@ -1,40 +1,39 @@
 
-import platform
-import psutil
+from geopy.geocoders import Nominatim
 
-def mostrar_informacion():
-    # Información del sistema operativo
-    sistema = platform.system()
-    version = platform.version()
-    arquitectura = platform.architecture()
-    nombre_maquina = platform.node()
+def obtener_continente(latitud, longitud):
+    geolocator = Nominatim(user_agent="geoapiExercises")
+    location = geolocator.reverse((latitud, longitud), language='en')
 
-    # Información de la CPU
-    cpu_frecuencia = psutil.cpu_freq().current
-    cpu_logicos = psutil.cpu_count(logical=True)
-    cpu_fisicos = psutil.cpu_count(logical=False)
+    if location and 'country' in location.raw['address']:
+        pais = location.raw['address']['country']
+        print(f"Ubicación: {location.address}")
+        print(f"País: {pais}")
 
-    # Información de la memoria
-    memoria = psutil.virtual_memory()
-    memoria_total = memoria.total / (1024 ** 2)  # Convertir a MB
-    memoria_usada = memoria.used / (1024 ** 2)    # Convertir a MB
-    memoria_libre = memoria.available / (1024 ** 2)  # Convertir a MB
+        # Diccionario de continentes
+        continentes = {
+            'Africa': ['Nigeria', 'Sudáfrica', 'Egipto'],
+            'Asia': ['China', 'India', 'Japón'],
+            'Europa': ['Alemania', 'Francia', 'Reino Unido'],
+            'América del Norte': ['Estados Unidos', 'Canadá', 'México'],
+            'América del Sur': ['Brasil', 'Argentina', 'Chile'],
+            'Oceanía': ['Australia', 'Nueva Zelanda'],
+            'Antártida': ['Antártida']
+        }
 
-    # Mostrar la información
-    print("Información del Dispositivo:")
-    print(f"Nombre de la máquina: {nombre_maquina}")
-    print(f"Sistema operativo: {sistema} {version}")
-    print(f"Arquitectura: {arquitectura[0]}")
-    
-    print("\nInformación de la CPU:")
-    print(f"Frecuencia actual: {cpu_frecuencia} MHz")
-    print(f"Número de núcleos lógicos: {cpu_logicos}")
-    print(f"Número de núcleos físicos: {cpu_fisicos}")
+        # Determinar continente
+        continente_encontrado = "Desconocido"
+        for continente, paises in continentes.items():
+            if pais in paises:
+                continente_encontrado = continente
+                break
 
-    print("\nInformación de la Memoria:")
-    print(f"Memoria total: {memoria_total:.2f} MB")
-    print(f"Memoria usada: {memoria_usada:.2f} MB")
-    print(f"Memoria libre: {memoria_libre:.2f} MB")
+        print(f"Continente: {continente_encontrado}")
+    else:
+        print("No se pudo determinar la ubicación.")
 
+# Ejemplo de uso
 if __name__ == "__main__":
-    mostrar_informacion()
+    latitud = float(input("Introduce la latitud: "))
+    longitud = float(input("Introduce la longitud: "))
+    obtener_continente(latitud, longitud)
