@@ -48,7 +48,7 @@ local Global = getgenv and getgenv() or _G
 		Global.Fling = Character.Humanoid.RigType == Enum.HumanoidRigType.R15 and 'LowerTorso' or Global.Reanimation == "PermaDeath" and 'HumanoidRootPart' or 'HumanoidRootPart'
 		Global.ShowReal = true
 		Global.GodMode = Global.Reanimation == 'PermaDeath' and true or false
-		Global.Velocity = -35
+		Global.Velocity = 35000
 		Global.Collisions = true
 		Global.AntiSleep = true
 		Global.MovementVelocity = false
