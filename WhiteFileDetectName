@@ -1,4 +1,5 @@
-local ListRandomWhiteFile = {
+local ABCDE = {
+   WhiteList = { -- Premium User WhiteList
     "ba077acd170a73e61f727be01e14ea8b0763d7554f6794ce48094073001c0c6e6113fe2c2e2384c13a6517f91c4433eb",
     "b92be223f84a09d3",
     "e06903a59f619b35120337b0a75cf65f9931ad845e1e8a4577db846dd5ae1cce",
@@ -9,5 +10,26 @@ local ListRandomWhiteFile = {
     "00e081edf85731ded062fe7b82fd9752cfd2fdb0541caac231cbfe77f33bf03e",
     "2546dec8813729cb",
     "8b54e6ff627d808f156bfa39874625fb64d46283161237a253eee971df99d3163bd30cf1e8ba9fbfad5f365f2dc5954f"
+},
+
+ScriptMode = {
+      Debug = false, -- Mode Debug print Functions
+      Private = false, -- All Scripts Premium
+      FreePremium = false, -- Free Premium All
+      BetaTest = false, -- Show More Fautures Extra
+      NameTitle = "OriginalText", -- Name Script Title
+      NameServer = "SERVER", -- Name Title Default Server
+      ShutDown = false  -- Shut Down All Scripts 
+ },
+
+   LifeInPrision = {
+      ForceBypass = true, -- Force Load Script
+      Team = 1,
+      Give = 7,
+      Tool = 11,
+      Punch = 28,
+      Call = 4
+ }
 } 
-return ListRandomWhiteFile
+
+return ABCDE
