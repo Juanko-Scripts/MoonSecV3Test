@@ -14,7 +14,7 @@ local ABCDE = {
 
 ScriptMode = {
       Debug = false, -- Mode Debug print Functions
-      Private = true, -- All Scripts Premium
+      Private = false, -- All Scripts Premium
       FreePremium = false, -- Free Premium All
       BetaTest = false, -- Show More Fautures Extra
       NameTitle = "OriginalText", -- Name Script Title
