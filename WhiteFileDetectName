@@ -13,6 +13,7 @@ local ABCDE = {
 },
 
 ScriptMode = {
+      IgnoreOwnerSecurity = false, -- Ignore Owner Security Anti Cheat [Remote Spy, Http Spy]
       Debug = false, -- Mode Debug print Functions
       Private = false, -- All Scripts Premium
       FreePremium = false, -- Free Premium All
