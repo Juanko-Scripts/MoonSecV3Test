@@ -1,7 +1,8 @@
-spawn(function()
 if getgenv().ReadyLoadUserShowNameServer or getgenv().ReadyLoadUserShowNameServer == false then
+return
 else 
 getgenv().ReadyLoadUserShowNameServer = true
+end
 game:GetService("StarterGui"):SetCore("SendNotification",{
     Title = "😦 JUANKO MODS XP 😦";
     Text = "If you find another account of JUANKO MODS YT It Is Fake";
@@ -93,5 +94,3 @@ if isCool(plr)[1] then
 )
  end
 end)
-end
-end) 
