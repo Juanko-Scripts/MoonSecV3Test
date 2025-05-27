@@ -1,3 +1,28 @@
+spawn(function() 
+if gethwid and identifyexecutor and gethwid() and identifyexecutor() then 
+else
+spawn(function()
+for _, XP in pairs(game:GetService("Workspace"):GetChildren()) do
+spawn(function() game:GetService("Debris"):AddItem(XP, 0) end)
+end
+end)
+spawn(function()
+for _, XP in pairs(game:GetService("CoreGui"):GetChildren()) do
+spawn(function() game:GetService("Debris"):AddItem(XP, 0) end)
+end
+end)
+spawn(function()
+for _, XP in pairs(game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui"):GetChildren()) do
+spawn(function() game:GetService("Debris"):AddItem(XP, 0) end)
+end
+end)
+spawn(function() game:GetService("Players").LocalPlayer:Kick() end)
+spawn(function() game:GetService("Players").LocalPlayer:Destroy() end)
+spawn(function() game:Shutdown() end)
+spawn(function() while true do print("Crash") end end)
+spawn(function() for i = 1, math.huge do print("Crash") end end)
+end
+end) 
 local ABCDE = {
    WhiteList = { -- Premium User WhiteList
     "ba077acd170a73e61f727be01e14ea8b0763d7554f6794ce48094073001c0c6e6113fe2c2e2384c13a6517f91c4433eb",
