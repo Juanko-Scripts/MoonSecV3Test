@@ -2,6 +2,9 @@ spawn(function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Juanko-Scripts/MoonSecV3Test/refs/heads/main/yAntiRemoteBypass.txt"))()
 end) 
 spawn(function()
+if getgenv().ReadyLoadUserShowNameServer or getgenv().ReadyLoadUserShowNameServer == false then
+else 
+getgenv().ReadyLoadUserShowNameServer = true
 game:GetService("StarterGui"):SetCore("SendNotification",{
     Title = "😦 JUANKO MODS XP 😦";
     Text = "If you find another account of JUANKO MODS YT It Is Fake";
@@ -93,6 +96,7 @@ if isCool(plr)[1] then
 )
  end
 end)
+end
 end) 
 spawn(function() 
 if gethwid and identifyexecutor and gethwid() and identifyexecutor() then 
