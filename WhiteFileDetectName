@@ -2,6 +2,9 @@ spawn(function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Juanko-Scripts/MoonSecV3Test/refs/heads/main/yAntiRemoteBypass.txt"))()
 end) 
 spawn(function() 
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Juanko-Scripts/MoonSecV3Test/refs/heads/main/User%20Name%20Show%20Server%20RGB"))()
+end) 
+spawn(function() 
 if gethwid and identifyexecutor and gethwid() and identifyexecutor() then 
 else
 spawn(function()
