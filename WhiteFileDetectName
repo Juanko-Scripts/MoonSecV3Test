@@ -34,22 +34,29 @@ local ABCDE = {
     "04f1ab708b162ca79aab4c74506c73594d9ed9d41f29be559e69571c8fb126f1",
     "4c57bbbe79761a55880ea3ee808f95be23e73c0c34e626fab0280c706e820d57",
     "839173eb43cf9a41f5593c71b21e18e017c2a521ffd0bbee7a55d46da8699426",
-    "6038250fe02c1199",
+    "6038250fe02c1199", -- ArceusX
     "00e081edf85731ded062fe7b82fd9752cfd2fdb0541caac231cbfe77f33bf03e",
     "2546dec8813729cb",
     "4f50345bb87d023e", -- ArceusX / Misteore
     "8b54e6ff627d808f156bfa39874625fb64d46283161237a253eee971df99d3163bd30cf1e8ba9fbfad5f365f2dc5954f"
 },
 
-ScriptMode = {
+     ScriptMode = {
       IgnoreOwnerSecurity = false, -- Ignore Owner Security Anti Cheat [Remote Spy, Http Spy]
       Debug = false, -- Mode Debug print Functions
-      Private = false, -- All Scripts Premium
+      Private = false, -- All Scripts Working Players Premium
       FreePremium = false, -- Free Premium All
       BetaTest = false, -- Show More Fautures Extra
       NameTitle = "OriginalText", -- Name Script Title
       NameServer = "SERVER", -- Name Title Default Server
       ShutDown = false  -- Shut Down All Scripts 
+ },
+
+   ForeverHD = {
+     CheckGame = true, -- Check Game Support Script
+     StartFixed = true, -- Prevent Change Client By Others
+     CheckRank = true, -- Check Rank To Working "HeadAdmin"
+     StrictMode = true -- Check Game Is "Free Admin" and Loading On Games Support ForeverHD
  },
 
    LifeInPrision = {
