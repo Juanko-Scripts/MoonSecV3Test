@@ -762,22 +762,17 @@ Hacker = {
 		Hover = Color3.fromRGB(181, 0, 0),
 		HoverChange = 0.04
 	}
-
 }
-
+RandomColorLibrarySelectXP = Themes.Names[math.random(1, #Themes.Names)]
 local Library = {
-	Version = "1.2.2",
-
+	Version = "1.0.1",
 	OpenFrames = {},
 	Options = {},
 	Themes = Themes.Names,
-
 	Window = nil,
 	WindowFrame = nil,
 	Unloaded = false,
-
 	Creator = nil,
-
 	DialogOpen = false,
 	UseAcrylic = false,
 	Acrylic = false,
