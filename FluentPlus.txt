@@ -1,9 +1,8 @@
-local Show_Button = true -- Shows the button for toggle fluent ui manually. If "false", works only on mobile, if "true", works everytime.
-local Button_Icon = "rbxassetid://10734897102" -- Icon of the button for toggle fluent ui.
-local Button_Transparency = 1 -- Transparency of button background (check line #6365).
-----------------------------
+local Show_Button = true
+local Button_Icon = "rbxassetid://10734897102"
+local Button_Transparency = 1
 
-----------------------------
+--------------------------------------------------------
 
 local Lighting = game:GetService("Lighting")
 local RunService = game:GetService("RunService")
@@ -40,7 +39,8 @@ local ProtectGui = protectgui or (syn and syn.protect_gui) or function() end
 
 local Themes = {
 	Names = {
-		"Dark",
+		"Dark", 
+                "Hacker",
 		"Darker", 
 		"AMOLED",
 		"Light",
@@ -59,6 +59,43 @@ local Themes = {
 		"Grape",
 		"Bloody"
 	},
+Hacker = {
+        Name = "Hacker",
+        Accent = Color3.fromRGB(0, 255, 0),
+        AcrylicMain = Color3.fromRGB(0, 0, 0),
+        AcrylicBorder = Color3.fromRGB(7, 44, 13),
+        AcrylicGradient = ColorSequence.new(Color3.fromRGB(0, 0, 0), Color3.fromRGB(0, 0, 0)),
+        AcyclicNoise = 1,
+        TitleBarLine = Color3.fromRGB(0, 0, 0),
+        Tab = Color3.fromRGB(0, 200, 0),
+        Element = Color3.fromRGB(0, 255, 0),
+        ElementBorder = Color3.fromRGB(7, 44, 13),
+        InElementBorder = Color3.fromRGB(7, 44, 13),
+        ElementTransparency = 0.86,
+        ToggleSlider = Color3.fromRGB(0, 255, 0),
+        ToggleToggled = Color3.fromRGB(0, 100, 0),
+        SliderRail = Color3.fromRGB(0, 200, 0),
+        DropdownFrame = Color3.fromRGB(0, 200, 0),
+        DropdownHolder = Color3.fromRGB(0, 0, 0),
+        DropdownBorder = Color3.fromRGB(0, 0, 0),
+        DropdownOption = Color3.fromRGB(0, 200, 0),
+        Keybind = Color3.fromRGB(0, 200, 0),
+        Input = Color3.fromRGB(0, 200, 0),
+        InputFocused = Color3.fromRGB(0, 0, 0),
+        InputIndicator = Color3.fromRGB(0, 226, 0),
+        Dialog = Color3.fromRGB(0, 0, 0),
+        DialogHolder = Color3.fromRGB(0, 0, 0),
+        DialogHolderLine = Color3.fromRGB(0, 0, 0),
+        DialogButton = Color3.fromRGB(0, 172, 0),
+        DialogButtonBorder = Color3.fromRGB(0, 0, 0),
+        DialogBorder = Color3.fromRGB(0, 0, 0),
+        DialogInput = Color3.fromRGB(0, 200, 0),
+        DialogInputLine = Color3.fromRGB(0, 255, 0),
+        Text = Color3.fromRGB(255, 255, 255),
+        SubText = Color3.fromRGB(131, 131, 131),
+        Hover = Color3.fromRGB(0, 255, 0),
+        HoverChange = 0.04
+    }, 
 	Dark = {
 		Name = "Dark",
 		Accent = Color3.fromRGB(96, 205, 255),
