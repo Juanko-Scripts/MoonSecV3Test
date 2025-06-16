@@ -42,13 +42,13 @@ local ABCDE = {
 },
 
      ScriptMode = {
-      IgnoreOwnerSecurity = false, -- Ignore Owner Security Anti Cheat [Remote Spy, Http Spy]
+      IgnoreOwnerSecurity = false, -- Ignore Owner Security Anti Cheat [Remote Spy]
       Debug = false, -- Mode Debug print Functions
       Private = false, -- All Scripts Working Players Premium
       FreePremium = false, -- Free Premium All
       BetaTest = false, -- Show More Fautures Extra
       NameTitle = "OriginalText", -- Name Script Title
-      NameServer = "SERVER", -- Name Title Default Server
+      NameServer = "JUANKO MODS XP", -- Name Title Default Server
       ShutDown = false  -- Shut Down All Scripts 
  },
 
