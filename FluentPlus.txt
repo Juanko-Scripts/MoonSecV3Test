@@ -1,6 +1,6 @@
 local Show_Button = true
 local Button_Icon = "rbxassetid://14333980839"
-local Button_Transparency = 1
+local Button_Transparency = 0
 
 --------------------------------------------------------
 
