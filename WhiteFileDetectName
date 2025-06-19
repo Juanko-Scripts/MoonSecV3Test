@@ -59,6 +59,10 @@ local ABCDE = {
      StrictMode = true -- Check Game Is "Free Admin" and Loading On Games Support ForeverHD
  },
 
+   EstadoFallidoMexico = {
+     Verzion = "1.0"
+  },
+
    LifeInPrision = {
       ForceBypass = true, -- Force Load Script
       Team = 1,
