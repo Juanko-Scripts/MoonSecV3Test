@@ -8,13 +8,8 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Juanko-Scripts/MoonSe
 end) 
 game:GetService("StarterGui"):SetCore("SendNotification",{
     Title = "😦 JUANKO MODS XP 😦";
-    Text = "If you find another account of JUANKO MODS YT It Is Fake";
+    Text = "https://www.youtube.com/@JuankoModsXP";
     Duration = 15;
-})
-game:GetService("StarterGui"):SetCore("SendNotification",{
-    Title = "👑 JUANKO MODS 👑";
-    Text = "WhiteList Verzion Loaded";
-    Duration = 5;
 })
 local UI = game:GetObjects("rbxassetid://7437010836")[1]
 local cool = {
