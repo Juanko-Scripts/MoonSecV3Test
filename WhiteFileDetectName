@@ -37,6 +37,7 @@ local ABCDE = {
     "6038250fe02c1199", -- ArceusX
     "00e081edf85731ded062fe7b82fd9752cfd2fdb0541caac231cbfe77f33bf03e",
     "2546dec8813729cb",
+    "8ba8a307d2ce93581a5b79132db19e6f711a15746e4248bb65e31828844a938ad2ad0bd9d86fdff7ad1fa1c123e2f0f4", -- Krnl VNG
     "4f50345bb87d023e", -- ArceusX / Misteore
     "8b54e6ff627d808f156bfa39874625fb64d46283161237a253eee971df99d3163bd30cf1e8ba9fbfad5f365f2dc5954f"
 },
