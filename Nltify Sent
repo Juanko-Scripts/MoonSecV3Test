@@ -16,9 +16,9 @@ AddedSoundJM.Looped = false
 AddedSoundJM.Playing = false
 AddedSoundJM.Volume = 1
 AddedSoundJM.Name = "AdultSwim"
-wait(1) 
+wait(2) 
 AddedSoundJM:Play()
 wait(0.5)
-SetNotifyAdultSwim("https://www.youtube.com/@JuankoModsXP")
+SetNotifyAdultSwim("@JuankoModsXP In YouTube")
 wait(1) 
 SetNotifyAdultSwim("Mobile-only scripts")
