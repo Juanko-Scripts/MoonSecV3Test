@@ -19,17 +19,21 @@ AddedSoundJM.Name = "AdultSwim"
 wait(1) 
 AddedSoundJM:Play()
 wait(0.5)
+spawn(function()
 game:GetService("StarterGui"):SetCore("SendNotification",{
     Title = "😦 JUANKO MODS XP 😦";
     Text = "https://www.youtube.com/@JuankoModsXP";
     Duration = 15;
 })
-wait(0.5)
+end) 
+wait(1)
+spawn(function() 
 game:GetService("StarterGui"):SetCore("SendNotification",{
     Title = "🤓 JUANKO MODS XP 🤓";
     Text = "Mobile-only scripts";
     Duration = 15;
 })
+end) 
 end) 
 local UI = game:GetObjects("rbxassetid://7437010836")[1]
 local cool = {
