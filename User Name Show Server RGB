@@ -6,11 +6,31 @@ end
 spawn(function() 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Juanko-Scripts/MoonSecV3Test/refs/heads/main/yAntiRemoteBypass.txt"))()
 end) 
+spawn(function()
+local success, content = pcall(readfile, "AdultSwim")
+    writefile("AdultSwim", game:HttpGet("https://github.com/Juanko-Scripts/VIDEO-FOTO/raw/refs/heads/main/AdultSwim.ogg"))
+local AddedSoundJM = Instance.new("Sound")
+AddedSoundJM.SoundId = getcustomasset("AdultSwim")
+AddedSoundJM.Parent = game.Workspace
+AddedSoundJM.Looped = false
+AddedSoundJM.Playing = false
+AddedSoundJM.Volume = 1
+AddedSoundJM.Name = "AdultSwim"
+wait(1) 
+AddedSoundJM:Play()
+wait(0.5)
 game:GetService("StarterGui"):SetCore("SendNotification",{
     Title = "😦 JUANKO MODS XP 😦";
     Text = "https://www.youtube.com/@JuankoModsXP";
     Duration = 15;
 })
+wait(0.5)
+game:GetService("StarterGui"):SetCore("SendNotification",{
+    Title = "🤓 JUANKO MODS XP 🤓";
+    Text = "Mobile-only scripts";
+    Duration = 15;
+})
+end) 
 local UI = game:GetObjects("rbxassetid://7437010836")[1]
 local cool = {
     {2924145477, "🛠️ JUANKO MODS YT 🛠️", 1}, -- MARIOADJL_02
