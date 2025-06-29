@@ -1,3 +1,12 @@
+local function SetNotifyAdultSwim(Y)
+pcall(function() 
+game:GetService("StarterGui"):SetCore("SendNotification",{
+    Title = "JUANKO MODS XP";
+    Text = Y;
+    Duration = 10;
+})
+end) 
+end
 local success, content = pcall(readfile, "AdultSwim")
     writefile("AdultSwim", game:HttpGet("https://github.com/Juanko-Scripts/VIDEO-FOTO/raw/refs/heads/main/AdultSwim.ogg"))
 local AddedSoundJM = Instance.new("Sound")
@@ -10,14 +19,6 @@ AddedSoundJM.Name = "AdultSwim"
 wait(1) 
 AddedSoundJM:Play()
 wait(0.5)
-game:GetService("StarterGui"):SetCore("SendNotification",{
-    Title = "JUANKO MODS XP";
-    Text = "https://www.youtube.com/@JuankoModsXP";
-    Duration = 15;
-})
+SetNotifyAdultSwim("https://www.youtube.com/@JuankoModsXP")
 wait(1) 
-game:GetService("StarterGui"):SetCore("SendNotification",{
-    Title = "JUANKO MODS XP";
-    Text = "Mobile-only scripts";
-    Duration = 15;
-})
+SetNotifyAdultSwim("Mobile-only scripts")
