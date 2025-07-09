@@ -1,6 +1,10 @@
 local ABCDE = {
    X = "❌", 
    Game = "🎮"
+   Rocket = "🚀", 
+   User = "👤", 
+   Settings = "⚙️", 
+   Location = "📍"
 } 
 
 return ABCDE
