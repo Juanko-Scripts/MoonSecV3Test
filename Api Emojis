@@ -1,0 +1,6 @@
+local ABCDE = {
+   X = "❌", 
+   Game = "🎮"
+} 
+
+return ABCDE
