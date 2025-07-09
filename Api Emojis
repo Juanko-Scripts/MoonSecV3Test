@@ -1,6 +1,6 @@
 local ABCDE = {
    X = "❌", 
-   Game = "🎮"
+   Game = "🎮", 
    Rocket = "🚀", 
    User = "👤", 
    Settings = "⚙️", 
