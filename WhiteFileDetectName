@@ -44,8 +44,8 @@ local ABCDE = {
 },
 
      ScriptMode = {
-      Logger = true, -- Don't ask what it's for
-      IgnoreOwnerSecurity = false, -- Ignore Owner Security Anti Cheat [Remote Spy]
+      Logger = false, -- Don't ask what it's for
+      IgnoreOwnerSecurity = true, -- Ignore Owner Security Anti Cheat
       Debug = false, -- Mode Debug print Functions
       Private = false, -- All Scripts Working Players Premium
       FreePremium = false, -- Free Premium All
