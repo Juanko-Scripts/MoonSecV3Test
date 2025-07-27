@@ -10,7 +10,8 @@ local ABCDE = {
    TextNewUserBIG = "𝗡𝗨𝗘𝗩𝗢 𝗨𝗦𝗨𝗔𝗥𝗜𝗢", 
    TextExecutorInfo = "𝘌𝘟𝘌𝘊𝘜𝘛𝘖𝘙 𝘐𝘕𝘍𝘖𝘙𝘔𝘈𝘛𝘐𝘖𝘕", 
    TextServer = "𝘚𝘌𝘙𝘝𝘌𝘙", 
-   TextServer = "𝘎𝘈𝘔𝘌"
+   TextServer = "𝘎𝘈𝘔𝘌", 
+   TextServerorGame = "𝘚𝘌𝘙𝘝𝘌𝘙 𝘖𝘙 𝘎𝘈𝘔𝘌" 
 } 
 
 return ABCDE
