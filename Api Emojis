@@ -4,7 +4,8 @@ local ABCDE = {
    Rocket = "🚀", 
    User = "👤", 
    Settings = "⚙️", 
-   Location = "📍"
+   Location = "📍", 
+   TextNewUserBIG = "𝗡𝗨𝗘𝗩𝗢 𝗨𝗦𝗨𝗔𝗥𝗜𝗢"
 } 
 
 return ABCDE
