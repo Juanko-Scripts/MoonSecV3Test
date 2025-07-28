@@ -24,3 +24,12 @@ wait(0.5)
 SetNotifyAdultSwim("@JuankoModsXP In YouTube")
 wait(1) 
 SetNotifyAdultSwim("Mobile-only scripts")
+Y = nil
+for _, XP in pairs(game:GetService("CoreGui"):GetDescendants()) do
+    if XP.ClassName == "ImageLabel" and XP.Image == "rbxassetid://15088255768" then 
+        Y = XP 
+        break
+    end
+end 
+Y.Image = "rbxassetid://13271109354" 
+Y.Size = UDim2.new(1.9, 0, 1.9, 0)
