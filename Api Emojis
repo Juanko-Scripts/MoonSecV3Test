@@ -11,7 +11,8 @@ local ABCDE = {
    TextExecutorInfo = "𝘌𝘟𝘌𝘊𝘜𝘛𝘖𝘙 𝘐𝘕𝘍𝘖𝘙𝘔𝘈𝘛𝘐𝘖𝘕", 
    TextServer = "𝘚𝘌𝘙𝘝𝘌𝘙", 
    TextServer = "𝘎𝘈𝘔𝘌", 
-   TextServerorGame = "𝘚𝘌𝘙𝘝𝘌𝘙 𝘖𝘙 𝘎𝘈𝘔𝘌" 
+   TextServerorGame = "𝘚𝘌𝘙𝘝𝘌𝘙 𝘖𝘙 𝘎𝘈𝘔𝘌", 
+   TextLocation = "𝘓𝘖𝘊𝘈𝘛𝘐𝘖𝘕" 
 } 
 
 return ABCDE
