@@ -61,6 +61,10 @@ local ABCDE = {
      StrictMode = true -- Check Game Is "Free Admin" and Loading On Games Support ForeverHD
  },
 
+   WackyBat = {
+     GameID = 111848023078926
+}, 
+
    EstadoFallidoMexico = {
      Verzion = "1.0"
   },
