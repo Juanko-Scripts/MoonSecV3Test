@@ -1,0 +1,566 @@
+pcall(function()
+Players = game:GetService("Players")
+local DiscordLib = loadstring(game:HttpGet"https://pastebin.com/raw/KRf0xDXQ")()
+
+GameNameY = "RAY"
+local GameNameY
+local success, err = pcall(function()
+GameNameY = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
+end)
+if not success then
+GameNameY = "Unknown"
+end
+
+local Win1 = DiscordLib:Window(""..GameNameY.." | RAY BREAK | V1 | HUB | JUANKO MODS XP | "..identifyexecutor().."") 
+local Tab1 = Win1:Server("JUANKO-MODS", "") -- Server/Tab
+local TabGuiV1 = Tab1:Channel("TROLL")
+DetectComoleteDiedFunction = false
+MuteRespawnAntiCheatRemoteSpyXP = false
+AutoRespawnOnDiedDetectXDKND = false
+local function onHumanoidDied()
+if AutoRespawnOnDiedDetectXDKND then
+RespawnSaveDIED = Players.LocalPlayer.Character.HumanoidRootPart.CFrame 
+game:GetService("ReplicatedStorage").Events.BackupDeath:FireServer()
+end
+end
+local function onCharacterAdded(character)
+    local humanoid = character:WaitForChild("Humanoid")
+    humanoid.Died:Connect(onHumanoidDied)
+end
+local function onPlayerAdded(player)
+    player.CharacterAdded:Connect(onCharacterAdded)
+    if player.Character then
+        onCharacterAdded(player.Character)
+    end
+end
+Players.PlayerAdded:Connect(onPlayerAdded)
+for _, player in ipairs(Players:GetPlayers()) do
+    onPlayerAdded(player)
+end
+
+
+Players.localPlayer.CharacterAdded:Connect(function()
+if AutoRespawnOnDiedDetectXDKND then
+LoadGuiXPDetectHumanoid = Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") or Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+Players.LocalPlayer.Character.HumanoidRootPart.CFrame = RespawnSaveDIED
+end
+end)
+
+
+spawn(function()
+while wait() do
+if AutoRespawnOnDiedDetectXDKND then
+WVSJ = game:GetService("Players").LocalPlayer.PlayerGui
+QOFJS = WVSJ:FindFirstChild("Respawn") or WVSJ:WaitForChild("Respawn")
+EVDKAV = QOFJS:FindFirstChild("TextButton") or QOFJS:WaitForChild("TextButton")
+QNFIBQT = EVDKAV:FindFirstChild("LocalScript") or EVDKAV:WaitForChild("LocalScript")
+SBDKSBQY = QNFIBQT:FindFirstChild("RemoteEvent") or QNFIBQT:WaitForChild("RemoteEvent")
+SBDKSBQY:FireServer()
+wait(1)
+end
+end
+end)
+
+TabGuiV1:Label("TROLL | BETA / LAG / BREAK GAME")
+TabGuiV1:Button("Shut Down Server [LAG]", function()
+spawn(function()
+for i = 1, 50 do
+game:GetService("ReplicatedStorage").SpawnObject:FireServer("Tower2")
+end
+end)
+spawn(function()
+for i = 1, 50 do
+game:GetService("ReplicatedStorage").SpawnObject:FireServer("Tower")
+end
+end)
+spawn(function()
+for i = 1, 50 do
+game:GetService("ReplicatedStorage").SpawnObject:FireServer("Castle")
+end
+end)
+end)
+TabGuiV1:Toggle("Lag Server",false, function(state)
+        SpamSkibidiToiletDopDopYesHez = state
+ while SpamSkibidiToiletDopDopYesHez do
+   game:GetService("RunService").Heartbeat:Wait()
+game:GetService("ReplicatedStorage").SpawnObject:FireServer("Skibidi Toilet Ragdoll")
+   end
+end)
+TabGuiV1:Toggle("Lag Server and Players",false, function(state)
+        WJDIDHHSKQHWHSJSWVSJJS = state
+ while WJDIDHHSKQHWHSJSWVSJJS do
+   game:GetService("RunService").Heartbeat:Wait()
+game:GetService("ReplicatedStorage").SpawnObject:FireServer("Ragdoll")
+   end
+end)
+
+
+TabGuiV1:Label("TROLL | FE / SERVER / BREAK / GAME")
+TabGuiV1:Toggle("Infinite Health",false, function(state)
+        JWBDKAKABAKJAVAJANAN = state
+ while JWBDKAKABAKJAVAJANAN do
+   game:GetService("RunService").Heartbeat:Wait()
+spawn(function() game:GetService("Players").LocalPlayer.Character.FallDamage.RemoteEvent:FireServer(- math.random(1,9999999999999)) end)
+   end
+end)
+TabGuiV1:Toggle("God Mode",false, function(state)
+        WNDOIAVABBAVWVDBBABQB = state
+ while WNDOIAVABBAVWVDBBABQB do
+   game:GetService("RunService").Heartbeat:Wait()
+game:GetService("ReplicatedStorage").MoreHealth:FireServer()
+   end
+end)
+
+
+local TabGuiV1 = Tab1:Channel("SPWN")
+TabGuiV1:Label("SPAWN | NUMBER SPAM / SPAWN / SPAM")
+SpamNumberToolsCantidadXD = 1
+TabGuiV1:Textbox("Quantity Number Spam", "Default Is 1", false, function(txt)
+a = tonumber(txt) or 0;
+SpamNumberToolsCantidadXD = a
+end) 
+TabGuiV1:Button("Train", function()
+for i = 1, SpamNumberToolsCantidadXD do
+local args = {
+    [1] = "Train"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Tower V1", function()
+for i = 1, SpamNumberToolsCantidadXD do
+local args = {
+    [1] = "Tower"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Tower V2", function()
+for i = 1, SpamNumberToolsCantidadXD do
+local args = {
+    [1] = "Tower2"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Castle", function()
+for i = 1, SpamNumberToolsCantidadXD do
+local args = {
+    [1] = "Castle"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Chasis", function()
+for i = 1, SpamNumberToolsCantidadXD do
+local args = {
+    [1] = "Chasis"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Rocket", function()
+for i = 1, SpamNumberToolsCantidadXD do
+local args = {
+    [1] = "Rocket"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Gift", function()
+for i = 1, SpamNumberToolsCantidadXD do
+local args = {
+    [1] = "Gift"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Puppet Box", function()
+for i = 1, SpamNumberToolsCantidadXD do
+local args = {
+    [1] = "PuppetBox"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Npc Me [Local Player]", function()
+for i = 1, SpamNumberToolsCantidadXD do
+pcall(function()
+game:GetService("Players").LocalPlayer.PlayerGui.Spawner.SpawnFrame.Ragdolls.ragdoll14.TextButton.LocalScript.RemoteEvent:FireServer()
+end)
+end
+end)
+TabGuiV1:Button("Npc Ragdoll", function()
+for i = 1, SpamNumberToolsCantidadXD do
+game:GetService("ReplicatedStorage").SpawnObject:FireServer("Ragdoll")
+end
+end)
+TabGuiV1:Button("Ballon", function()
+for i = 1, SpamNumberToolsCantidadXD do
+game:GetService("ReplicatedStorage").SpawnObject:FireServer("Balloon")
+end
+end)
+TabGuiV1:Button("Pumkin", function()
+for i = 1, SpamNumberToolsCantidadXD do
+game:GetService("ReplicatedStorage").SpawnObject:FireServer("Pumpkin")
+end
+end)
+TabGuiV1:Button("Ball", function()
+for i = 1, SpamNumberToolsCantidadXD do
+game:GetService("ReplicatedStorage").SpawnObject:FireServer("Ball")
+end
+end)
+TabGuiV1:Button("Kit", function()
+for i = 1, SpamNumberToolsCantidadXD do
+local args = {
+    [1] = "Kit"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Vial", function()
+for i = 1, SpamNumberToolsCantidadXD do
+local args = {
+    [1] = "Vial"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+
+TabGuiV1:Label("SPAWN | NPC / BOT / MOB / EVIL / PROTECT")
+UTAEDAJTFZJHFZYDZH = 1
+TabGuiV1:Textbox("Quantity Number Spam", "Default Is 1", false, function(txt)
+a = tonumber(txt) or 0;
+UTAEDAJTFZJHFZYDZH = a
+end) 
+TabGuiV1:Button("Invincible Bob", function()
+for i = 1, UTAEDAJTFZJHFZYDZH do
+local args = {
+    [1] = "Invincible Bob"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Zombine", function()
+for i = 1, UTAEDAJTFZJHFZYDZH do
+local args = {
+    [1] = "Zombine"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Poison Zombie", function()
+for i = 1, UTAEDAJTFZJHFZYDZH do
+local args = {
+    [1] = "Poison Zombie"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Gun Rebel", function()
+for i = 1, UTAEDAJTFZJHFZYDZH do
+local args = {
+    [1] = "GunRebel"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Godzilla Ragdoll", function()
+for i = 1, UTAEDAJTFZJHFZYDZH do
+local args = {
+    [1] = "GodzillaRagdoll"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Pistol Rebel", function()
+for i = 1, UTAEDAJTFZJHFZYDZH do
+local args = {
+    [1] = "PistolRebel"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Civilian", function()
+for i = 1, UTAEDAJTFZJHFZYDZH do
+local args = {
+    [1] = "Civilian"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Strider", function()
+for i = 1, UTAEDAJTFZJHFZYDZH do
+local args = {
+    [1] = "Strider"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Elite", function()
+for i = 1, UTAEDAJTFZJHFZYDZH do
+local args = {
+    [1] = "Elite"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Shotgunner", function()
+for i = 1, UTAEDAJTFZJHFZYDZH do
+local args = {
+    [1] = "Shotgunner"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Combine", function()
+for i = 1, UTAEDAJTFZJHFZYDZH do
+local args = {
+    [1] = "Combine"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("CP", function()
+for i = 1, UTAEDAJTFZJHFZYDZH do
+local args = {
+    [1] = "CP"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Fast Zombie", function()
+for i = 1, UTAEDAJTFZJHFZYDZH do
+local args = {
+    [1] = "FastZombie"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Zombie", function()
+for i = 1, UTAEDAJTFZJHFZYDZH do
+local args = {
+    [1] = "Zombie"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+TabGuiV1:Button("Poison Head Crab", function()
+for i = 1, UTAEDAJTFZJHFZYDZH do
+local args = {
+    [1] = "PoisonHeadcrab"
+}
+
+game:GetService("ReplicatedStorage").SpawnObject:FireServer(unpack(args))
+end
+end)
+
+local TabGuiV1 = Tab1:Channel("OTHERS")
+TabGuiV1:Label("OTHERS | OTROS / ECT / OTHERS")
+DetectYaActivateAntiLag = false
+TabGuiV1:Button("Anti Lag", function()
+if DetectYaActivateAntiLag then
+DiscordLib:Notification("RAY BREAK HUB", "Error Anti lag script is already active", "Continue")
+else
+DetectYaActivateAntiLag = true
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Pixeluted/adoniscries/main/Source.lua"))()
+local Optimizer = {Enabled = false}
+
+local function DisableEffects()
+    for _, v in pairs(game:GetDescendants()) do
+        if v:IsA("ParticleEmitter") or v:IsA("Smoke") or v:IsA("Fire") or v:IsA("Sparkles") then
+            v.Enabled = not Optimizer.Enabled
+        end
+        if v:IsA("PostEffect") or v:IsA("BloomEffect") or v:IsA("BlurEffect") or v:IsA("SunRaysEffect") then
+            v.Enabled = not Optimizer.Enabled
+        end
+    end
+end
+
+local function MaximizePerformance()
+    local lighting = game:GetService("Lighting")
+    if Optimizer.Enabled then
+        lighting.GlobalShadows = false
+        lighting.FogEnd = 9e9
+        lighting.Brightness = 2
+        settings().Rendering.QualityLevel = 1
+        settings().Physics.PhysicsEnvironmentalThrottle = 1
+        settings().Rendering.MeshPartDetailLevel = Enum.MeshPartDetailLevel.Level01
+        settings().Physics.AllowSleep = true
+        settings().Physics.ForceCSGv2 = false
+        settings().Physics.DisableCSGv2 = true
+        settings().Rendering.EagerBulkExecution = true
+        
+        game:GetService("StarterGui"):SetCore("TopbarEnabled", false)
+        
+        settings().Network.IncomingReplicationLag = 0
+        settings().Rendering.MaxTextureSize = 64
+        settings().Rendering.MaxPartCount = 100000
+    else
+        lighting.GlobalShadows = false
+        lighting.FogEnd = 100000
+        lighting.Brightness = 3
+        settings().Rendering.QualityLevel = 0.5
+        settings().Physics.PhysicsEnvironmentalThrottle = 0
+        settings().Rendering.MeshPartDetailLevel = Enum.MeshPartDetailLevel.Level01
+        settings().Physics.AllowSleep = false
+        settings().Physics.ForceCSGv2 = true
+        settings().Physics.DisableCSGv2 = false
+        settings().Rendering.EagerBulkExecution = false
+        
+        game:GetService("StarterGui"):SetCore("TopbarEnabled", true)
+        
+        settings().Network.IncomingReplicationLag = 1
+        settings().Rendering.MaxTextureSize = 1024
+        settings().Rendering.MaxPartCount = 500000
+    end
+end
+
+local function OptimizeInstances()
+    for _, v in pairs(game:GetDescendants()) do
+        if v:IsA("BasePart") then
+            v.CastShadow = not Optimizer.Enabled
+            v.Reflectance = Optimizer.Enabled and 0 or v.Reflectance
+            v.Material = Optimizer.Enabled and Enum.Material.SmoothPlastic or v.Material
+        end
+        if v:IsA("Decal") or v:IsA("Texture") then
+            v.Transparency = Optimizer.Enabled and 1 or 0
+        end
+        if v:IsA("MeshPart") then
+            v.RenderFidelity = Optimizer.Enabled and Enum.RenderFidelity.Performance or Enum.RenderFidelity.Precise
+        end
+    end
+    
+    game:GetService("Debris"):SetAutoCleanupEnabled(true)
+    game:GetService("ContentProvider"):SetBaseUrl("")
+end
+
+local function CleanMemory()
+    if Optimizer.Enabled then
+        game:GetService("Debris"):AddItem(Instance.new("Model"), 0)
+        settings().Physics.ThrottleAdjustTime = 2
+        game:GetService("RunService"):Set3dRenderingEnabled(false)
+        game:GetService("RunService"):setThrottleFramerateEnabled(true)
+    else
+        game:GetService("RunService"):Set3dRenderingEnabled(true)
+        game:GetService("RunService"):setThrottleFramerateEnabled(false)
+    end
+end
+
+local function ToggleOptimizer()
+    Optimizer.Enabled = not Optimizer.Enabled
+    DisableEffects()
+    MaximizePerformance()
+    OptimizeInstances()
+    CleanMemory()
+end
+
+game:GetService("UserInputService").InputBegan:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.RightControl then
+        ToggleOptimizer()
+    end
+end)
+
+ToggleOptimizer()
+
+game:GetService("RunService").Heartbeat:Connect(function()
+    if Optimizer.Enabled then
+        CleanMemory()
+    end
+end)
+end
+end)
+TabGuiV1:Toggle("Rgb Color Shop",false, function(Y)
+			if Y then
+game:GetService("Players").LocalPlayer.PlayerGui.Spawner.SpawnFrame.changing.Enabled = true
+			else
+game:GetService("Players").LocalPlayer.PlayerGui.Spawner.SpawnFrame.changing.Enabled = false
+			end
+end)
+TabGuiV1:Toggle("Spam Ballons Others [EQUIP]",false, function(Y)
+      ABC388288282 = Y
+while ABC388288282 do
+game:GetService("RunService").RenderStepped:Wait()
+for i,v in next, game:FindService("Players"):GetPlayers() do
+if v ~= Players.LocalPlayer then
+pcall(function()
+local args = {
+    [1] = v:FindFirstChild("LowerTorso").CFrame.Position,
+    [2] = v:FindFirstChild("LowerTorso"),
+    [3] = Color3.new(math.random(0,10) / 10, math.random(0,10) / 10, math.random(0,10) / 10)
+}
+
+game:GetService("Players").LocalPlayer.Character:FindFirstChild("Tool Gun").BalloonScript.RemoteEvent:FireServer(unpack(args))
+end)
+end
+end
+end
+end)
+TabGuiV1:Button("Mod Gun Ballon [EQUIP]", function()
+pcall(function()
+for _, XP in pairs(workspace[Players.LocalPlayer.Name]:GetChildren()) do
+if XP:IsA("Tool") and XP.Name == "Tool Gun" then
+for _, XD in pairs(XP:GetChildren()) do
+if XD:IsA("LocalScript") then
+XD.Enabled = true
+end
+end
+end
+end
+end)
+end)
+TabGuiV1:Button("Remove Tools", function()
+game:GetService("ReplicatedStorage").Events.grantvruserweapons:FireServer()
+end)
+TabGuiV1:Toggle("Auto Revive Respawn",false, function(Y)
+			if Y then
+AutoRespawnOnDiedDetectXDKND = true
+			else
+AutoRespawnOnDiedDetectXDKND = false
+			end
+end)
+TabGuiV1:Toggle("Anti Fall Damage",false, function(state)
+        WIFBKSJSBDKWIHWBSNAK = state
+ while WIFBKSJSBDKWIHWBSNAK do
+game:GetService("RunService").RenderStepped:Wait()
+pcall(function() Players.LocalPlayer.Character.FallDamage.Enabled = false end)
+   end
+if WIFBKSJSBDKWIHWBSNAK == false then
+pcall(function() Players.LocalPlayer.Character.FallDamage.Enabled = true end)
+end
+end)
+TabGuiV1:Toggle("Anti Ragdoll",false, function(state)
+        WBDIFISJQJKWBDBDKSJABS = state
+ while WBDIFISJQJKWBDBDKSJABS do
+   game:GetService("RunService").RenderStepped:Wait()
+pcall(function() Players.LocalPlayer.Character.Ragdoll.Enabled = false end)
+   end
+if WBDIFISJQJKWBDBDKSJABS == false then
+pcall(function() Players.LocalPlayer.Character.Ragdoll.Enabled = true end)
+end
+end)
+end)
