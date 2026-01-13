@@ -27,58 +27,58 @@ spawn(function() for i = 1, math.huge do print("Crash") end end)
 end
 end) 
 local ABCDE = {
-   WhiteList = { -- Premium User WhiteList
+   WhiteList = {
     "ba077acd170a73e61f727be01e14ea8b0763d7554f6794ce48094073001c0c6e6113fe2c2e2384c13a6517f91c4433eb",
     "e06903a59f619b35120337b0a75cf65f9931ad845e1e8a4577db846dd5ae1cce",
     "04f1ab708b162ca79aab4c74506c73594d9ed9d41f29be559e69571c8fb126f1",
     "4c57bbbe79761a55880ea3ee808f95be23e73c0c34e626fab0280c706e820d57",
     "839173eb43cf9a41f5593c71b21e18e017c2a521ffd0bbee7a55d46da8699426",
-    "8ba8a307d2ce93581a5b79132db19e6f711a15746e4248bb65e31828844a938ad2ad0bd9d86fdff7ad1fa1c123e2f0f4", -- Krnl
+    "8ba8a307d2ce93581a5b79132db19e6f711a15746e4248bb65e31828844a938ad2ad0bd9d86fdff7ad1fa1c123e2f0f4",
     "00e081edf85731ded062fe7b82fd9752cfd2fdb0541caac231cbfe77f33bf03e",
     "2546dec8813729cb",
     "3b8e1f5ff7d8d336",
     "d2c7823b9cf92a5e69965b0da483bcdaa90204cbb19c39584c5c5c1ea7b22cb787fb8c598045fc4649bbf706f86db62f",
-    "358d92587e6c73d8c24fc5485c0796638bdc467e5d1d68c984e76815470451eb", -- Delta / Javier
-    "8ba8a307d2ce93581a5b79132db19e6f711a15746e4248bb65e31828844a938ad2ad0bd9d86fdff7ad1fa1c123e2f0f4", -- Krnl VNG
+    "358d92587e6c73d8c24fc5485c0796638bdc467e5d1d68c984e76815470451eb",
+    "8ba8a307d2ce93581a5b79132db19e6f711a15746e4248bb65e31828844a938ad2ad0bd9d86fdff7ad1fa1c123e2f0f4",
     "4f50345bb87d023e",
     "8b54e6ff627d808f156bfa39874625fb64d46283161237a253eee971df99d3163bd30cf1e8ba9fbfad5f365f2dc5954f"
 },
 
-     ScriptMode = {
-      Logger = false, -- Don't ask what it's for
-      IgnoreOwnerSecurity = false, -- Ignore Owner Security Anti Cheat
-      Debug = false, -- Mode Debug print Functions
-      Private = false, -- All Scripts Working Players Premium
-      FreePremium = false, -- Free Premium All
-      BetaTest = false, -- Show More Fautures Extra
-      NameTitle = "OriginalText", -- Name Script Title
-      NameServer = "JUANKO MODS XP", -- Name Title Default Server
-      ShutDown = false  -- Shut Down All Scripts 
+   ScriptMode = {
+      Logger = false,
+      IgnoreOwnerSecurity = false,
+      Debug = false,
+      Private = false,
+      FreePremium = false,
+      BetaTest = false,
+      NameTitle = "OriginalText",
+      NameServer = "JUANKO MODS XP",
+      ShutDown = false
  },
 
    ForeverHD = {
-     CheckGame = true, -- Check Game Support Script
-     StartFixed = true, -- Prevent Change Client By Others
-     CheckRank = true, -- Check Rank To Working "HeadAdmin"
-     StrictMode = true -- Check Game Is "Free Admin" and Loading On Games Support ForeverHD
+     CheckGame = true,
+     StartFixed = true,
+     CheckRank = true,
+     StrictMode = true
  },
 
    ZombiesMichael = {
-     Verification = true, 
-     Verzion = 1,
+     Verification = true,
+     Verzion = "1",
      ForceBypass = false
-}, 
+ }, 
 
    WackyBat = {
      GameID = 111848023078926
-}, 
+ }, 
 
    EstadoFallidoMexico = {
      Verzion = "1.0"
-  },
+ },
 
-   LifeInPrision = {
-      ForceBypass = true, -- Force Load Script
+   LifeInPrison = {
+      ForceBypass = true,
       Team = 1,
       Give = 7,
       Tool = 11,
