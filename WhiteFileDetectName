@@ -63,7 +63,7 @@ local ABCDE = {
      StrictMode = true
  },
 
-   ZombiesMichael = {
+   ZombieMichael = {
      Verification = true,
      Verzion = "1",
      ForceBypass = false
