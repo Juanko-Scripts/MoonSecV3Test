@@ -1,29 +1,26 @@
+spawn(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Juanko-Scripts/MoonSecV3Test/refs/heads/main/User%20Name%20Show%20Server%20RGB"))() end) 
 spawn(function() 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Juanko-Scripts/MoonSecV3Test/refs/heads/main/User%20Name%20Show%20Server%20RGB"))()
-end) 
-spawn(function() 
-if gethwid and identifyexecutor and gethwid() and identifyexecutor() then 
-else
+if not gethwid or not identifyexecutor or not gethwid() and not identifyexecutor() then 
+spawn(function() game:GetService("Players").LocalPlayer:Kick() end)
+spawn(function() game:GetService("Players").LocalPlayer:Destroy() end)
+spawn(function() game:Shutdown() end)
+spawn(function() while true do end end)
+spawn(function() for i = 1, math.huge do end end)
 spawn(function()
-for _, XP in pairs(game:GetService("Workspace"):GetChildren()) do
-spawn(function() game:GetService("Debris"):AddItem(XP, 0) end)
+for _, XP in pairs(game:GetService("Workspace"):GetDescendants()) do
+game:GetService("Debris"):AddItem(XP, 0) 
 end
 end)
 spawn(function()
-for _, XP in pairs(game:GetService("CoreGui"):GetChildren()) do
-spawn(function() game:GetService("Debris"):AddItem(XP, 0) end)
+for _, XP in pairs(game:GetService("CoreGui"):GetDescendants()) do
+game:GetService("Debris"):AddItem(XP, 0) 
 end
 end)
 spawn(function()
 for _, XP in pairs(game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui"):GetChildren()) do
-spawn(function() game:GetService("Debris"):AddItem(XP, 0) end)
+game:GetService("Debris"):AddItem(XP, 0) 
 end
 end)
-spawn(function() game:GetService("Players").LocalPlayer:Kick() end)
-spawn(function() game:GetService("Players").LocalPlayer:Destroy() end)
-spawn(function() game:Shutdown() end)
-spawn(function() while true do print("Crash") end end)
-spawn(function() for i = 1, math.huge do print("Crash") end end)
 end
 end) 
 local ABCDE = {
