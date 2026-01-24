@@ -311,7 +311,7 @@ if syn and syn.protect_gui then
     syn.protect_gui(venuslib)
 end
 
-RealNameScriot = venuslib.Parent
+RealNameScriot = venuslib
 venuslib.Parent = coreGui
 
 library = utility.format_table(library)
