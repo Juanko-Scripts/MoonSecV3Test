@@ -83,14 +83,18 @@ local function ApplyTag(player, text, num)
     local tag = UI:Clone()
     tag.Nameplate.Text = text
     
-    if num == 1 then
-        coroutine.wrap(function()
-            while tag and tag.Parent do
-                wait()
-    local color = Color3.fromHSV(tick() % 5 / 5, 1, 1)
+        if num == 1 then
+        local ABC461818
+ABC461818 = game:GetService("RunService").Heartbeat:Connect(function()
+            if tag and tag.Nameplate then
+     local color = Color3.fromHSV(tick() % 5 / 5, 1, 1)
                 tag.Nameplate.TextColor3 = color
+            else
+                if ABC461818 then
+         ABC461818:Disconnect()
+                end
             end
-        end)()
+        end)
     end
     
     tag.Parent = player.Character.Head
