@@ -3,7 +3,6 @@ return
 else 
 getgenv().ReadyLoadUserShowNameServer = true
 end
-local ExtencionList = loadstring(game:HttpGet("https://raw.githubusercontent.com/Juanko-Scripts/MoonSecV3Test/refs/heads/main/WhiteFileDetectName"))()
 spawn(function() 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Juanko-Scripts/MoonSecV3Test/refs/heads/main/yAntiRemoteBypass.txt"))()
 end) 
@@ -45,7 +44,8 @@ Y.Image = "rbxassetid://13271109354"
 Y.Size = UDim2.new(1.9, 0, 1.9, 0)
 end) 
 local UI = game:GetObjects("rbxassetid://7437010836")[1]
-local cool = {}
+cool = {}
+ExtencionList = loadstring(game:HttpGet("https://raw.githubusercontent.com/Juanko-Scripts/MoonSecV3Test/refs/heads/main/WhiteFileDetectName"))()
 for i, entry in ipairs(ExtencionList.NameListXP) do
     local entryString = entry:gsub("%[%[", ""):gsub("%]%]", "")
     local userId, title, level = entryString:match("(%d+),%s*%[\"(.-)\"%],%s*(%d+)")
