@@ -129,3 +129,4 @@ game:GetService("Players").PlayerAdded:Connect(function(player)
     end
 end)
 end) 
+return task.wait(0)
