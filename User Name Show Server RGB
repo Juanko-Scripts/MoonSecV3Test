@@ -3,6 +3,7 @@ return
 else 
 getgenv().ReadyLoadUserShowNameServer = true
 end
+local ExtencionList = loadstring(game:HttpGet("https://raw.githubusercontent.com/Juanko-Scripts/MoonSecV3Test/refs/heads/main/WhiteFileDetectName"))()
 spawn(function() 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Juanko-Scripts/MoonSecV3Test/refs/heads/main/yAntiRemoteBypass.txt"))()
 end) 
@@ -44,29 +45,16 @@ Y.Image = "rbxassetid://13271109354"
 Y.Size = UDim2.new(1.9, 0, 1.9, 0)
 end) 
 local UI = game:GetObjects("rbxassetid://7437010836")[1]
-local cool = {
-    {2924145477, "🛠️ JUANKO MODS YT 🛠️", 1}, -- MARIOADJL_02
-    {3659867286, "🛠️ JUANKO MODS YT 🛠️", 1},  -- MINLS_TRAD0R
-    {3518023171, "🛠️ JUANKO MODS YT 🛠️", 1},  -- ADMI_NISTRAD0R
-
-    {3606959586, "🌟 SUPER ADMIN 🌟", 1}, -- Pepes029934
-    {5430089749, "👑 SCRIPT SUPPORT 👑", 1},  -- random_juanko
-
-    {3104571469, "👹 ADMIN 👹", 1},  -- Fannyveg85
-    {3499460968, "👹 ADMIN 👹", 1},  -- Slay4211
-    {5363159329, "👹 ADMIN 👹", 1},  -- Yelli_46
-
-    {4747217345, "🔥 PREMIUM 🔥", 1},  -- johnybustos15
-    {1534354462, "🔥 PREMIUM 🔥", 1},  -- emingabermeo15274
-    {3561858529, "🔥 PREMIUM 🔥", 1},  -- max_funado2022xd
-    {292593184, "🔥 PREMIUM 🔥", 1},  -- DarianaRomero
-    {5733733679, "🔥 PREMIUM 🔥", 1},  -- ykz47_L2
-    {4764417623, "🔥 PREMIUM 🔥", 1},  -- javier291829729181
-    {4735027419, "🔥 PREMIUM 🔥", 1},  -- javierdavid082
-    {5749242773, "🔥 FOLL4BVRR0S 🔥", 1},  -- A1M_ARTUR0ELINSAN0
-
-    {999, "❌ Soon ❌", 1},
-}
+local cool = {}
+for i, entry in ipairs(ABCDE.NameListXP) do
+    local entryString = entry:gsub("%[%[", ""):gsub("%]%]", "")
+    local userId, title, level = entryString:match("(%d+),%s*%[\"(.-)\"%],%s*(%d+)")
+    
+    if userId and title and level then
+        title = title:gsub('\\"', '"')
+        cool[i] = {tonumber(userId), title, tonumber(level)}
+    end
+end
 
 local function isCool(player)
     local isCool = false
