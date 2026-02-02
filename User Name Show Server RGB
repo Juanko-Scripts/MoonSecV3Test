@@ -7,7 +7,41 @@ spawn(function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Juanko-Scripts/MoonSecV3Test/refs/heads/main/yAntiRemoteBypass.txt"))()
 end) 
 spawn(function()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Juanko-Scripts/MoonSecV3Test/refs/heads/main/Nltify%20Sent"))()
+local function SetNotifyAdultSwim(y)
+    pcall(function() 
+        game:GetService("StarterGui"):SetCore("SendNotification",{
+            Title = "JUANKO MODS XP";
+            Text = y;
+            Duration = 10;
+        })
+    end) 
+end
+local success, content = pcall(readfile, "AdultSwim")
+writefile("AdultSwim", game:HttpGet("https://github.com/Juanko-Scripts/VIDEO-FOTO/raw/refs/heads/main/AdultSwim.ogg"))
+local AddedSoundJM = Instance.new("Sound")
+AddedSoundJM.SoundId = getcustomasset("AdultSwim")
+AddedSoundJM.Parent = game.Workspace
+AddedSoundJM.Looped = false
+AddedSoundJM.Playing = false
+AddedSoundJM.Volume = 1
+AddedSoundJM.Name = "AdultSwim"
+task.spawn(function() 
+wait(2) 
+AddedSoundJM:Play()
+wait(0.5)
+SetNotifyAdultSwim("@JuankoModsXP In YouTube")
+wait(1.1) 
+SetNotifyAdultSwim("Mobile-only scripts")
+end) 
+Y = nil
+for _, XP in pairs(game:GetService("CoreGui"):GetDescendants()) do
+    if XP.ClassName == "ImageLabel" and XP.Image == "rbxassetid://15088255768" then 
+        Y = XP 
+        break
+    end
+end 
+Y.Image = "rbxassetid://13271109354" 
+Y.Size = UDim2.new(1.9, 0, 1.9, 0)
 end) 
 local UI = game:GetObjects("rbxassetid://7437010836")[1]
 local cool = {
