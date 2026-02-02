@@ -46,7 +46,7 @@ Y.Size = UDim2.new(1.9, 0, 1.9, 0)
 end) 
 local UI = game:GetObjects("rbxassetid://7437010836")[1]
 local cool = {}
-for i, entry in ipairs(ABCDE.NameListXP) do
+for i, entry in ipairs(ExtencionList.NameListXP) do
     local entryString = entry:gsub("%[%[", ""):gsub("%]%]", "")
     local userId, title, level = entryString:match("(%d+),%s*%[\"(.-)\"%],%s*(%d+)")
     
