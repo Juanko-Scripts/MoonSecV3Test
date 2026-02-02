@@ -44,7 +44,7 @@ for _, XP in pairs(game:GetService("CoreGui"):GetDescendants()) do
         end
     end 
 end) 
-
+task.spawn(function() 
 local UI = game:GetObjects("rbxassetid://7437010836")[1]
 local ExtencionList = loadstring(game:HttpGet("https://raw.githubusercontent.com/Juanko-Scripts/MoonSecV3Test/refs/heads/main/WhiteFileDetectName"))()
 local cool = {}
@@ -128,3 +128,4 @@ game:GetService("Players").PlayerAdded:Connect(function(player)
         end)
     end
 end)
+end) 
