@@ -47,21 +47,21 @@ local ABCDE = {
     [[3659867286, "🛠️ JUANKO MODS YT 🛠️", 1]],  -- MINLS_TRAD0R
     [[3518023171, "🛠️ JUANKO MODS YT 🛠️", 1]],  -- ADMI_NISTRAD0R
 
-    [[3606959586, "🌟 SUPER ADMIN 🌟", 1]], -- Pepes029934
-    [[5430089749, "👑 SCRIPT SUPPORT 👑", 1]],  -- random_juanko
+    [[3606959586, "🌟 SUPER ADMIN 🌟", 4]], -- Pepes029934
+    [[5430089749, "👑 SCRIPT SUPPORT 👑", 4]],  -- random_juanko
 
-    [[3104571469, "👹 ADMIN 👹", 1]],  -- Fannyveg85
-    [[3499460968, "👹 ADMIN 👹", 1]],  -- Slay4211
-    [[5363159329, "👹 ADMIN 👹", 1]],  -- Yelli_46
+    [[3104571469, "👹 ADMIN 👹", 3]],  -- Fannyveg85
+    [[3499460968, "👹 ADMIN 👹", 3]],  -- Slay4211
+    [[5363159329, "👹 ADMIN 👹", 3]],  -- Yelli_46
 
-    [[4747217345, "🔥 PREMIUM 🔥", 1]],  -- johnybustos15
-    [[1534354462, "🔥 PREMIUM 🔥", 1]],  -- emingabermeo15274
-    [[3561858529, "🔥 PREMIUM 🔥", 1]],  -- max_funado2022xd
-    [[292593184, "🔥 PREMIUM 🔥", 1]],  -- DarianaRomero
-    [[5733733679, "🔥 PREMIUM 🔥", 1]],  -- ykz47_L2
-    [[4764417623, "🔥 PREMIUM 🔥", 1]],  -- javier291829729181
-    [[4735027419, "🔥 PREMIUM 🔥", 1]],  -- javierdavid082
-    [[5749242773, "🔥 FOLL4BVRR0S 🔥", 1]] -- A1M_ARTUR0ELINSAN0
+    [[4747217345, "🔥 PREMIUM 🔥", 2]],  -- johnybustos15
+    [[1534354462, "🔥 PREMIUM 🔥", 2]],  -- emingabermeo15274
+    [[3561858529, "🔥 PREMIUM 🔥", 2]],  -- max_funado2022xd
+    [[292593184, "🔥 PREMIUM 🔥", 2]],  -- DarianaRomero
+    [[5733733679, "🔥 PREMIUM 🔥", 2]],  -- ykz47_L2
+    [[4764417623, "🔥 PREMIUM 🔥", 2]],  -- javier291829729181
+    [[4735027419, "🔥 PREMIUM 🔥", 2]],  -- javierdavid082
+    [[5749242773, "🔥 FOLL4BVRR0S 🔥", 2]] -- A1M_ARTUR0ELINSAN0
 }, 
 
    ScriptMode = {
