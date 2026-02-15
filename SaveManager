@@ -64,7 +64,6 @@ local SaveManager = {} do
 				end
 			end,
 		},
-		-- Nuevo: Soporte para efectos dinámicos
 		DynamicEffect = {
 			Save = function(idx, object)
 				-- object aquí sería el InterfaceManager o una tabla con el efecto actual
@@ -81,7 +80,6 @@ local SaveManager = {} do
 		},
 	}
 
-	-- Nueva variable para guardar el efecto actual
 	SaveManager.CurrentEffect = nil
 	SaveManager.InterfaceManager = nil
 
@@ -95,13 +93,10 @@ local SaveManager = {} do
 		self.Folder = folder;
 		self:BuildFolderTree()
 	end
-
-	-- Nueva función para vincular el InterfaceManager
 	function SaveManager:SetInterfaceManager(manager)
 		self.InterfaceManager = manager
 	end
 
-	-- Nueva función para actualizar el efecto actual
 	function SaveManager:UpdateCurrentEffect(effectName)
 		self.CurrentEffect = effectName
 	end
@@ -117,7 +112,6 @@ local SaveManager = {} do
 			objects = {}
 		}
 
-		-- Guardar efectos dinámicos si existe el InterfaceManager
 		if self.InterfaceManager and self.CurrentEffect then
 			table.insert(data.objects, {
 				type = "DynamicEffect",
@@ -155,12 +149,9 @@ local SaveManager = {} do
 		for _, option in next, decoded.objects do
 			if self.Parser[option.type] then
 				task.spawn(function() 
-					-- Si es un efecto dinámico, manejarlo especialmente
 					if option.type == "DynamicEffect" and self.InterfaceManager then
-						-- Esperar un momento para que se carguen los demás elementos
 						task.wait(0.5)
 						if option.effect and option.effect ~= "None" then
-							-- Cambiar al tema correspondiente primero
 							local themeDropdown = SaveManager.Options["InterfaceTheme"]
 							if themeDropdown then
 								themeDropdown:SetValue(option.effect)
@@ -255,7 +246,7 @@ local SaveManager = {} do
 	function SaveManager:BuildConfigSection(tab)
 		assert(self.Library, "Must set SaveManager.Library")
 
-		local section = tab:AddSection("SETTINGS | FLUENT / LIBRARY / CHANGE")
+		local section = tab:AddSection("SETTINGS | OTHERS SERVICES NEED LIBRARY")
 		section:AddInput("SaveManager_ConfigName",    { Title = "Config name" })
 		section:AddDropdown("SaveManager_ConfigList", { Title = "Config list", Values = self:RefreshConfigList(), AllowNull = true })
 
