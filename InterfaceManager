@@ -1,124 +1,63 @@
-local HttpService = game:GetService("HttpService")
+local InterfaceManager = {}
+InterfaceManager.Folder = "FluentXP"
+InterfaceManager.Library = nil
 
-local SaveManager = {}
-SaveManager.Library = nil
-SaveManager.Folder = "FluentXPSettings"
-SaveManager.Ignore = {}
-SaveManager.Options = {}
-
-local function MakeFolder(path)
-    if not isfolder(path) then
-        makefolder(path)
-    end
-end
-
-local function Encode(t)
-    return HttpService:JSONEncode(t)
-end
-
-local function Decode(t)
-    return HttpService:JSONDecode(t)
-end
-
-function SaveManager:SetLibrary(lib)
+function InterfaceManager:SetLibrary(lib)
     self.Library = lib
-    self.Options = lib.Flags or lib.Options or {}
 end
 
-function SaveManager:Save(name)
+function InterfaceManager:SetFolder(folder)
+    self.Folder = folder
+end
+
+local function GetWindow()
+    if InterfaceManager.Library.GetWindow then
+        return InterfaceManager.Library:GetWindow()
+    end
+    return InterfaceManager.Library.Window
+end
+
+function InterfaceManager:BuildInterfaceSection(Tab)
     if not self.Library then return end
-    MakeFolder(self.Folder)
 
-    local data = {}
+    local Window = GetWindow()
+    if not Window then return end
 
-    for i,v in pairs(self.Options) do
-        if not table.find(self.Ignore, i) then
-            pcall(function()
-                if typeof(v) == "table" and v.Value ~= nil then
-                    data[i] = v.Value
-                else
-                    data[i] = v
-                end
-            end)
-        end
-    end
-
-    writefile(self.Folder.."/"..name..".json", Encode(data))
-end
-
-function SaveManager:Load(name)
-    if not self.Library then return end
-    local file = self.Folder.."/"..name..".json"
-    if not isfile(file) then return end
-
-    local data = Decode(readfile(file))
-
-    for i,v in pairs(data) do
-        local opt = self.Options[i]
-        if opt then
-            pcall(function()
-                if opt.Set then
-                    opt:Set(v)
-                elseif opt.SetValue then
-                    opt:SetValue(v)
-                else
-                    opt.Value = v
-                end
-            end)
-        end
-    end
-end
-
-function SaveManager:GetConfigs()
-    MakeFolder(self.Folder)
-    local files = {}
-
-    for _,file in pairs(listfiles(self.Folder)) do
-        if file:sub(-5) == ".json" then
-            table.insert(files, file:match(".+/(.+)%.json"))
-        end
-    end
-    return files
-end
-
-function SaveManager:Delete(name)
-    local f = self.Folder.."/"..name..".json"
-    if isfile(f) then
-        delfile(f)
-    end
-end
-
-function SaveManager:BuildConfigSection(tab)
-    local Group = tab:AddGroup("Config Manager")
-
-    Group:AddTextbox("ConfigName", {
-        Title = "Config Name",
-        Default = "myconfig"
+    Tab:AddParagraph({
+        Title = "Interface Settings",
+        Content = "FluentXP Interface Manager"
     })
 
-    Group:AddDropdown("ConfigList", {
-        Title = "Configs",
-        Values = self:GetConfigs()
+    if self.Library.SetTheme then
+        Tab:AddDropdown("ThemeSelector", {
+            Title = "Theme",
+            Values = self.Library.Themes or {"Dark","Light"},
+            Default = "Dark",
+            Callback = function(Value)
+                self.Library:SetTheme(Value)
+            end
+        })
+    end
+
+    Tab:AddToggle("SaveWindowPos", {
+        Title = "Save Window Position",
+        Default = true,
+        Callback = function(Value)
+            if Window and Window.SetSavePosition then
+                Window:SetSavePosition(Value)
+            end
+        end
     })
 
-    Group:AddButton("Save Config", function()
-        local name = self.Library.Flags.ConfigName.Value
-        self:Save(name)
-    end)
-
-    Group:AddButton("Load Config", function()
-        local name = self.Library.Flags.ConfigList.Value
-        self:Load(name)
-    end)
-
-    Group:AddButton("Delete Config", function()
-        local name = self.Library.Flags.ConfigList.Value
-        self:Delete(name)
-    end)
-
-    Group:AddButton("Refresh List", function()
-        self.Library.Flags.ConfigList:Refresh(self:GetConfigs())
-    end)
+    Tab:AddKeybind("MinimizeKey", {
+        Title = "Minimize Key",
+        Default = Enum.KeyCode.LeftControl,
+        Callback = function(Key)
+            if Window then
+                Window.MinimizeKey = Key
+            end
+        end
+    })
 end
 
-return SaveManager
+return InterfaceManager
