@@ -1,0 +1,231 @@
+local httpService = game:GetService("HttpService")
+RunService = game:GetService("RunService")
+TweenService = game:GetService("TweenService")
+local InterfaceManager = {} do
+	InterfaceManager.Folder = "FluentSettings"
+    InterfaceManager.Settings = {
+        Theme = "Dark",
+        Acrylic = true,
+        Transparency = true,
+        MenuKeybind = "LeftControl"
+    }
+
+    function InterfaceManager:SetFolder(folder)
+		self.Folder = folder;
+		self:BuildFolderTree()
+	end
+
+    function InterfaceManager:SetLibrary(library)
+		self.Library = library
+	end
+
+    function InterfaceManager:BuildFolderTree()
+		local paths = {}
+
+		local parts = self.Folder:split("/")
+		for idx = 1, #parts do
+			paths[#paths + 1] = table.concat(parts, "/", 1, idx)
+		end
+
+		table.insert(paths, self.Folder)
+		table.insert(paths, self.Folder .. "/settings")
+
+		for i = 1, #paths do
+			local str = paths[i]
+			if not isfolder(str) then
+				makefolder(str)
+			end
+		end
+	end
+
+    function InterfaceManager:SaveSettings()
+        writefile(self.Folder .. "/options.json", httpService:JSONEncode(InterfaceManager.Settings))
+    end
+
+    function InterfaceManager:LoadSettings()
+        local path = self.Folder .. "/options.json"
+        if isfile(path) then
+            local data = readfile(path)
+local success, decoded = pcall(httpService.JSONDecode, httpService, data)
+
+            if success then
+                for i, v in next, decoded do
+                    InterfaceManager.Settings[i] = v
+                end
+            end
+        end
+    end
+
+    function InterfaceManager:BuildInterfaceSection(tab)
+assert(self.Library, "Must set InterfaceManager.Library")
+		local Library = self.Library
+        local Settings = InterfaceManager.Settings
+
+        InterfaceManager:LoadSettings()
+
+		local section = tab:AddSection("Interface")
+pcall(function()
+local effectConnection = nil
+local currentEffect = nil
+local hue = 0
+local color1, color2
+
+local function updateAccentColor(newColor)
+    if Fluent and Fluent.Theme then
+        Fluent.Theme.Accent = newColor
+        if Fluent.updateTheme then
+            Fluent:updateTheme()
+        end
+    end
+end
+
+local function rgbEffect()
+    hue = (hue + 0.005) % 1
+    local color = Color3.fromHSV(hue, 1, 1)
+    updateAccentColor(color)
+end
+
+local function blackWhiteEffect()
+    local value = (math.sin(tick() * 2) + 1) / 2 
+    local color = Color3.new(value, value, value)
+    updateAccentColor(color)
+end
+
+local function redPurpleEffect()
+    local t = (math.sin(tick() * 1.5) + 1) / 2
+    local hue = t * 0.8
+    local color = Color3.fromHSV(hue, 1, 1)
+    updateAccentColor(color)
+end
+
+local function yellowOrangeEffect()
+    local t = (math.sin(tick() * 1.8) + 1) / 2
+    local hue = 0.08 + (t * 0.08)
+    local color = Color3.fromHSV(hue, 1, 1)
+    updateAccentColor(color)
+end
+
+local function blueGreenEffect()
+    local t = (math.sin(tick() * 1.6) + 1) / 2
+    local hue = 0.3 + (t * 0.3)
+    local color = Color3.fromHSV(hue, 1, 1)
+    updateAccentColor(color)
+end
+
+local function cyberpunkEffect()
+    local t = (math.sin(tick() * 2) + 1) / 2
+    local hue
+    if t < 0.33 then
+        hue = 0.8 + (t * 3 * 0.2) -- Magenta a cian
+    elseif t < 0.66 then
+        hue = 0.5 + ((t - 0.33) * 3 * 0.3) -- Cian a amarillo
+    else
+        hue = 0.16 + ((t - 0.66) * 3 * 0.64) -- Amarillo a magenta
+    end
+    local color = Color3.fromHSV(hue % 1, 1, 1)
+    updateAccentColor(color)
+end
+
+local function neonSunsetEffect()
+    local t = (math.sin(tick() * 1.4) + 1) / 2
+    local hue
+    if t < 0.5 then
+        hue = 0.08 + (t * 2 * 0.87) -- Naranja a rosa
+    else
+        hue = 0.95 - ((t - 0.5) * 2 * 0.15) -- Rosa a morado
+    end
+    local color = Color3.fromHSV(hue % 1, 1, 1)
+    updateAccentColor(color)
+end
+
+local function aquaWaveEffect()
+    local t = (math.sin(tick() * 1.7) + 1) / 2
+    local hue = 0.45 + (t * 0.1)
+    local color = Color3.fromHSV(hue, 0.9, 1)
+    updateAccentColor(color)
+end
+
+local function setDynamicEffect(effectName)
+    if effectConnection then
+        effectConnection:Disconnect()
+        effectConnection = nil
+    end
+    if effectName == "RGB" then
+        effectConnection = RunService.Heartbeat:Connect(rgbEffect)
+    elseif effectName == "Black & White" then
+        effectConnection = RunService.Heartbeat:Connect(blackWhiteEffect)
+    elseif effectName == "Red & Purple" then
+        effectConnection = RunService.Heartbeat:Connect(redPurpleEffect)
+    elseif effectName == "Yellow & Orange" then
+        effectConnection = RunService.Heartbeat:Connect(yellowOrangeEffect)
+    elseif effectName == "Blue & Green" then
+        effectConnection = RunService.Heartbeat:Connect(blueGreenEffect)
+    elseif effectName == "Cyberpunk" then
+        effectConnection = RunService.Heartbeat:Connect(cyberpunkEffect)
+    elseif effectName == "Neon Sunset" then
+        effectConnection = RunService.Heartbeat:Connect(neonSunsetEffect)
+    elseif effectName == "Aqua Wave" then
+effectConnection = RunService.Heartbeat:Connect(aquaWaveEffect)
+    end
+end
+local InterfaceTheme = section:AddDropdown("InterfaceTheme", {
+			Title = "Theme",
+			Description = "Changes the interface theme.",
+			Values = Library.Themes,
+			Default = Settings.Theme,
+			Callback = function(selectedTheme)
+				Library:SetTheme(selectedTheme)
+                Settings.Theme = selectedTheme
+                InterfaceManager:SaveSettings()
+local ABC37371666666 = {
+"RGB", "Black & White", "Red & Purple", "Yellow & Orange",
+    "Blue & Green", "Cyberpunk", "Neon Sunset", "Aqua Wave"
+        }
+        
+        if table.find(ABC37371666666, selectedTheme) then
+            setDynamicEffect(selectedTheme)
+        else
+            if effectConnection then
+                effectConnection:Disconnect()
+                effectConnection = nil
+            end
+        end
+			end
+		})
+end)
+        InterfaceTheme:SetValue(Settings.Theme)
+	
+		if Library.UseAcrylic then
+			section:AddToggle("AcrylicToggle", {
+				Title = "Acrylic",
+Description = "The blurred background requires graphic quality 8+",
+				Default = Settings.Acrylic,
+				Callback = function(Value)
+					Library:ToggleAcrylic(Value)
+                    Settings.Acrylic = Value
+                    InterfaceManager:SaveSettings()
+				end
+			})
+		end
+	
+		section:AddToggle("TransparentToggle", {
+			Title = "Transparency",
+		Description = "Makes the interface transparent.",
+			Default = Settings.Transparency,
+			Callback = function(Value)
+				Library:ToggleTransparency(Value)
+				Settings.Transparency = Value
+                InterfaceManager:SaveSettings()
+			end
+		})
+	
+		local MenuKeybind = section:AddKeybind("MenuKeybind", { Title = "Minimize Bind", Default = Settings.MenuKeybind })
+		MenuKeybind:OnChanged(function()
+			Settings.MenuKeybind = MenuKeybind.Value
+            InterfaceManager:SaveSettings()
+		end)
+		Library.MinimizeKeybind = MenuKeybind
+    end
+end
+
+return InterfaceManager
