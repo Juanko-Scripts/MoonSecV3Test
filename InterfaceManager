@@ -11,7 +11,8 @@ local InterfaceManager = {} do
     
     local effectConnection = nil
     local hue = 0
-    local WindowReference = nil
+    local LibraryRef = nil
+    local CreatorRef = nil
 
     function InterfaceManager:SetFolder(folder)
 		self.Folder = folder
@@ -20,11 +21,10 @@ local InterfaceManager = {} do
 
     function InterfaceManager:SetLibrary(library)
 		self.Library = library
+        LibraryRef = library
+        -- Intentar obtener Creator
+        CreatorRef = library.Creator or (library.Window and library.Window.Creator)
 	end
-
-    function InterfaceManager:SetWindow(window)
-        WindowReference = window
-    end
 
     function InterfaceManager:BuildFolderTree()
 		local paths = {self.Folder, self.Folder .. "/settings"}
@@ -51,18 +51,71 @@ local InterfaceManager = {} do
         end
     end
 
+    local function updateAccentColor(newColor)
+        if CreatorRef and CreatorRef.UpdateAccentOnly then
+            CreatorRef.UpdateAccentOnly(newColor)
+        elseif LibraryRef then
+            -- Fallback: forzar actualización completa del tema
+            LibraryRef:SetTheme(LibraryRef.Theme)
+        end
+    end
+
     local function rgbEffect()
         hue = (hue + 0.005) % 1
-        if WindowReference then
-            WindowReference:UpdateAccentColor(Color3.fromHSV(hue, 1, 1))
-        end
+        updateAccentColor(Color3.fromHSV(hue, 1, 1))
     end
 
     local function blackWhiteEffect()
         local value = (math.sin(tick() * 2) + 1) / 2 
-        if WindowReference then
-            WindowReference:UpdateAccentColor(Color3.new(value, value, value))
+        updateAccentColor(Color3.new(value, value, value))
+    end
+
+    local function redPurpleEffect()
+        local t = (math.sin(tick() * 1.5) + 1) / 2
+        local hue = t * 0.8
+        updateAccentColor(Color3.fromHSV(hue, 1, 1))
+    end
+
+    local function yellowOrangeEffect()
+        local t = (math.sin(tick() * 1.8) + 1) / 2
+        local hue = 0.08 + (t * 0.08)
+        updateAccentColor(Color3.fromHSV(hue, 1, 1))
+    end
+
+    local function blueGreenEffect()
+        local t = (math.sin(tick() * 1.6) + 1) / 2
+        local hue = 0.3 + (t * 0.3)
+        updateAccentColor(Color3.fromHSV(hue, 1, 1))
+    end
+
+    local function cyberpunkEffect()
+        local t = (math.sin(tick() * 2) + 1) / 2
+        local hue
+        if t < 0.33 then
+            hue = 0.8 + (t * 3 * 0.2)
+        elseif t < 0.66 then
+            hue = 0.5 + ((t - 0.33) * 3 * 0.3)
+        else
+            hue = 0.16 + ((t - 0.66) * 3 * 0.64)
         end
+        updateAccentColor(Color3.fromHSV(hue % 1, 1, 1))
+    end
+
+    local function neonSunsetEffect()
+        local t = (math.sin(tick() * 1.4) + 1) / 2
+        local hue
+        if t < 0.5 then
+            hue = 0.08 + (t * 2 * 0.87)
+        else
+            hue = 0.95 - ((t - 0.5) * 2 * 0.15)
+        end
+        updateAccentColor(Color3.fromHSV(hue % 1, 1, 1))
+    end
+
+    local function aquaWaveEffect()
+        local t = (math.sin(tick() * 1.7) + 1) / 2
+        local hue = 0.45 + (t * 0.1)
+        updateAccentColor(Color3.fromHSV(hue, 0.9, 1))
     end
 
     local function setDynamicEffect(effectName)
@@ -75,6 +128,18 @@ local InterfaceManager = {} do
             effectConnection = RunService.Heartbeat:Connect(rgbEffect)
         elseif effectName == "Black & White" then
             effectConnection = RunService.Heartbeat:Connect(blackWhiteEffect)
+        elseif effectName == "Red & Purple" then
+            effectConnection = RunService.Heartbeat:Connect(redPurpleEffect)
+        elseif effectName == "Yellow & Orange" then
+            effectConnection = RunService.Heartbeat:Connect(yellowOrangeEffect)
+        elseif effectName == "Blue & Green" then
+            effectConnection = RunService.Heartbeat:Connect(blueGreenEffect)
+        elseif effectName == "Cyberpunk" then
+            effectConnection = RunService.Heartbeat:Connect(cyberpunkEffect)
+        elseif effectName == "Neon Sunset" then
+            effectConnection = RunService.Heartbeat:Connect(neonSunsetEffect)
+        elseif effectName == "Aqua Wave" then
+            effectConnection = RunService.Heartbeat:Connect(aquaWaveEffect)
         end
     end
 
@@ -97,7 +162,10 @@ local InterfaceManager = {} do
                 Settings.Theme = selectedTheme
                 InterfaceManager:SaveSettings()
                 
-                local dynamicThemes = {"RGB", "Black & White"}
+                local dynamicThemes = {
+                    "RGB", "Black & White", "Red & Purple", "Yellow & Orange",
+                    "Blue & Green", "Cyberpunk", "Neon Sunset", "Aqua Wave"
+                }
         
                 if table.find(dynamicThemes, selectedTheme) then
                     setDynamicEffect(selectedTheme)
@@ -113,6 +181,7 @@ local InterfaceManager = {} do
 		if Library.UseAcrylic then
 			section:AddToggle("AcrylicToggle", {
 				Title = "Acrylic",
+                Description = "The blurred background requires graphic quality 8+",
 				Default = Settings.Acrylic,
 				Callback = function(Value)
 					Library:ToggleAcrylic(Value)
@@ -124,6 +193,7 @@ local InterfaceManager = {} do
 	
 		section:AddToggle("TransparentToggle", {
 			Title = "Transparency",
+		    Description = "Makes the interface transparent.",
 			Default = Settings.Transparency,
 			Callback = function(Value)
 				Library:ToggleTransparency(Value)
