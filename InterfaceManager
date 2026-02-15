@@ -17,9 +17,38 @@ local function GetWindow()
     return InterfaceManager.Library.Window
 end
 
+local RGBEnabled = false
+local RunService = game:GetService("RunService")
+
+local function StartRGB(Fluent)
+    if RGBEnabled then return end
+    RGBEnabled = true
+
+    task.spawn(function()
+        while RGBEnabled do
+            local hue = (tick() % 5) / 5
+            local color = Color3.fromHSV(hue, 1, 1)
+
+            if Fluent.SetColor then
+                Fluent:SetColor("Accent", color)
+                Fluent:SetColor("Primary", color)
+                Fluent:SetColor("Secondary", color)
+            elseif Fluent.Theme then
+                Fluent.Theme.Accent = color
+                Fluent.Theme.Primary = color
+            end
+
+            RunService.RenderStepped:Wait()
+        end
+    end)
+end
+
+local function StopRGB()
+    RGBEnabled = false
+end
+
 function InterfaceManager:BuildInterfaceSection(Tab)
     if not self.Library then return end
-
     local Window = GetWindow()
     if not Window then return end
 
@@ -28,16 +57,21 @@ function InterfaceManager:BuildInterfaceSection(Tab)
         Content = "FluentXP Interface Manager"
     })
 
-    if self.Library.SetTheme then
-        Tab:AddDropdown("ThemeSelector", {
-            Title = "Theme",
-            Values = self.Library.Themes or {"Dark","Light"},
-            Default = "Dark",
-            Callback = function(Value)
-                self.Library:SetTheme(Value)
+    Tab:AddDropdown("ThemeSelector", {
+        Title = "Theme",
+        Values = {"Dark", "Light", "RGB"},
+        Default = "Dark",
+        Callback = function(Value)
+            if Value == "RGB" then
+                StartRGB(self.Library)
+            else
+                StopRGB()
+                if self.Library.SetTheme then
+                    self.Library:SetTheme(Value)
+                end
             end
-        })
-    end
+        end
+    })
 
     Tab:AddToggle("SaveWindowPos", {
         Title = "Save Window Position",
