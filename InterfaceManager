@@ -24,15 +24,12 @@ local InterfaceManager = {} do
 
     function InterfaceManager:BuildFolderTree()
 		local paths = {}
-
 		local parts = self.Folder:split("/")
 		for idx = 1, #parts do
 			paths[#paths + 1] = table.concat(parts, "/", 1, idx)
 		end
-
 		table.insert(paths, self.Folder)
 		table.insert(paths, self.Folder .. "/settings")
-
 		for i = 1, #paths do
 			local str = paths[i]
 			if not isfolder(str) then
@@ -50,7 +47,6 @@ local InterfaceManager = {} do
         if isfile(path) then
             local data = readfile(path)
             local success, decoded = pcall(httpService.JSONDecode, httpService, data)
-
             if success then
                 for i, v in next, decoded do
                     InterfaceManager.Settings[i] = v
@@ -58,11 +54,21 @@ local InterfaceManager = {} do
             end
         end
     end
+
     local function updateAccentColor(newColor)
-        if self.Library and self.Library.Theme then
+        if not self.Library then return end
+        
+        if self.Library.Theme then
             self.Library.Theme.Accent = newColor
-            if self.Library.updateTheme then
-                self.Library:updateTheme()
+        end
+        
+        if self.Library.Acrylic then
+            self.Library.Acrylic.Accent = newColor
+        end
+        
+        for _, element in pairs(self.Library.Options or {}) do
+            if element.Type == "Colorpicker" and element.OptionCallback then
+                element.OptionCallback(newColor)
             end
         end
     end
@@ -188,13 +194,6 @@ local InterfaceManager = {} do
                     if effectConnection then
                         effectConnection:Disconnect()
                         effectConnection = nil
-                        -- Restaurar color de acento original del tema
-                        if Library.Themes[selectedTheme] and Library.Themes[selectedTheme].Accent then
-                            Library.Theme.Accent = Library.Themes[selectedTheme].Accent
-                            if Library.updateTheme then
-                                Library:updateTheme()
-                            end
-                        end
                     end
                 end
 			end
