@@ -10,7 +10,6 @@ local InterfaceManager = {} do
         MenuKeybind = "LeftControl"
     }
     
-    -- Variables para efectos dinámicos (movidas fuera del pcall)
     local effectConnection = nil
     local hue = 0
 
@@ -59,8 +58,6 @@ local InterfaceManager = {} do
             end
         end
     end
-
-    -- Funciones de efectos dinámicos (movidas fuera del pcall)
     local function updateAccentColor(newColor)
         if self.Library and self.Library.Theme then
             self.Library.Theme.Accent = newColor
