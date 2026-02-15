@@ -1,214 +1,86 @@
-local httpService = game:GetService("HttpService")
-RunService = game:GetService("RunService")
-local InterfaceManager = {} do
-	InterfaceManager.Folder = "FluentSettings"
-    InterfaceManager.Settings = {
-        Theme = "Dark",
-        Acrylic = true,
-        Transparency = true,
-        MenuKeybind = "LeftControl"
-    }
-    
-    local effectConnection = nil
-    local hue = 0
-    local LibraryRef = nil
-    local CreatorRef = nil
-
-    function InterfaceManager:SetFolder(folder)
-		self.Folder = folder
-		self:BuildFolderTree()
-	end
-
-    function InterfaceManager:SetLibrary(library)
-		self.Library = library
-        LibraryRef = library
-        -- Intentar obtener Creator
-        CreatorRef = library.Creator or (library.Window and library.Window.Creator)
-	end
-
-    function InterfaceManager:BuildFolderTree()
-		local paths = {self.Folder, self.Folder .. "/settings"}
-		for i = 1, #paths do
-			if not isfolder(paths[i]) then
-				makefolder(paths[i])
-			end
-		end
-	end
-
-    function InterfaceManager:SaveSettings()
-        writefile(self.Folder .. "/options.json", httpService:JSONEncode(InterfaceManager.Settings))
+local HttpService = game:GetService("HttpService")
+local SaveManager = {}
+SaveManager.Library = nil
+SaveManager.Folder = "FluentXPSettings"
+SaveManager.Ignore = {}
+SaveManager.Theme = true
+local function MakeFolder(path)
+    if not isfolder(path) then
+        makefolder(path)
     end
+end
+local function Encode(data)
+    return HttpService:JSONEncode(data)
+end
+local function Decode(data)
+    return HttpService:JSONDecode(data)
+end
+function SaveManager:SetLibrary(Library)
+    self.Library = Library
+end
 
-    function InterfaceManager:LoadSettings()
-        local path = self.Folder .. "/options.json"
-        if isfile(path) then
-            local success, decoded = pcall(httpService.JSONDecode, httpService, readfile(path))
-            if success then
-                for i, v in next, decoded do
-                    InterfaceManager.Settings[i] = v
-                end
+function SaveManager:IgnoreThemeSettings(state)
+    self.Theme = not state
+end
+function SaveManager:Save(name)
+    if not self.Library then return end
+    MakeFolder(self.Folder)
+    local data = {
+        Options = {},
+        Theme = {},
+    }
+    for i,v in pairs(self.Library.Options or {}) do
+        if not table.find(self.Ignore, i) then
+            pcall(function()
+                data.Options[i] = v.Value
+            end)
+        end
+    end
+    if self.Theme and self.Library.Theme then
+        for k,v in pairs(self.Library.Theme) do
+            if typeof(v) == "Color3" then
+                data.Theme[k] = {v.R, v.G, v.B}
             end
         end
     end
-
-    local function updateAccentColor(newColor)
-        if CreatorRef and CreatorRef.UpdateAccentOnly then
-            CreatorRef.UpdateAccentOnly(newColor)
-        elseif LibraryRef then
-            -- Fallback: forzar actualización completa del tema
-            LibraryRef:SetTheme(LibraryRef.Theme)
+    writefile(self.Folder.."/"..name..".json", Encode(data))
+end
+function SaveManager:Load(name)
+    if not self.Library then return end
+    if not isfile(self.Folder.."/"..name..".json") then return end
+    local data = Decode(readfile(self.Folder.."/"..name..".json"))
+    if data.Options then
+        for i,v in pairs(data.Options) do
+            local option = self.Library.Options[i]
+            if option then
+                pcall(function()
+                    option:SetValue(v)
+                end)
+            end
         end
     end
-
-    local function rgbEffect()
-        hue = (hue + 0.005) % 1
-        updateAccentColor(Color3.fromHSV(hue, 1, 1))
-    end
-
-    local function blackWhiteEffect()
-        local value = (math.sin(tick() * 2) + 1) / 2 
-        updateAccentColor(Color3.new(value, value, value))
-    end
-
-    local function redPurpleEffect()
-        local t = (math.sin(tick() * 1.5) + 1) / 2
-        local hue = t * 0.8
-        updateAccentColor(Color3.fromHSV(hue, 1, 1))
-    end
-
-    local function yellowOrangeEffect()
-        local t = (math.sin(tick() * 1.8) + 1) / 2
-        local hue = 0.08 + (t * 0.08)
-        updateAccentColor(Color3.fromHSV(hue, 1, 1))
-    end
-
-    local function blueGreenEffect()
-        local t = (math.sin(tick() * 1.6) + 1) / 2
-        local hue = 0.3 + (t * 0.3)
-        updateAccentColor(Color3.fromHSV(hue, 1, 1))
-    end
-
-    local function cyberpunkEffect()
-        local t = (math.sin(tick() * 2) + 1) / 2
-        local hue
-        if t < 0.33 then
-            hue = 0.8 + (t * 3 * 0.2)
-        elseif t < 0.66 then
-            hue = 0.5 + ((t - 0.33) * 3 * 0.3)
-        else
-            hue = 0.16 + ((t - 0.66) * 3 * 0.64)
+    if self.Theme and data.Theme and self.Library then
+        for k,v in pairs(data.Theme) do
+            if self.Library.UpdateColor then
+                self.Library:UpdateColor(k, Color3.new(v[1], v[2], v[3]))
+            elseif self.Library.Theme then
+                self.Library.Theme[k] = Color3.new(v[1], v[2], v[3])
+            end
         end
-        updateAccentColor(Color3.fromHSV(hue % 1, 1, 1))
-    end
 
-    local function neonSunsetEffect()
-        local t = (math.sin(tick() * 1.4) + 1) / 2
-        local hue
-        if t < 0.5 then
-            hue = 0.08 + (t * 2 * 0.87)
-        else
-            hue = 0.95 - ((t - 0.5) * 2 * 0.15)
+        if self.Library.ApplyTheme then
+            self.Library:ApplyTheme()
         end
-        updateAccentColor(Color3.fromHSV(hue % 1, 1, 1))
-    end
-
-    local function aquaWaveEffect()
-        local t = (math.sin(tick() * 1.7) + 1) / 2
-        local hue = 0.45 + (t * 0.1)
-        updateAccentColor(Color3.fromHSV(hue, 0.9, 1))
-    end
-
-    local function setDynamicEffect(effectName)
-        if effectConnection then
-            effectConnection:Disconnect()
-            effectConnection = nil
-        end
-        
-        if effectName == "RGB" then
-            effectConnection = RunService.Heartbeat:Connect(rgbEffect)
-        elseif effectName == "Black & White" then
-            effectConnection = RunService.Heartbeat:Connect(blackWhiteEffect)
-        elseif effectName == "Red & Purple" then
-            effectConnection = RunService.Heartbeat:Connect(redPurpleEffect)
-        elseif effectName == "Yellow & Orange" then
-            effectConnection = RunService.Heartbeat:Connect(yellowOrangeEffect)
-        elseif effectName == "Blue & Green" then
-            effectConnection = RunService.Heartbeat:Connect(blueGreenEffect)
-        elseif effectName == "Cyberpunk" then
-            effectConnection = RunService.Heartbeat:Connect(cyberpunkEffect)
-        elseif effectName == "Neon Sunset" then
-            effectConnection = RunService.Heartbeat:Connect(neonSunsetEffect)
-        elseif effectName == "Aqua Wave" then
-            effectConnection = RunService.Heartbeat:Connect(aquaWaveEffect)
-        end
-    end
-
-    function InterfaceManager:BuildInterfaceSection(tab)
-        assert(self.Library, "Must set InterfaceManager.Library")
-		local Library = self.Library
-        local Settings = InterfaceManager.Settings
-
-        InterfaceManager:LoadSettings()
-
-		local section = tab:AddSection("Interface")
-        
-        local InterfaceTheme = section:AddDropdown("InterfaceTheme", {
-			Title = "Theme",
-			Description = "Changes the interface theme.",
-			Values = Library.Themes,
-			Default = Settings.Theme,
-			Callback = function(selectedTheme)
-				Library:SetTheme(selectedTheme)
-                Settings.Theme = selectedTheme
-                InterfaceManager:SaveSettings()
-                
-                local dynamicThemes = {
-                    "RGB", "Black & White", "Red & Purple", "Yellow & Orange",
-                    "Blue & Green", "Cyberpunk", "Neon Sunset", "Aqua Wave"
-                }
-        
-                if table.find(dynamicThemes, selectedTheme) then
-                    setDynamicEffect(selectedTheme)
-                elseif effectConnection then
-                    effectConnection:Disconnect()
-                    effectConnection = nil
-                end
-			end
-		})
-        
-        InterfaceTheme:SetValue(Settings.Theme)
-	
-		if Library.UseAcrylic then
-			section:AddToggle("AcrylicToggle", {
-				Title = "Acrylic",
-                Description = "The blurred background requires graphic quality 8+",
-				Default = Settings.Acrylic,
-				Callback = function(Value)
-					Library:ToggleAcrylic(Value)
-                    Settings.Acrylic = Value
-                    InterfaceManager:SaveSettings()
-				end
-			})
-		end
-	
-		section:AddToggle("TransparentToggle", {
-			Title = "Transparency",
-		    Description = "Makes the interface transparent.",
-			Default = Settings.Transparency,
-			Callback = function(Value)
-				Library:ToggleTransparency(Value)
-				Settings.Transparency = Value
-                InterfaceManager:SaveSettings()
-			end
-		})
-	
-		local MenuKeybind = section:AddKeybind("MenuKeybind", { Title = "Minimize Bind", Default = Settings.MenuKeybind })
-		MenuKeybind:OnChanged(function()
-			Settings.MenuKeybind = MenuKeybind.Value
-            InterfaceManager:SaveSettings()
-		end)
-		Library.MinimizeKeybind = MenuKeybind
     end
 end
+function SaveManager:GetConfigs()
+    MakeFolder(self.Folder)
 
-return InterfaceManager
+    local files = {}
+    for _,file in pairs(listfiles(self.Folder)) do
+        table.insert(files, file:gsub(self.Folder.."/",""):gsub(".json",""))
+    end
+    return files
+end
+
+return SaveManager
