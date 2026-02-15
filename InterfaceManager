@@ -1,86 +1,371 @@
 local HttpService = game:GetService("HttpService")
 local SaveManager = {}
+
 SaveManager.Library = nil
 SaveManager.Folder = "FluentXPSettings"
 SaveManager.Ignore = {}
 SaveManager.Theme = true
+SaveManager.Options = {} 
 local function MakeFolder(path)
     if not isfolder(path) then
         makefolder(path)
     end
 end
+
 local function Encode(data)
     return HttpService:JSONEncode(data)
 end
+
 local function Decode(data)
     return HttpService:JSONDecode(data)
 end
+
 function SaveManager:SetLibrary(Library)
     self.Library = Library
+    if Library and Library.Options then
+        self.Options = Library.Options
+    end
 end
 
 function SaveManager:IgnoreThemeSettings(state)
     self.Theme = not state
 end
+
 function SaveManager:Save(name)
-    if not self.Library then return end
+    if not self.Library then 
+        return false, "No library set"
+    end
+    
     MakeFolder(self.Folder)
+    
     local data = {
         Options = {},
         Theme = {},
     }
-    for i,v in pairs(self.Library.Options or {}) do
+    
+    for i, v in pairs(self.Library.Options or {}) do
         if not table.find(self.Ignore, i) then
             pcall(function()
-                data.Options[i] = v.Value
+                -- Manejar diferentes tipos de opciones
+                if v.Type == "Toggle" then
+                    data.Options[i] = {type = "Toggle", value = v.Value}
+                elseif v.Type == "Slider" then
+                    data.Options[i] = {type = "Slider", value = v.Value}
+                elseif v.Type == "Dropdown" then
+                    data.Options[i] = {type = "Dropdown", value = v.Value, multi = v.Multi}
+                elseif v.Type == "Colorpicker" then
+                    data.Options[i] = {type = "Colorpicker", value = v.Value:ToHex(), transparency = v.Transparency}
+                elseif v.Type == "Keybind" then
+                    data.Options[i] = {type = "Keybind", key = v.Value, mode = v.Mode}
+                elseif v.Type == "Input" then
+                    data.Options[i] = {type = "Input", value = v.Value}
+                else
+                    data.Options[i] = v.Value
+                end
             end)
         end
     end
+    
     if self.Theme and self.Library.Theme then
-        for k,v in pairs(self.Library.Theme) do
+        for k, v in pairs(self.Library.Theme) do
             if typeof(v) == "Color3" then
                 data.Theme[k] = {v.R, v.G, v.B}
+            elseif typeof(v) == "number" then
+                data.Theme[k] = v
+            elseif typeof(v) == "string" then
+                data.Theme[k] = v
             end
         end
     end
-    writefile(self.Folder.."/"..name..".json", Encode(data))
+    
+    local success, err = pcall(function()
+        writefile(self.Folder.."/"..name..".json", Encode(data))
+    end)
+    
+    if success then
+        return true, "Config saved successfully"
+    else
+        return false, "Failed to save config: " .. tostring(err)
+    end
 end
 function SaveManager:Load(name)
-    if not self.Library then return end
-    if not isfile(self.Folder.."/"..name..".json") then return end
-    local data = Decode(readfile(self.Folder.."/"..name..".json"))
+    if not self.Library then 
+        return false, "No library set"
+    end
+    
+    local filePath = self.Folder.."/"..name..".json"
+    if not isfile(filePath) then 
+        return false, "Config file not found"
+    end
+    
+    local success, data = pcall(function()
+        return Decode(readfile(filePath))
+    end)
+    
+    if not success then
+        return false, "Failed to decode config file"
+    end
+    
     if data.Options then
-        for i,v in pairs(data.Options) do
+        for i, v in pairs(data.Options) do
             local option = self.Library.Options[i]
             if option then
                 pcall(function()
-                    option:SetValue(v)
+                    if type(v) == "table" then
+                        if v.type == "Toggle" then
+                            option:SetValue(v.value)
+                        elseif v.type == "Slider" then
+                            option:SetValue(v.value)
+                        elseif v.type == "Dropdown" then
+                            option:SetValue(v.value)
+                        elseif v.type == "Colorpicker" and v.value then
+                            option:SetValueRGB(Color3.fromHex(v.value), v.transparency or 0)
+                        elseif v.type == "Keybind" then
+                            option:SetValue(v.key, v.mode)
+                        elseif v.type == "Input" then
+                            option:SetValue(v.value)
+                        end
+                    else
+                        option:SetValue(v)
+                    end
                 end)
             end
         end
     end
+    
     if self.Theme and data.Theme and self.Library then
-        for k,v in pairs(data.Theme) do
-            if self.Library.UpdateColor then
-                self.Library:UpdateColor(k, Color3.new(v[1], v[2], v[3]))
-            elseif self.Library.Theme then
-                self.Library.Theme[k] = Color3.new(v[1], v[2], v[3])
+        for k, v in pairs(data.Theme) do
+            if type(v) == "table" and #v == 3 then
+               local color = Color3.new(v[1], v[2], v[3])
+                
+                if self.Library.UpdateColor then
+                    self.Library:UpdateColor(k, color)
+                elseif self.Library.Theme then
+                    self.Library.Theme[k] = color
+                end
+            else
+                if self.Library.Theme then
+                    self.Library.Theme[k] = v
+                end
             end
         end
-
+        
         if self.Library.ApplyTheme then
             self.Library:ApplyTheme()
+        elseif self.Library.ForceUpdateAllThemes then
+            self.Library:ForceUpdateAllThemes()
+        elseif self.Library.Creator and self.Library.Creator.UpdateTheme then
+            self.Library.Creator.UpdateTheme()
+        end
+    end
+    
+    if self.Library.SettingLoaded then
+        self.Library.SettingLoaded = true
+    end
+    
+    return true, "Config loaded successfully"
+end
+
+function SaveManager:GetConfigs()
+    MakeFolder(self.Folder)
+    
+    local files = {}
+    local success, fileList = pcall(function()
+        return listfiles(self.Folder)
+    end)
+    
+    if success and fileList then
+        for _, file in pairs(fileList) do
+            if file:sub(-5) == ".json" then
+                local name = file:gsub(self.Folder.."/", ""):gsub(".json", "")
+                table.insert(files, name)
+            end
+        end
+    end
+    
+    return files
+end
+
+function SaveManager:Delete(name)
+    local filePath = self.Folder.."/"..name..".json"
+    if isfile(filePath) then
+        local success = pcall(function()
+            delfile(filePath)
+        end)
+        return success
+    end
+    return false
+end
+
+function SaveManager:SetIgnoreIndexes(list)
+    self.Ignore = list or {}
+end
+
+function SaveManager:AddIgnoreIndex(idx)
+    table.insert(self.Ignore, idx)
+end
+
+function SaveManager:RemoveIgnoreIndex(idx)
+    for i, v in ipairs(self.Ignore) do
+        if v == idx then
+            table.remove(self.Ignore, i)
+            break
         end
     end
 end
-function SaveManager:GetConfigs()
-    MakeFolder(self.Folder)
 
-    local files = {}
-    for _,file in pairs(listfiles(self.Folder)) do
-        table.insert(files, file:gsub(self.Folder.."/",""):gsub(".json",""))
+function SaveManager:BuildConfigSection(tab)
+    if not self.Library then
+        error("SaveManager: Must set Library before building config section")
     end
-    return files
+    
+    MakeFolder(self.Folder)
+    
+    local section = tab:AddSection("Configuración", "settings")
+    
+    section:AddInput("SaveManager_ConfigName", {
+        Title = "Nombre de configuración",
+        Description = "Escribe el nombre para guardar/cargar",
+        Placeholder = "mi_configuracion"
+    })
+    
+    section:AddDropdown("SaveManager_ConfigList", {
+        Title = "Configuraciones disponibles",
+        Description = "Selecciona una configuración",
+        Values = self:GetConfigs(),
+        AllowNull = true
+    })
+ 
+    section:AddButton({
+        Title = "Guardar configuración",
+        Description = "Guarda la configuración actual",
+        Callback = function()
+            local name = self.Library.Options.SaveManager_ConfigName and 
+                        self.Library.Options.SaveManager_ConfigName.Value or ""
+            
+            if name:gsub(" ", "") == "" then
+                if self.Library.Notify then
+                    self.Library:Notify({
+                        Title = "Configuración",
+                        Content = "Error",
+                        SubContent = "Nombre de configuración inválido",
+                        Duration = 5
+                    })
+                end
+                return
+            end
+            
+            local success, msg = self:Save(name)
+            
+            if self.Library.Notify then
+                self.Library:Notify({
+                    Title = "Configuración",
+                    Content = success and "Éxito" or "Error",
+                    SubContent = msg,
+                    Duration = 5
+                })
+            end
+            
+            if self.Library.Options.SaveManager_ConfigList then
+                self.Library.Options.SaveManager_ConfigList:SetValues(self:GetConfigs())
+            end
+        end
+    })
+    
+    section:AddButton({
+        Title = "Cargar configuración",
+        Description = "Carga la configuración seleccionada",
+        Callback = function()
+            local name = self.Library.Options.SaveManager_ConfigList and 
+                        self.Library.Options.SaveManager_ConfigList.Value or nil
+            
+            if not name then
+                if self.Library.Notify then
+                    self.Library:Notify({
+                        Title = "Configuración",
+                        Content = "Error",
+                        SubContent = "Selecciona una configuración",
+                        Duration = 5
+                    })
+                end
+                return
+            end
+            
+            local success, msg = self:Load(name)
+            
+            if self.Library.Notify then
+                self.Library:Notify({
+                    Title = "Configuración",
+                    Content = success and "Éxito" or "Error",
+                    SubContent = msg,
+                    Duration = 5
+                })
+            end
+        end
+    })
+    
+    section:AddButton({
+        Title = "Eliminar configuración",
+        Description = "Elimina la configuración seleccionada",
+        Callback = function()
+            local name = self.Library.Options.SaveManager_ConfigList and 
+                        self.Library.Options.SaveManager_ConfigList.Value or nil
+            
+            if not name then
+                if self.Library.Notify then
+                    self.Library:Notify({
+                        Title = "Configuración",
+                        Content = "Error",
+                        SubContent = "Selecciona una configuración",
+                        Duration = 5
+                    })
+                end
+                return
+            end
+            
+            local success = self:Delete(name)
+            
+            if success then
+                if self.Library.Notify then
+                    self.Library:Notify({
+                        Title = "Configuración",
+                        Content = "Éxito",
+                        SubContent = "Configuración eliminada",
+                        Duration = 5
+                    })
+                end
+                
+                if self.Library.Options.SaveManager_ConfigList then
+                    self.Library.Options.SaveManager_ConfigList:SetValues(self:GetConfigs())
+                    self.Library.Options.SaveManager_ConfigList:SetValue(nil)
+                end
+            else
+                if self.Library.Notify then
+                    self.Library:Notify({
+                        Title = "Configuración",
+                        Content = "Error",
+                        SubContent = "No se pudo eliminar la configuración",
+                        Duration = 5
+                    })
+                end
+            end
+        end
+    })
+    
+    section:AddButton({
+        Title = "Actualizar lista",
+        Description = "Actualiza la lista de configuraciones",
+        Callback = function()
+            if self.Library.Options.SaveManager_ConfigList then
+                self.Library.Options.SaveManager_ConfigList:SetValues(self:GetConfigs())
+            end
+        end
+    })
+    
+    self:AddIgnoreIndex("SaveManager_ConfigName")
+    self:AddIgnoreIndex("SaveManager_ConfigList")
+    
+    return section
 end
 
 return SaveManager
