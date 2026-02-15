@@ -12,7 +12,8 @@ local InterfaceManager = {} do
     
     local effectConnection = nil
     local hue = 0
-    local LibraryReference = nil -- Referencia a la librería
+    local LibraryReference = nil
+    local ThemesReference = nil 
 
     function InterfaceManager:SetFolder(folder)
 		self.Folder = folder;
@@ -21,7 +22,8 @@ local InterfaceManager = {} do
 
     function InterfaceManager:SetLibrary(library)
 		self.Library = library
-        LibraryReference = library -- Guardar referencia
+        LibraryReference = library
+        ThemesReference = library.Themes 
 	end
 
     function InterfaceManager:BuildFolderTree()
@@ -58,21 +60,18 @@ local InterfaceManager = {} do
     end
 
     local function updateAccentColor(newColor)
-        if not LibraryReference then return end
+        if not LibraryReference or not ThemesReference then return end
         
-        if LibraryReference.Theme then
-            LibraryReference.Theme.Accent = newColor
+        local currentTheme = LibraryReference.Theme
+        if currentTheme and ThemesReference[currentTheme] then
+            ThemesReference[currentTheme].Accent = newColor
         end
         
         if LibraryReference.Acrylic then
             LibraryReference.Acrylic.Accent = newColor
         end
         
-        for _, element in pairs(LibraryReference.Options or {}) do
-            if element.Type == "Colorpicker" and element.OptionCallback then
-                element.OptionCallback(newColor)
-            end
-        end
+        LibraryReference:SetTheme(currentTheme)
     end
 
     local function rgbEffect()
@@ -170,7 +169,8 @@ local InterfaceManager = {} do
         assert(self.Library, "Must set InterfaceManager.Library")
 		local Library = self.Library
         local Settings = InterfaceManager.Settings
-        LibraryReference = self.Library -- Actualizar referencia
+        LibraryReference = self.Library
+        ThemesReference = self.Library.Themes
 
         InterfaceManager:LoadSettings()
 
