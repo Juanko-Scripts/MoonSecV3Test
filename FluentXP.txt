@@ -559,7 +559,7 @@ function Creator.UpdateTheme()
 	if not Creator.Themes[Creator.Theme] then
 		Creator.Theme = "Dark"
 	end
-local Theme = Library.Themes[Library.Theme]
+Theme = Creator.Themes[Library.Theme]
 Library.AccentColor = Theme.Accent
 	for Instance, Object in next, Creator.Registry do
 		for Property, ColorIdx in next, Object.Properties do
