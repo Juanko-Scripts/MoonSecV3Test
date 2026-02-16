@@ -10,7 +10,6 @@ local InterfaceManager = {} do
         MenuKeybind = "LeftControl"
     }
     
-    -- Variables para el color dinámico
     local isBlackWhiteTheme = false
     local dynamicConnection = nil
 
@@ -68,57 +67,68 @@ local InterfaceManager = {} do
         isBlackWhiteTheme = false
     end
     
-    function InterfaceManager:StartDynamicColor()
-        self:StopDynamicColor()
-        isBlackWhiteTheme = true
-        
-        dynamicConnection = RunService.Heartbeat:Connect(function()
-            if not isBlackWhiteTheme then return end
-            
-            -- Generar colores RGB aleatorios
-            local r = math.random(0, 50)
-            local g = math.random(0, 50)
-            local b = math.random(0, 50)
-            
-            local r2 = math.random(150, 255)
-            local g2 = math.random(150, 255)
-            local b2 = math.random(150, 255)
-            
-            -- Aplicar colores
-            getgenv().BackgroundXP = Color3.fromRGB(r, g, b)
-            getgenv().OthersColorsFunctions = Color3.fromRGB(r + 20, g + 20, b + 20)
-            getgenv().FullColorOthers = Color3.fromRGB(r2, g2, b2)
-            getgenv().DialogColorY = Color3.fromRGB(r - 5, g - 5, b - 5)
-            getgenv().SubTextX = Color3.fromRGB(r2 - 50, g2 - 50, b2 - 50)
-            getgenv().FrameDialogBorder = Color3.fromRGB(r + 10, g + 10, b + 10)
-            getgenv().TitleXP = Color3.fromRGB(r + 15, g + 15, b + 15)
-            getgenv().DialogIndicator = Color3.fromRGB(r2 - 100, g2 - 100, b2 - 100)
-            getgenv().ButtonBorderY = Color3.fromRGB(r + 25, g + 25, b + 25)
-            getgenv().DialogBorderY = Color3.fromRGB(r + 20, g + 20, b + 20)
-            
-            -- Valores estáticos
-            getgenv().ElementTransparecyY = 0.95
-            getgenv().HoverChangeV = 0.04
-            getgenv().AcrylicNoiseY = 1
-        end)
-    end
     
-    function InterfaceManager:ApplyStaticBlackWhite()
-        getgenv().BackgroundXP = Color3.fromRGB(0, 0, 0)
-        getgenv().OthersColorsFunctions = Color3.fromRGB(40, 40, 40)
-        getgenv().FullColorOthers = Color3.fromRGB(255, 255, 255)
-        getgenv().DialogColorY = Color3.fromRGB(15, 15, 15)
-        getgenv().SubTextX = Color3.fromRGB(170, 170, 170)
-        getgenv().FrameDialogBorder = Color3.fromRGB(20, 20, 20)
-        getgenv().TitleXP = Color3.fromRGB(25, 25, 25)
-        getgenv().DialogIndicator = Color3.fromRGB(60, 60, 60)
+    function InterfaceManager:StartDynamicColor()
+    self:StopDynamicColor()
+    isBlackWhiteTheme = true
+    
+    local FluentXP = self.Library 
+    local Creator = FluentXP and FluentXP.Creator 
+    
+    dynamicConnection = RunService.Heartbeat:Connect(function()
+        if not isBlackWhiteTheme then return end
+        
+        local r = math.random(0, 50)
+        local g = math.random(0, 50)
+        local b = math.random(0, 50)
+        
+        local r2 = math.random(150, 255)
+        local g2 = math.random(150, 255)
+        local b2 = math.random(150, 255)
+        
+        getgenv().BackgroundXP = Color3.fromRGB(r, g, b)
+        getgenv().OthersColorsFunctions = Color3.fromRGB(r + 20, g + 20, b + 20)
+        getgenv().FullColorOthers = Color3.fromRGB(r2, g2, b2)
+        getgenv().DialogColorY = Color3.fromRGB(r - 5, g - 5, b - 5)
+        getgenv().SubTextX = Color3.fromRGB(r2 - 50, g2 - 50, b2 - 50)
+        getgenv().FrameDialogBorder = Color3.fromRGB(r + 10, g + 10, b + 10)
+        getgenv().TitleXP = Color3.fromRGB(r + 15, g + 15, b + 15)
+        getgenv().DialogIndicator = Color3.fromRGB(r2 - 100, g2 - 100, b2 - 100)
+        getgenv().ButtonBorderY = Color3.fromRGB(r + 25, g + 25, b + 25)
+        getgenv().DialogBorderY = Color3.fromRGB(r + 20, g + 20, b + 20)
+        
         getgenv().ElementTransparecyY = 0.95
         getgenv().HoverChangeV = 0.04
-        getgenv().ButtonBorderY = Color3.fromRGB(30, 30, 30)
-        getgenv().DialogBorderY = Color3.fromRGB(27, 27, 27)
         getgenv().AcrylicNoiseY = 1
-    end
+        
+        if Creator and Creator.UpdateTheme then
+            Creator.UpdateTheme()
+        end
+    end)
+end
 
+function InterfaceManager:ApplyStaticBlackWhite()
+    getgenv().BackgroundXP = Color3.fromRGB(0, 0, 0)
+    getgenv().OthersColorsFunctions = Color3.fromRGB(40, 40, 40)
+    getgenv().FullColorOthers = Color3.fromRGB(255, 255, 255)
+    getgenv().DialogColorY = Color3.fromRGB(15, 15, 15)
+    getgenv().SubTextX = Color3.fromRGB(170, 170, 170)
+    getgenv().FrameDialogBorder = Color3.fromRGB(20, 20, 20)
+    getgenv().TitleXP = Color3.fromRGB(25, 25, 25)
+    getgenv().DialogIndicator = Color3.fromRGB(60, 60, 60)
+    getgenv().ElementTransparecyY = 0.95
+    getgenv().HoverChangeV = 0.04
+    getgenv().ButtonBorderY = Color3.fromRGB(30, 30, 30)
+    getgenv().DialogBorderY = Color3.fromRGB(27, 27, 27)
+    getgenv().AcrylicNoiseY = 1
+    
+    local FluentXP = self.Library
+    local Creator = FluentXP and FluentXP.Creator
+    if Creator and Creator.UpdateTheme then
+        Creator.UpdateTheme()
+    end
+end
+    
     function InterfaceManager:BuildInterfaceSection(tab)
         assert(self.Library, "Must set InterfaceManager.Library")
 		local Library = self.Library
@@ -128,46 +138,34 @@ local InterfaceManager = {} do
 
 		local section = tab:AddSection("Interface")
 		
-		-- BOTÓN 1: BlackWhite Dinámico (colores aleatorios)
 		section:AddButton({
-			Title = "🌈 BlackWhite Dinámico",
+			Title = "BlackWhite Dinámico",
 			Description = "Activa el tema BlackWhite con colores que cambian",
 			Callback = function()
-				-- Cambiar el tema en la librería
 				Library:SetTheme("BlackWhite")
 				
-				-- Actualizar settings
 				Settings.Theme = "BlackWhite"
 				InterfaceManager:SaveSettings()
 				
-				-- Iniciar colores dinámicos
 				InterfaceManager:StartDynamicColor()
-				
-				print("🌈 Tema BlackWhite Dinámico Activado - Los colores cambian cada frame")
 			end
 		})
 		
-		-- BOTÓN 2: BlackWhite Estático (original)
 		section:AddButton({
-			Title = "⚫ BlackWhite Estático",
+			Title = "BlackWhite Estático",
 			Description = "Activa el tema BlackWhite original (sin cambios)",
 			Callback = function()
-				-- Cambiar el tema en la librería
 				Library:SetTheme("BlackWhite")
 				
-				-- Actualizar settings
 				Settings.Theme = "BlackWhite"
 				InterfaceManager:SaveSettings()
 				
-				-- Detener colores dinámicos y aplicar estáticos
 				InterfaceManager:StopDynamicColor()
 				InterfaceManager:ApplyStaticBlackWhite()
 				
-				print("⚫ Tema BlackWhite Estático Activado - Colores fijos")
 			end
 		})
 		
-		-- BOTÓN 3: Reset a otro tema (para probar)
 		section:AddButton({
 			Title = "🔵 Tema Dark",
 			Description = "Cambia al tema Dark",
@@ -180,7 +178,6 @@ local InterfaceManager = {} do
 			end
 		})
 
-		-- Dropdown original (sin modificar)
 		local InterfaceTheme = section:AddDropdown("InterfaceTheme", {
 			Title = "Theme",
 			Description = "Changes the interface theme.",
@@ -199,7 +196,6 @@ local InterfaceManager = {} do
 			end
 		})
         
-        -- Iniciar dinámico si el tema actual es BlackWhite
         if Settings.Theme == "BlackWhite" then
             task.spawn(function()
                 task.wait(0.1)
