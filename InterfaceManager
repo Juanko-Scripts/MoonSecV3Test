@@ -13,6 +13,7 @@ local InterfaceManager = {} do
     -- Variables para el color dinámico
     local isBlackWhiteTheme = false
     local dynamicConnection = nil
+    local InterfaceTheme = nil -- Guardar referencia al dropdown
 
     function InterfaceManager:SetFolder(folder)
 		self.Folder = folder;
@@ -75,21 +76,21 @@ local InterfaceManager = {} do
         dynamicConnection = RunService.Heartbeat:Connect(function()
             if not isBlackWhiteTheme then return end
             
-            -- Generar colores RGB aleatorios pero manteniendo la estructura del tema BlackWhite
-            local r = math.random(0, 50)  -- Tonos oscuros para fondos
+            -- Generar colores RGB aleatorios
+            local r = math.random(0, 50)
             local g = math.random(0, 50)
             local b = math.random(0, 50)
             
-            local r2 = math.random(150, 255)  -- Tonos claros para textos
+            local r2 = math.random(150, 255)
             local g2 = math.random(150, 255)
             local b2 = math.random(150, 255)
             
-            -- Aplicar colores usando SOLO Color3.fromRGB
-            getgenv().BackgroundXP = Color3.fromRGB(r, g, b)  -- Oscuro
-            getgenv().OthersColorsFunctions = Color3.fromRGB(r + 20, g + 20, b + 20)  -- Un poco más claro
-            getgenv().FullColorOthers = Color3.fromRGB(r2, g2, b2)  -- Claro para texto
-            getgenv().DialogColorY = Color3.fromRGB(r - 5, g - 5, b - 5)  -- Más oscuro
-            getgenv().SubTextX = Color3.fromRGB(r2 - 50, g2 - 50, b2 - 50)  -- Texto secundario
+            -- Aplicar colores
+            getgenv().BackgroundXP = Color3.fromRGB(r, g, b)
+            getgenv().OthersColorsFunctions = Color3.fromRGB(r + 20, g + 20, b + 20)
+            getgenv().FullColorOthers = Color3.fromRGB(r2, g2, b2)
+            getgenv().DialogColorY = Color3.fromRGB(r - 5, g - 5, b - 5)
+            getgenv().SubTextX = Color3.fromRGB(r2 - 50, g2 - 50, b2 - 50)
             getgenv().FrameDialogBorder = Color3.fromRGB(r + 10, g + 10, b + 10)
             getgenv().TitleXP = Color3.fromRGB(r + 15, g + 15, b + 15)
             getgenv().DialogIndicator = Color3.fromRGB(r2 - 100, g2 - 100, b2 - 100)
@@ -103,7 +104,6 @@ local InterfaceManager = {} do
         end)
     end
     
-    -- Función para aplicar colores estáticos de BlackWhite
     function InterfaceManager:ApplyStaticBlackWhite()
         getgenv().BackgroundXP = Color3.fromRGB(0, 0, 0)
         getgenv().OthersColorsFunctions = Color3.fromRGB(40, 40, 40)
@@ -129,40 +129,35 @@ local InterfaceManager = {} do
 
 		local section = tab:AddSection("Interface")
 		
-		-- AGREGAR BOTÓN PARA BLACKWHITE DINÁMICO
-		local BlackWhiteButton = section:AddButton({
-			Title = "BlackWhite Dinámico",
+		-- BOTÓN PARA BLACKWHITE DINÁMICO
+		section:AddButton({
+			Title = "🌈 BlackWhite Dinámico",
 			Description = "Activa el tema BlackWhite con colores aleatorios",
 			Callback = function()
-				-- Cambiar el dropdown al valor BlackWhite
-				InterfaceTheme:SetValue("BlackWhite")
-				
 				-- Cambiar el tema en la librería
 				Library:SetTheme("BlackWhite")
 				
 				-- Actualizar settings
 				Settings.Theme = "BlackWhite"
 				InterfaceManager:SaveSettings()
+				
+				-- Actualizar el dropdown si existe
+				if InterfaceTheme then
+					InterfaceTheme:SetValue("BlackWhite")
+				end
 				
 				-- Iniciar colores dinámicos
 				InterfaceManager:StartDynamicColor()
 				
-				-- Aplicar BlackWhite múltiples veces para asegurar
-				for i = 1, 3 do
-					task.wait(0.05)
-					Library:SetTheme("BlackWhite")
-				end
+				print("🌈 Tema BlackWhite Dinámico Activado")
 			end
 		})
 		
-		-- BOTÓN PARA BLACKWHITE ESTÁTICO (original)
-		local StaticButton = section:AddButton({
-			Title = "BlackWhite Estático",
-			Description = "Activa el tema BlackWhite original (sin colores)",
+		-- BOTÓN PARA BLACKWHITE ESTÁTICO
+		section:AddButton({
+			Title = "⚫ BlackWhite Estático",
+			Description = "Activa el tema BlackWhite original",
 			Callback = function()
-				-- Cambiar el dropdown al valor BlackWhite
-				InterfaceTheme:SetValue("BlackWhite")
-				
 				-- Cambiar el tema en la librería
 				Library:SetTheme("BlackWhite")
 				
@@ -170,17 +165,21 @@ local InterfaceManager = {} do
 				Settings.Theme = "BlackWhite"
 				InterfaceManager:SaveSettings()
 				
-				-- Detener colores dinámicos
-				InterfaceManager:StopDynamicColor()
+				-- Actualizar el dropdown si existe
+				if InterfaceTheme then
+					InterfaceTheme:SetValue("BlackWhite")
+				end
 				
-				-- Aplicar colores estáticos
+				-- Detener colores dinámicos y aplicar estáticos
+				InterfaceManager:StopDynamicColor()
 				InterfaceManager:ApplyStaticBlackWhite()
 				
 				print("⚫ Tema BlackWhite Estático Activado")
 			end
 		})
 
-		local InterfaceTheme = section:AddDropdown("InterfaceTheme", {
+		-- Dropdown normal
+		InterfaceTheme = section:AddDropdown("InterfaceTheme", {
 			Title = "Theme",
 			Description = "Changes the interface theme.",
 			Values = Library.Themes,
@@ -191,15 +190,12 @@ local InterfaceManager = {} do
                 InterfaceManager:SaveSettings()
                 
                 if Value == "BlackWhite" then
-                    -- Por defecto usa el dinámico cuando se selecciona del dropdown
                     InterfaceManager:StartDynamicColor()
                 else
                     InterfaceManager:StopDynamicColor()
                 end
 			end
 		})
-
-        InterfaceTheme:SetValue(Settings.Theme)
         
         -- Iniciar dinámico si el tema actual es BlackWhite
         if Settings.Theme == "BlackWhite" then
