@@ -1,4 +1,5 @@
 local httpService = game:GetService("HttpService")
+local RunService = game:GetService("RunService")
 
 local InterfaceManager = {} do
 	InterfaceManager.Folder = "FluentSettings"
@@ -8,6 +9,11 @@ local InterfaceManager = {} do
         Transparency = true,
         MenuKeybind = "LeftControl"
     }
+    
+    -- Variables para el color dinámico
+    local dynamicHue = 0
+    local isBlackWhiteTheme = false
+    local dynamicConnection = nil
 
     function InterfaceManager:SetFolder(folder)
 		self.Folder = folder;
@@ -54,6 +60,79 @@ local InterfaceManager = {} do
             end
         end
     end
+    
+    -- Función para detener el color dinámico
+    function InterfaceManager:StopDynamicColor()
+        if dynamicConnection then
+            dynamicConnection:Disconnect()
+            dynamicConnection = nil
+        end
+        isBlackWhiteTheme = false
+    end
+    
+    -- Función para iniciar el color dinámico suave
+    function InterfaceManager:StartDynamicColor()
+        if dynamicConnection then
+            dynamicConnection:Disconnect()
+        end
+        
+        isBlackWhiteTheme = true
+        local lastTime = tick()
+        
+        dynamicConnection = RunService.Heartbeat:Connect(function()
+            if not isBlackWhiteTheme then
+                if dynamicConnection then
+                    dynamicConnection:Disconnect()
+                    dynamicConnection = nil
+                end
+                return
+            end
+            
+            -- Actualizar el hue suavemente (velocidad ajustable)
+            local currentTime = tick()
+            local deltaTime = currentTime - lastTime
+            lastTime = currentTime
+            
+            dynamicHue = (dynamicHue + deltaTime * 0.1) % 1 -- Velocidad de cambio: 0.1 por segundo
+            
+            -- Convertir HSV a RGB con saturación y valor altos para colores vibrantes
+            local color = Color3.fromHSV(dynamicHue, 0.8, 1)
+            
+            -- Aplicar los colores dinámicos a las variables globales
+            getgenv().BackgroundXP = color
+            getgenv().OthersColorsFunctions = Color3.fromHSV(dynamicHue, 0.7, 0.4)
+            getgenv().FullColorOthers = Color3.fromHSV(dynamicHue, 0.3, 1)
+            getgenv().DialogColorY = Color3.fromHSV(dynamicHue, 0.8, 0.3)
+            getgenv().SubTextX = Color3.fromHSV(dynamicHue, 0.4, 0.9)
+            getgenv().FrameDialogBorder = Color3.fromHSV(dynamicHue, 0.9, 0.3)
+            getgenv().TitleXP = Color3.fromHSV(dynamicHue, 0.6, 0.5)
+            getgenv().DialogIndicator = Color3.fromHSV(dynamicHue, 0.5, 0.7)
+            getgenv().ButtonBorderY = Color3.fromHSV(dynamicHue, 0.8, 0.5)
+            getgenv().DialogBorderY = Color3.fromHSV(dynamicHue, 0.7, 0.4)
+            
+            -- Mantener valores constantes (no dinámicos)
+            getgenv().ElementTransparecyY = 0.95
+            getgenv().HoverChangeV = 0.04
+            getgenv().AcrylicNoiseY = 1
+        end)
+    end
+    
+    -- Función para restaurar los colores del tema BlackWhite original (estáticos)
+    function InterfaceManager:SetStaticBlackWhite()
+        getgenv().BackgroundXP = Color3.fromRGB(0, 0, 0)
+        getgenv().OthersColorsFunctions = Color3.fromRGB(40, 40, 40)
+        getgenv().FullColorOthers = Color3.fromRGB(255, 255, 255)
+        getgenv().DialogColorY = Color3.fromRGB(15, 15, 15)
+        getgenv().SubTextX = Color3.fromRGB(170, 170, 170)
+        getgenv().FrameDialogBorder = Color3.fromRGB(20, 20, 20)
+        getgenv().TitleXP = Color3.fromRGB(25, 25, 25)
+        getgenv().DialogIndicator = Color3.fromRGB(60, 60, 60)
+        getgenv().ElementTransparecyY = 0.95
+        getgenv().HoverChangeV = 0.04
+        getgenv().ButtonBorderY = Color3.fromRGB(30, 30, 30)
+        getgenv().DialogBorderY = Color3.fromRGB(27, 27, 27)
+        getgenv().AcrylicNoiseY = 1
+    end
 
     function InterfaceManager:BuildInterfaceSection(tab)
         assert(self.Library, "Must set InterfaceManager.Library")
@@ -73,10 +152,28 @@ local InterfaceManager = {} do
 				Library:SetTheme(Value)
                 Settings.Theme = Value
                 InterfaceManager:SaveSettings()
+                
+                -- Manejar el tema BlackWhite con color dinámico
+                if Value == "BlackWhite" then
+                    InterfaceManager:StartDynamicColor()
+                else
+                    InterfaceManager:StopDynamicColor()
+                    -- Si el tema anterior era BlackWhite y cambiamos a otro,
+                    -- aseguramos que los colores se actualicen al nuevo tema
+                    if InterfaceManager.lastTheme == "BlackWhite" then
+                        Library:SetTheme(Value)
+                    end
+                end
+                InterfaceManager.lastTheme = Value
 			end
 		})
 
         InterfaceTheme:SetValue(Settings.Theme)
+        
+        -- Iniciar color dinámico si el tema actual es BlackWhite
+        if Settings.Theme == "BlackWhite" then
+            InterfaceManager:StartDynamicColor()
+        end
 	
 		if Library.UseAcrylic then
 			section:AddToggle("AcrylicToggle", {
