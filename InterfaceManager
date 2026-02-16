@@ -13,7 +13,6 @@ local InterfaceManager = {} do
     -- Variables para el color dinámico
     local isBlackWhiteTheme = false
     local dynamicConnection = nil
-    local InterfaceTheme = nil -- Guardar referencia al dropdown
 
     function InterfaceManager:SetFolder(folder)
 		self.Folder = folder;
@@ -129,10 +128,10 @@ local InterfaceManager = {} do
 
 		local section = tab:AddSection("Interface")
 		
-		-- BOTÓN PARA BLACKWHITE DINÁMICO
+		-- BOTÓN 1: BlackWhite Dinámico (colores aleatorios)
 		section:AddButton({
 			Title = "🌈 BlackWhite Dinámico",
-			Description = "Activa el tema BlackWhite con colores aleatorios",
+			Description = "Activa el tema BlackWhite con colores que cambian",
 			Callback = function()
 				-- Cambiar el tema en la librería
 				Library:SetTheme("BlackWhite")
@@ -140,23 +139,18 @@ local InterfaceManager = {} do
 				-- Actualizar settings
 				Settings.Theme = "BlackWhite"
 				InterfaceManager:SaveSettings()
-				
-				-- Actualizar el dropdown si existe
-				if InterfaceTheme then
-					InterfaceTheme:SetValue("BlackWhite")
-				end
 				
 				-- Iniciar colores dinámicos
 				InterfaceManager:StartDynamicColor()
 				
-				print("🌈 Tema BlackWhite Dinámico Activado")
+				print("🌈 Tema BlackWhite Dinámico Activado - Los colores cambian cada frame")
 			end
 		})
 		
-		-- BOTÓN PARA BLACKWHITE ESTÁTICO
+		-- BOTÓN 2: BlackWhite Estático (original)
 		section:AddButton({
 			Title = "⚫ BlackWhite Estático",
-			Description = "Activa el tema BlackWhite original",
+			Description = "Activa el tema BlackWhite original (sin cambios)",
 			Callback = function()
 				-- Cambiar el tema en la librería
 				Library:SetTheme("BlackWhite")
@@ -164,22 +158,30 @@ local InterfaceManager = {} do
 				-- Actualizar settings
 				Settings.Theme = "BlackWhite"
 				InterfaceManager:SaveSettings()
-				
-				-- Actualizar el dropdown si existe
-				if InterfaceTheme then
-					InterfaceTheme:SetValue("BlackWhite")
-				end
 				
 				-- Detener colores dinámicos y aplicar estáticos
 				InterfaceManager:StopDynamicColor()
 				InterfaceManager:ApplyStaticBlackWhite()
 				
-				print("⚫ Tema BlackWhite Estático Activado")
+				print("⚫ Tema BlackWhite Estático Activado - Colores fijos")
+			end
+		})
+		
+		-- BOTÓN 3: Reset a otro tema (para probar)
+		section:AddButton({
+			Title = "🔵 Tema Dark",
+			Description = "Cambia al tema Dark",
+			Callback = function()
+				Library:SetTheme("Dark")
+				Settings.Theme = "Dark"
+				InterfaceManager:SaveSettings()
+				InterfaceManager:StopDynamicColor()
+				print("🔵 Tema Dark Activado")
 			end
 		})
 
-		-- Dropdown normal
-		InterfaceTheme = section:AddDropdown("InterfaceTheme", {
+		-- Dropdown original (sin modificar)
+		local InterfaceTheme = section:AddDropdown("InterfaceTheme", {
 			Title = "Theme",
 			Description = "Changes the interface theme.",
 			Values = Library.Themes,
