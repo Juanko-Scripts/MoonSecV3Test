@@ -1361,10 +1361,53 @@ function Creator.UpdateTheme()
 	if not Creator.Themes[Creator.Theme] then
 		Creator.Theme = "Dark"
 	end
+	if Creator.Theme == "BlackWhite" then
+		if getgenv().BackgroundXP then
+			Creator.Themes.BlackWhite.Background = getgenv().BackgroundXP
+		end
+		if getgenv().OthersColorsFunctions then
+			Creator.Themes.BlackWhite.Text = getgenv().OthersColorsFunctions
+			Creator.Themes.BlackWhite.ElementBackground = getgenv().OthersColorsFunctions
+		end
+		if getgenv().FullColorOthers then
+			Creator.Themes.BlackWhite.TextDisabled = getgenv().FullColorOthers
+			Creator.Themes.BlackWhite.TextHover = getgenv().FullColorOthers
+		end
+		if getgenv().DialogColorY then
+			Creator.Themes.BlackWhite.DialogBackground = getgenv().DialogColorY
+		end
+		if getgenv().SubTextX then
+			Creator.Themes.BlackWhite.SubText = getgenv().SubTextX
+		end
+		if getgenv().FrameDialogBorder then
+			Creator.Themes.BlackWhite.DialogBorder = getgenv().FrameDialogBorder
+		end
+		if getgenv().TitleXP then
+			Creator.Themes.BlackWhite.Title = getgenv().TitleXP
+		end
+		if getgenv().DialogIndicator then
+			Creator.Themes.BlackWhite.DialogIndicator = getgenv().DialogIndicator
+		end
+		if getgenv().ButtonBorderY then
+			Creator.Themes.BlackWhite.ButtonBorder = getgenv().ButtonBorderY
+		end
+		if getgenv().DialogBorderY then
+			Creator.Themes.BlackWhite.DialogBorder = getgenv().DialogBorderY
+		end
+		if getgenv().ElementTransparecyY then
+			Creator.Themes.BlackWhite.ElementTransparency = getgenv().ElementTransparecyY
+		end
+		if getgenv().HoverChangeV then
+			Creator.Themes.BlackWhite.HoverTransparency = getgenv().HoverChangeV
+		end
+		if getgenv().AcrylicNoiseY then
+			Creator.Themes.BlackWhite.AcrylicNoise = getgenv().AcrylicNoiseY
+		end
+	end
 
 	for Instance, Object in next, Creator.Registry do
-		for Property, ColorIdx in next, Object.Properties do
-			local themeValue = Creator.GetThemeProperty(ColorIdx)
+	for Property, ColorIdx in next, Object.Properties do
+	local themeValue = Creator.GetThemeProperty(ColorIdx)
 			if themeValue then
 				Instance[Property] = themeValue
 			end
@@ -1374,7 +1417,7 @@ function Creator.UpdateTheme()
 	local transparency = Creator.GetThemeProperty("ElementTransparency")
 	if transparency then
 		for _, Motor in next, Creator.TransparencyMotors do
-			Motor:setGoal(Flipper.Instant.new(transparency))
+		Motor:setGoal(Flipper.Instant.new(transparency))
 		end
 	end
 end
@@ -9290,127 +9333,43 @@ local InterfaceManager = {} do
 
 
 	function InterfaceManager:SetTheme(name)
-
-
 		InterfaceManager.Settings.Theme = name
-
-
 	end
-
-
-
-
 
 	function InterfaceManager:SetFolder(folder)
-
-
 		self.Folder = folder;
-
-
 		self:BuildFolderTree()
-
-
 	end
-
-
-
-
 
 	function InterfaceManager:SetLibrary(library)
-
-
 		self.Library = library
-
-
 	end
-
-
-
-
 
 	function InterfaceManager:BuildFolderTree()
-
-
 		local paths = {}
-
-
-
-
-
 		local parts = self.Folder:split("/")
-
-
 		for idx = 1, #parts do
-
-
-			paths[#paths + 1] = table.concat(parts, "/", 1, idx)
-
-
+	paths[#paths + 1] = table.concat(parts, "/", 1, idx)
 		end
-
-
-
-
 
 		table.insert(paths, self.Folder)
-
-
 		table.insert(paths, self.Folder .. "/")
-
-
-
-
-
 		for i = 1, #paths do
-
-
 			local str = paths[i]
-
-
 			if not isfolder(str) then
-
-
 				makefolder(str)
-
-
 			end
-
-
 		end
-
-
 	end
-
-
-
-
 
 	function InterfaceManager:SaveSettings()
-
-
 		writefile(self.Folder .. "/options.json", httpService:JSONEncode(InterfaceManager.Settings))
-
-
 	end
 
-
-
-
-
 	function InterfaceManager:LoadSettings()
-
-
 		local path = self.Folder .. "/options.json"
-
-
 		if isfile(path) then
-
-
 			local data = readfile(path)
-
-
-
-
 
 			if not RunService:IsStudio() then local success, decoded = pcall(httpService.JSONDecode, httpService, data) end
 
