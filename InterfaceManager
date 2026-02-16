@@ -10,7 +10,6 @@ local InterfaceManager = {} do
         MenuKeybind = "LeftControl"
     }
     
-    -- Variables para el color dinámico
     local dynamicHue = 0
     local isBlackWhiteTheme = false
     local dynamicConnection = nil
@@ -62,8 +61,7 @@ local InterfaceManager = {} do
             end
         end
     end
-    
-    -- Función para detener el spam de tema
+   
     function InterfaceManager:StopThemeSpam()
         if spamConnection then
             spamConnection:Disconnect()
@@ -75,16 +73,13 @@ local InterfaceManager = {} do
         end
         isBlackWhiteTheme = false
     end
-    
-    -- Función para iniciar el spam de tema BlackWhite con colores dinámicos
+
     function InterfaceManager:StartThemeSpam()
-        -- Detener cualquier spam anterior
         self:StopThemeSpam()
         
         isBlackWhiteTheme = true
         lastTime = tick()
         
-        -- Inicializar las variables globales si no existen
         getgenv().BackgroundXP = getgenv().BackgroundXP or Color3.fromRGB(0, 0, 0)
         getgenv().OthersColorsFunctions = getgenv().OthersColorsFunctions or Color3.fromRGB(40, 40, 40)
         getgenv().FullColorOthers = getgenv().FullColorOthers or Color3.fromRGB(255, 255, 255)
@@ -99,37 +94,26 @@ local InterfaceManager = {} do
         getgenv().DialogBorderY = getgenv().DialogBorderY or Color3.fromRGB(27, 27, 27)
         getgenv().AcrylicNoiseY = getgenv().AcrylicNoiseY or 1
         
-        -- SPAM: Aplicar el tema BlackWhite constantemente
         spamConnection = RunService.Heartbeat:Connect(function()
             if not isBlackWhiteTheme then
                 return
             end
-            
-            -- Aplicar el tema BlackWhite de la librería constantemente
-            -- Esto "spamea" la aplicación del tema para asegurar que los cambios se apliquen
             pcall(function()
                 self.Library:SetTheme("BlackWhite")
             end)
         end)
         
-        -- Animación de colores dinámicos (más lenta para no sobrecargar)
         dynamicConnection = RunService.Heartbeat:Connect(function()
             if not isBlackWhiteTheme then
                 return
             end
-            
-            -- Actualizar el hue suavemente para colores dinámicos
             local currentTime = tick()
             local deltaTime = currentTime - lastTime
             lastTime = currentTime
-            
-            dynamicHue = (dynamicHue + deltaTime * 0.1) % 1 -- Velocidad más lenta para la animación
-            
-            -- Actualizar las variables globales con colores dinámicos
-            -- Estos valores mantienen la esencia del tema BlackWhite pero con tonos de color
-            getgenv().BackgroundXP = Color3.fromHSV(dynamicHue, 0.8, 0.1)  -- Casi negro
+            dynamicHue = (dynamicHue + deltaTime * 0.1) % 1
+            getgenv().BackgroundXP = Color3.fromHSV(dynamicHue, 0.8, 0.1) 
             getgenv().OthersColorsFunctions = Color3.fromHSV(dynamicHue, 0.7, 0.2)
-            getgenv().FullColorOthers = Color3.fromHSV(dynamicHue, 0.5, 0.95) -- Casi blanco
+            getgenv().FullColorOthers = Color3.fromHSV(dynamicHue, 0.5, 0.95) 
             getgenv().DialogColorY = Color3.fromHSV(dynamicHue, 0.8, 0.12)
             getgenv().SubTextX = Color3.fromHSV(dynamicHue, 0.4, 0.85)
             getgenv().FrameDialogBorder = Color3.fromHSV(dynamicHue, 0.9, 0.15)
@@ -155,26 +139,19 @@ local InterfaceManager = {} do
 			Values = Library.Themes,
 			Default = Settings.Theme,
 			Callback = function(Value)
-                -- Cambiar el tema de la librería
 				Library:SetTheme(Value)
                 Settings.Theme = Value
                 InterfaceManager:SaveSettings()
                 
-                -- Manejar el tema BlackWhite con SPAM de cambios
                 if Value == "BlackWhite" then
-                    -- Iniciar spam del tema BlackWhite con colores dinámicos
                     InterfaceManager:StartThemeSpam()
-                    
-                    -- Aplicar el tema múltiples veces para asegurar
                     for i = 1, 5 do
                         task.wait(0.05)
                         Library:SetTheme("BlackWhite")
                     end
                 else
-                    -- Detener spam si estaba activo
                     InterfaceManager:StopThemeSpam()
                     
-                    -- Aplicar el nuevo tema múltiples veces para asegurar el cambio
                     for i = 1, 3 do
                         task.wait(0.05)
                         Library:SetTheme(Value)
@@ -186,12 +163,9 @@ local InterfaceManager = {} do
 		})
 
         InterfaceTheme:SetValue(Settings.Theme)
-        
-        -- Iniciar spam si el tema actual es BlackWhite (al cargar)
         task.spawn(function()
-            task.wait(0.5) -- Esperar a que la UI cargue
+            task.wait(0.5) 
             if Settings.Theme == "BlackWhite" then
-                -- Aplicar tema múltiples veces al inicio
                 for i = 1, 5 do
                     Library:SetTheme("BlackWhite")
                     task.wait(0.05)
