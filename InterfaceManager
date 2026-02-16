@@ -1,97 +1,114 @@
-local InterfaceManager = {}
-InterfaceManager.Folder = "FluentXP"
-InterfaceManager.Library = nil
+local httpService = game:GetService("HttpService")
 
-function InterfaceManager:SetLibrary(lib)
-    self.Library = lib
-end
+local InterfaceManager = {} do
+	InterfaceManager.Folder = "FluentSettings"
+    InterfaceManager.Settings = {
+        Theme = "Dark",
+        Acrylic = true,
+        Transparency = true,
+        MenuKeybind = "LeftControl"
+    }
 
-function InterfaceManager:SetFolder(folder)
-    self.Folder = folder
-end
+    function InterfaceManager:SetFolder(folder)
+		self.Folder = folder;
+		self:BuildFolderTree()
+	end
 
-local function GetWindow()
-    if InterfaceManager.Library.GetWindow then
-        return InterfaceManager.Library:GetWindow()
+    function InterfaceManager:SetLibrary(library)
+		self.Library = library
+	end
+
+    function InterfaceManager:BuildFolderTree()
+		local paths = {}
+
+		local parts = self.Folder:split("/")
+		for idx = 1, #parts do
+			paths[#paths + 1] = table.concat(parts, "/", 1, idx)
+		end
+
+		table.insert(paths, self.Folder)
+		table.insert(paths, self.Folder .. "/settings")
+
+		for i = 1, #paths do
+			local str = paths[i]
+			if not isfolder(str) then
+				makefolder(str)
+			end
+		end
+	end
+
+    function InterfaceManager:SaveSettings()
+        writefile(self.Folder .. "/options.json", httpService:JSONEncode(InterfaceManager.Settings))
     end
-    return InterfaceManager.Library.Window
-end
 
-local RGBEnabled = false
-local RunService = game:GetService("RunService")
+    function InterfaceManager:LoadSettings()
+        local path = self.Folder .. "/options.json"
+        if isfile(path) then
+            local data = readfile(path)
+            local success, decoded = pcall(httpService.JSONDecode, httpService, data)
 
-local function StartRGB(Fluent)
-    if RGBEnabled then return end
-    RGBEnabled = true
-
-    task.spawn(function()
-        while RGBEnabled do
-            local hue = (tick() % 5) / 5
-            local color = Color3.fromHSV(hue, 1, 1)
-
-            if Fluent.SetColor then
-                Fluent:SetColor("Accent", color)
-                Fluent:SetColor("Primary", color)
-                Fluent:SetColor("Secondary", color)
-            elseif Fluent.Theme then
-                Fluent.Theme.Accent = color
-                Fluent.Theme.Primary = color
-            end
-
-            RunService.RenderStepped:Wait()
-        end
-    end)
-end
-
-local function StopRGB()
-    RGBEnabled = false
-end
-
-function InterfaceManager:BuildInterfaceSection(Tab)
-    if not self.Library then return end
-    local Window = GetWindow()
-    if not Window then return end
-
-    Tab:AddParagraph({
-        Title = "Interface Settings",
-        Content = "FluentXP Interface Manager"
-    })
-
-    Tab:AddDropdown("ThemeSelector", {
-        Title = "Theme",
-        Values = {"Dark", "Light", "RGB"},
-        Default = "Dark",
-        Callback = function(Value)
-            if Value == "RGB" then
-                StartRGB(self.Library)
-            else
-                StopRGB()
-                if self.Library.SetTheme then
-                    self.Library:SetTheme(Value)
+            if success then
+                for i, v in next, decoded do
+                    InterfaceManager.Settings[i] = v
                 end
             end
         end
-    })
+    end
 
-    Tab:AddToggle("SaveWindowPos", {
-        Title = "Save Window Position",
-        Default = true,
-        Callback = function(Value)
-            if Window and Window.SetSavePosition then
-                Window:SetSavePosition(Value)
-            end
-        end
-    })
+    function InterfaceManager:BuildInterfaceSection(tab)
+        assert(self.Library, "Must set InterfaceManager.Library")
+		local Library = self.Library
+        local Settings = InterfaceManager.Settings
 
-    Tab:AddKeybind("MinimizeKey", {
-        Title = "Minimize Key",
-        Default = Enum.KeyCode.LeftControl,
-        Callback = function(Key)
-            if Window then
-                Window.MinimizeKey = Key
-            end
-        end
-    })
+        InterfaceManager:LoadSettings()
+
+		local section = tab:AddSection("Interface")
+
+		local InterfaceTheme = section:AddDropdown("InterfaceTheme", {
+			Title = "Theme",
+			Description = "Changes the interface theme.",
+			Values = Library.Themes,
+			Default = Settings.Theme,
+			Callback = function(Value)
+				Library:SetTheme(Value)
+                Settings.Theme = Value
+                InterfaceManager:SaveSettings()
+			end
+		})
+
+        InterfaceTheme:SetValue(Settings.Theme)
+	
+		if Library.UseAcrylic then
+			section:AddToggle("AcrylicToggle", {
+				Title = "Acrylic",
+				Description = "The blurred background requires graphic quality 8+",
+				Default = Settings.Acrylic,
+				Callback = function(Value)
+					Library:ToggleAcrylic(Value)
+                    Settings.Acrylic = Value
+                    InterfaceManager:SaveSettings()
+				end
+			})
+		end
+	
+		section:AddToggle("TransparentToggle", {
+			Title = "Transparency",
+			Description = "Makes the interface transparent.",
+			Default = Settings.Transparency,
+			Callback = function(Value)
+				Library:ToggleTransparency(Value)
+				Settings.Transparency = Value
+                InterfaceManager:SaveSettings()
+			end
+		})
+	
+		local MenuKeybind = section:AddKeybind("MenuKeybind", { Title = "Minimize Bind", Default = Settings.MenuKeybind })
+		MenuKeybind:OnChanged(function()
+			Settings.MenuKeybind = MenuKeybind.Value
+            InterfaceManager:SaveSettings()
+		end)
+		Library.MinimizeKeybind = MenuKeybind
+    end
 end
 
 return InterfaceManager
