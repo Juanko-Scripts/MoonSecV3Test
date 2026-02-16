@@ -2897,391 +2897,370 @@ if NotificationHolderMain then game:GetService("Debris"):AddItem(NotificationHol
 				return DropFunc
 			end
 function ChannelContent:Colorpicker(text, preset, callback)
-    local isMobile = UserInputService.TouchEnabled and not UserInputService.MouseEnabled
-    local colorpickerframe = Instance.new("Frame")
-    local colorbutton = Instance.new("TextButton")
-    local colorbuttoncorner = Instance.new("UICorner")
-    local textlabel = Instance.new("TextLabel")
-    local colorshow = Instance.new("Frame")
-    local colorshowcorner = Instance.new("UICorner")
-    local textbutton = Instance.new("TextButton")
-    
-    colorpickerframe.Name = "ColorpickerFrame"
-    colorpickerframe.Parent = self
-    colorpickerframe.BackgroundColor3 = Color3.fromRGB(30, 31, 34)
-    colorpickerframe.BorderSizePixel = 0
-    colorpickerframe.Size = UDim2.new(1, -25, 0, 30)
-    
-    colorbutton.Name = "ColorButton"
-    colorbutton.Parent = colorpickerframe
-    colorbutton.BackgroundColor3 = Color3.fromRGB(66, 68, 73)
-    colorbutton.BorderSizePixel = 0
-    colorbutton.Position = UDim2.new(0.930000007, 0, 0.170000002, 0)
-    colorbutton.Size = UDim2.new(0, 20, 0, 20)
-    colorbutton.AutoButtonColor = false
-    colorbutton.Text = ""
-    
-    colorbuttoncorner.CornerRadius = UDim.new(0, 4)
-    colorbuttoncorner.Parent = colorbutton
-    
-    textlabel.Name = "TextLabel"
-    textlabel.Parent = colorpickerframe
-    textlabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    textlabel.BackgroundTransparency = 1.000
-    textlabel.Position = UDim2.new(0, 15, 0, 0)
-    textlabel.Size = UDim2.new(0, 114, 0, 30)
-    textlabel.Font = Enum.Font.Gotham
-    textlabel.Text = text
-    textlabel.TextColor3 = Color3.fromRGB(220, 221, 222)
-    textlabel.TextSize = 14.000
-    textlabel.TextXAlignment = Enum.TextXAlignment.Left
-    
-    colorshow.Name = "ColorShow"
-    colorshow.Parent = colorpickerframe
-    colorshow.BackgroundColor3 = preset or Color3.fromRGB(255, 255, 255)
-    colorshow.BorderSizePixel = 0
-    colorshow.Position = UDim2.new(0.779999971, 0, 0.170000002, 0)
-    colorshow.Size = UDim2.new(0, 20, 0, 20)
-    
-    colorshowcorner.CornerRadius = UDim.new(0, 4)
-    colorshowcorner.Parent = colorshow
-    
-    textbutton.Name = "TextButton"
-    textbutton.Parent = colorpickerframe
-    textbutton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    textbutton.BackgroundTransparency = 1.000
-    textbutton.Size = UDim2.new(1, 0, 1, 0)
-    textbutton.Font = Enum.Font.SourceSans
-    textbutton.Text = ""
-    textbutton.TextColor3 = Color3.fromRGB(0, 0, 0)
-    textbutton.TextSize = 14.000
-    
-    local colorpickerpopup = Instance.new("Frame")
-    local colorcontainer = Instance.new("Frame")
-    local hue = Instance.new("Frame")
-    local saturation = Instance.new("Frame")
-    local hueGradient = Instance.new("UIGradient")
-    local colorGradient = Instance.new("UIGradient")
-    local saturationGradient = Instance.new("UIGradient")
-    local dragButton = Instance.new("TextButton")
-    local dragButtonHue = Instance.new("TextButton")
-    local accept = Instance.new("TextButton")
-    local acceptcorner = Instance.new("UICorner")
-    local canc = Instance.new("TextButton")
-    local cancelcorner = Instance.new("UICorner")
-    
-    colorpickerpopup.Name = "ColorPickerPopup"
-    colorpickerpopup.Parent = MainFrame
-    colorpickerpopup.BackgroundColor3 = Color3.fromRGB(30, 31, 34)
-    colorpickerpopup.BorderSizePixel = 0
-    colorpickerpopup.Position = UDim2.new(0.389999986, 0, 0.324999988, 0)
-    colorpickerpopup.Size = UDim2.new(0, 203, 0, 160)
-    colorpickerpopup.Visible = false
-    colorpickerpopup.Active = true
-    
-    local popupcorner = Instance.new("UICorner")
-    popupcorner.CornerRadius = UDim.new(0, 4)
-    popupcorner.Parent = colorpickerpopup
-    
-    colorcontainer.Name = "ColorContainer"
-    colorcontainer.Parent = colorpickerpopup
-    colorcontainer.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    colorcontainer.BorderSizePixel = 0
-    colorcontainer.Position = UDim2.new(0.0295566503, 0, 0.0687500015, 0)
-    colorcontainer.Size = UDim2.new(0, 127, 0, 120)
-    
-    local containercorner = Instance.new("UICorner")
-    containercorner.CornerRadius = UDim.new(0, 4)
-    containercorner.Parent = colorcontainer
-    
-    hue.Name = "Hue"
-    hue.Parent = colorpickerpopup
-    hue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    hue.BorderSizePixel = 0
-    hue.Position = UDim2.new(0.68965517, 0, 0.0687500015, 0)
-    hue.Size = UDim2.new(0, 15, 0, 120)
-    
-    local huecorner = Instance.new("UICorner")
-    huecorner.CornerRadius = UDim.new(0, 4)
-    huecorner.Parent = hue
-    
-    hueGradient.Rotation = 90
-    hueGradient.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),
-        ColorSequenceKeypoint.new(0.2, Color3.fromRGB(255, 255, 0)),
-        ColorSequenceKeypoint.new(0.4, Color3.fromRGB(0, 255, 0)),
-        ColorSequenceKeypoint.new(0.6, Color3.fromRGB(0, 255, 255)),
-        ColorSequenceKeypoint.new(0.8, Color3.fromRGB(0, 0, 255)),
-        ColorSequenceKeypoint.new(0.9, Color3.fromRGB(255, 0, 255)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 0, 0))
-    })
-    hueGradient.Parent = hue
-    
-    saturation.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    saturation.BackgroundTransparency = 1.000
-    saturation.BorderSizePixel = 0
-    saturation.Position = UDim2.new(0.0295566503, 0, 0.0687500015, 0)
-    saturation.Size = UDim2.new(0, 127, 0, 120)
-    saturation.Parent = colorcontainer
-    saturation.ZIndex = 2
-    
-    saturationGradient.Rotation = 270
-    saturationGradient.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 0, 0))
-    })
-    saturationGradient.Parent = saturation
-    
-    colorGradient.Rotation = 180
-    colorGradient.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 0, 0)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
-    })
-    colorGradient.Parent = colorcontainer
-    
-    dragButton.Name = "DragButton"
-    dragButton.Parent = colorcontainer
-    dragButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    dragButton.BorderSizePixel = 2
-    dragButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    dragButton.Position = UDim2.new(0, 0, 0, 0)
-    dragButton.Size = UDim2.new(0, 8, 0, 8)
-    dragButton.ZIndex = 3
-    dragButton.Text = ""
-    dragButton.AutoButtonColor = false
-    
-    local dragcorner = Instance.new("UICorner")
-    dragcorner.CornerRadius = UDim.new(1, 4)
-    dragcorner.Parent = dragButton
-    
-    dragButtonHue.Name = "DragButtonHue"
-    dragButtonHue.Parent = hue
-    dragButtonHue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    dragButtonHue.BorderSizePixel = 2
-    dragButtonHue.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    dragButtonHue.Position = UDim2.new(-0.5, 0, 0, 0)
-    dragButtonHue.Size = UDim2.new(0, 20, 0, 4)
-    dragButtonHue.ZIndex = 3
-    dragButtonHue.Text = ""
-    dragButtonHue.AutoButtonColor = false
-    
-    accept.Name = "Accept"
-    accept.Parent = colorpickerpopup
-    accept.BackgroundColor3 = Color3.fromRGB(52, 152, 219)
-    accept.BorderSizePixel = 0
-    accept.Position = UDim2.new(0.551724136, 0, 0.837499976, 0)
-    accept.Size = UDim2.new(0, 40, 0, 20)
-    accept.Font = Enum.Font.Gotham
-    accept.Text = "OK"
-    accept.TextColor3 = Color3.fromRGB(255, 255, 255)
-    accept.TextSize = 11.000
-    accept.AutoButtonColor = false
-    
-    acceptcorner.CornerRadius = UDim.new(0, 4)
-    acceptcorner.Parent = accept
-    
-    canc.Name = "Cancel"
-    canc.Parent = colorpickerpopup
-    canc.BackgroundColor3 = Color3.fromRGB(220, 221, 222)
-    canc.BorderSizePixel = 0
-    canc.Position = UDim2.new(0.290640399, 0, 0.837499976, 0)
-    canc.Size = UDim2.new(0, 40, 0, 20)
-    canc.Font = Enum.Font.Gotham
-    canc.Text = "Cancel"
-    canc.TextColor3 = Color3.fromRGB(0, 0, 0)
-    canc.TextSize = 11.000
-    canc.AutoButtonColor = false
-    
-    cancelcorner.CornerRadius = UDim.new(0, 4)
-    cancelcorner.Parent = canc
-    
-    local dragging = false
-    local draggingHue = false
-    local huePos = 0
-    local currentColor = preset or Color3.fromRGB(255, 255, 255)
-    local hueColor = Color3.fromRGB(255, 0, 0)
-    
-    local function updateColorFromPos(x, y)
-        local containerSize = colorcontainer.AbsoluteSize
-        local containerPos = colorcontainer.AbsolutePosition
-        local relativeX = math.clamp(x - containerPos.X, 0, containerSize.X)
-        local relativeY = math.clamp(y - containerPos.Y, 0, containerSize.Y)
-        
-        dragButton.Position = UDim2.new(0, relativeX - 4, 0, relativeY - 4)
-        
-        local sat = relativeX / containerSize.X
-        local val = 1 - (relativeY / containerSize.Y)
-        
-        local newColor = Color3.fromHSV(huePos, sat, val)
-        currentColor = newColor
-        colorshow.BackgroundColor3 = newColor
-    end
-    
-    local function updateHueFromPos(y)
-        local hueSize = hue.AbsoluteSize
-        local huePos = hue.AbsolutePosition
-        local relativeY = math.clamp(y - huePos.Y, 0, hueSize.Y)
-        
-        dragButtonHue.Position = UDim2.new(-0.5, 0, 0, relativeY - 2)
-        huePos = relativeY / hueSize.Y
-        
-        hueColor = Color3.fromHSV(huePos, 1, 1)
-        saturationGradient.Color = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
-            ColorSequenceKeypoint.new(1, hueColor)
-        })
-        
-        local sat = dragButton.Position.X.Offset / (colorcontainer.AbsoluteSize.X - 4)
-        local val = 1 - (dragButton.Position.Y.Offset / (colorcontainer.AbsoluteSize.Y - 4))
-        currentColor = Color3.fromHSV(huePos, sat, val)
-        colorshow.BackgroundColor3 = currentColor
-    end
-    
-    local function setupDragButton(button, isHue)
-        button.InputBegan:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                if isHue then
-                    draggingHue = true
-                else
-                    dragging = true
-                end
-                
-                local connection
-                connection = RunService.RenderStepped:Connect(function()
-                    local input2 = UserInputService:GetMouseLocation()
-                    if isHue then
-                        updateHueFromPos(input2.Y)
-                    else
-                        updateColorFromPos(input2.X, input2.Y)
-                    end
-                end)
-                
-                input.Changed:Connect(function()
-                    if input.UserInputState == Enum.UserInputState.End then
-                        if isHue then
-                            draggingHue = false
-                        else
-                            dragging = false
-                        end
-                        connection:Disconnect()
-                    end
-                end)
-            end
-        end)
-    end
-    
-    setupDragButton(dragButton, false)
-    setupDragButton(dragButtonHue, true)
-    
-    colorcontainer.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            local pos = UserInputService:GetMouseLocation()
-            updateColorFromPos(pos.X, pos.Y)
-            dragging = true
-            
-            local connection
-            connection = RunService.RenderStepped:Connect(function()
-                local pos2 = UserInputService:GetMouseLocation()
-                updateColorFromPos(pos2.X, pos2.Y)
-            end)
-            
-            input.Changed:Connect(function()
-                if input.UserInputState == Enum.UserInputState.End then
-                    dragging = false
-                    connection:Disconnect()
-                end
-            end)
-        end
-    end)
-    
-    hue.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            local pos = UserInputService:GetMouseLocation()
-            updateHueFromPos(pos.Y)
-            draggingHue = true
-            
-            local connection
-            connection = RunService.RenderStepped:Connect(function()
-                local pos2 = UserInputService:GetMouseLocation()
-                updateHueFromPos(pos2.Y)
-            end)
-            
-            input.Changed:Connect(function()
-                if input.UserInputState == Enum.UserInputState.End then
-                    draggingHue = false
-                    connection:Disconnect()
-                end
-            end)
-        end
-    end)
-    
-    textbutton.MouseButton1Click:Connect(function()
-        colorpickerpopup.Visible = not colorpickerpopup.Visible
-        
-        if colorpickerpopup.Visible then
-            -- Inicializar con el color actual
-            local h, s, v = currentColor:ToHSV()
-            huePos = h
-            
-            local containerSize = colorcontainer.AbsoluteSize
-            dragButton.Position = UDim2.new(0, s * containerSize.X - 4, 0, (1 - v) * containerSize.Y - 4)
-            
-            local hueSize = hue.AbsoluteSize
-            dragButtonHue.Position = UDim2.new(-0.5, 0, 0, h * hueSize.Y - 2)
-            
-            hueColor = Color3.fromHSV(h, 1, 1)
-            saturationGradient.Color = ColorSequence.new({
-                ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
-                ColorSequenceKeypoint.new(1, hueColor)
-            })
-        end
-    end)
-    
-    textbutton.TouchTap:Connect(function()
-        colorpickerpopup.Visible = not colorpickerpopup.Visible
-        
-        if colorpickerpopup.Visible then
-            local h, s, v = currentColor:ToHSV()
-            huePos = h
-            
-            local containerSize = colorcontainer.AbsoluteSize
-            dragButton.Position = UDim2.new(0, s * containerSize.X - 4, 0, (1 - v) * containerSize.Y - 4)
-            
-            local hueSize = hue.AbsoluteSize
-            dragButtonHue.Position = UDim2.new(-0.5, 0, 0, h * hueSize.Y - 2)
-            
-            hueColor = Color3.fromHSV(h, 1, 1)
-            saturationGradient.Color = ColorSequence.new({
-                ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
-                ColorSequenceKeypoint.new(1, hueColor)
-            })
-        end
-    end)
-    
-    accept.MouseButton1Click:Connect(function()
-        colorpickerpopup.Visible = false
-        colorshow.BackgroundColor3 = currentColor
-        pcall(callback, currentColor)
-    end)
-    
-    canc.MouseButton1Click:Connect(function()
-        colorpickerpopup.Visible = false
-        colorshow.BackgroundColor3 = preset or Color3.fromRGB(255, 255, 255)
-        currentColor = preset or Color3.fromRGB(255, 255, 255)
-    end)
-    
-    accept.TouchTap:Connect(function()
-        colorpickerpopup.Visible = false
-        colorshow.BackgroundColor3 = currentColor
-        pcall(callback, currentColor)
-    end)
-    
-    canc.TouchTap:Connect(function()
-        colorpickerpopup.Visible = false
-        colorshow.BackgroundColor3 = preset or Color3.fromRGB(255, 255, 255)
-        currentColor = preset or Color3.fromRGB(255, 255, 255)
-    end)
+local colorpickerframe = Instance.new("Frame")
+local colorbutton = Instance.new("TextButton")
+local colorbuttoncorner = Instance.new("UICorner")
+local textlabel = Instance.new("TextLabel")
+local colorshow = Instance.new("Frame")
+local colorshowcorner = Instance.new("UICorner")
+local textbutton = Instance.new("TextButton")
+
+colorpickerframe.Name = "ColorpickerFrame"
+colorpickerframe.Parent = self
+colorpickerframe.BackgroundColor3 = Color3.fromRGB(30, 31, 34)
+colorpickerframe.BorderSizePixel = 0
+colorpickerframe.Size = UDim2.new(1, -25, 0, 30)
+
+colorbutton.Name = "ColorButton"
+colorbutton.Parent = colorpickerframe
+colorbutton.BackgroundColor3 = Color3.fromRGB(66, 68, 73)
+colorbutton.BorderSizePixel = 0
+colorbutton.Position = UDim2.new(0.930000007, 0, 0.170000002, 0)
+colorbutton.Size = UDim2.new(0, 20, 0, 20)
+colorbutton.AutoButtonColor = false
+colorbutton.Text = ""
+
+colorbuttoncorner.CornerRadius = UDim.new(0, 4)
+colorbuttoncorner.Parent = colorbutton
+
+textlabel.Name = "TextLabel"
+textlabel.Parent = colorpickerframe
+textlabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+textlabel.BackgroundTransparency = 1.000
+textlabel.Position = UDim2.new(0, 15, 0, 0)
+textlabel.Size = UDim2.new(0, 114, 0, 30)
+textlabel.Font = Enum.Font.Gotham
+textlabel.Text = text
+textlabel.TextColor3 = Color3.fromRGB(220, 221, 222)
+textlabel.TextSize = 14.000
+textlabel.TextXAlignment = Enum.TextXAlignment.Left
+
+colorshow.Name = "ColorShow"
+colorshow.Parent = colorpickerframe
+colorshow.BackgroundColor3 = preset or Color3.fromRGB(255, 255, 255)
+colorshow.BorderSizePixel = 0
+colorshow.Position = UDim2.new(0.779999971, 0, 0.170000002, 0)
+colorshow.Size = UDim2.new(0, 20, 0, 20)
+
+colorshowcorner.CornerRadius = UDim.new(0, 4)
+colorshowcorner.Parent = colorshow
+
+textbutton.Name = "TextButton"
+textbutton.Parent = colorpickerframe
+textbutton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+textbutton.BackgroundTransparency = 1.000
+textbutton.Size = UDim2.new(1, 0, 1, 0)
+textbutton.Font = Enum.Font.SourceSans
+textbutton.Text = ""
+textbutton.TextColor3 = Color3.fromRGB(0, 0, 0)
+textbutton.TextSize = 14.000
+
+local colorpickerpopup = Instance.new("Frame")
+local colorcontainer = Instance.new("Frame")
+local hue = Instance.new("Frame")
+local saturation = Instance.new("Frame")
+local hueGradient = Instance.new("UIGradient")
+local colorGradient = Instance.new("UIGradient")
+local saturationGradient = Instance.new("UIGradient")
+local dragButton = Instance.new("TextButton")
+local dragButtonHue = Instance.new("TextButton")
+local accept = Instance.new("TextButton")
+local acceptcorner = Instance.new("UICorner")
+local canc = Instance.new("TextButton")
+local cancelcorner = Instance.new("UICorner")
+
+colorpickerpopup.Name = "ColorPickerPopup"
+colorpickerpopup.Parent = MainFrame
+colorpickerpopup.BackgroundColor3 = Color3.fromRGB(30, 31, 34)
+colorpickerpopup.BorderSizePixel = 0
+colorpickerpopup.Position = UDim2.new(0.389999986, 0, 0.324999988, 0)
+colorpickerpopup.Size = UDim2.new(0, 203, 0, 160)
+colorpickerpopup.Visible = false
+colorpickerpopup.Active = true
+
+local popupcorner = Instance.new("UICorner")
+popupcorner.CornerRadius = UDim.new(0, 4)
+popupcorner.Parent = colorpickerpopup
+
+colorcontainer.Name = "ColorContainer"
+colorcontainer.Parent = colorpickerpopup
+colorcontainer.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+colorcontainer.BorderSizePixel = 0
+colorcontainer.Position = UDim2.new(0.0295566503, 0, 0.0687500015, 0)
+colorcontainer.Size = UDim2.new(0, 127, 0, 120)
+
+local containercorner = Instance.new("UICorner")
+containercorner.CornerRadius = UDim.new(0, 4)
+containercorner.Parent = colorcontainer
+
+hue.Name = "Hue"
+hue.Parent = colorpickerpopup
+hue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+hue.BorderSizePixel = 0
+hue.Position = UDim2.new(0.68965517, 0, 0.0687500015, 0)
+hue.Size = UDim2.new(0, 15, 0, 120)
+
+local huecorner = Instance.new("UICorner")
+huecorner.CornerRadius = UDim.new(0, 4)
+huecorner.Parent = hue
+
+hueGradient.Rotation = 90
+hueGradient.Color = ColorSequence.new({
+ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),
+ColorSequenceKeypoint.new(0.2, Color3.fromRGB(255, 255, 0)),
+ColorSequenceKeypoint.new(0.4, Color3.fromRGB(0, 255, 0)),
+ColorSequenceKeypoint.new(0.6, Color3.fromRGB(0, 255, 255)),
+ColorSequenceKeypoint.new(0.8, Color3.fromRGB(0, 0, 255)),
+ColorSequenceKeypoint.new(0.9, Color3.fromRGB(255, 0, 255)),
+ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 0, 0))
+})
+hueGradient.Parent = hue
+
+saturation.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+saturation.BackgroundTransparency = 1.000
+saturation.BorderSizePixel = 0
+saturation.Position = UDim2.new(0.0295566503, 0, 0.0687500015, 0)
+saturation.Size = UDim2.new(0, 127, 0, 120)
+saturation.Parent = colorcontainer
+saturation.ZIndex = 2
+
+saturationGradient.Rotation = 270
+saturationGradient.Color = ColorSequence.new({
+ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 0, 0))
+})
+saturationGradient.Parent = saturation
+
+colorGradient.Rotation = 180
+colorGradient.Color = ColorSequence.new({
+ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 0, 0)),
+ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
+})
+colorGradient.Parent = colorcontainer
+
+dragButton.Name = "DragButton"
+dragButton.Parent = colorcontainer
+dragButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+dragButton.BorderSizePixel = 2
+dragButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+dragButton.Position = UDim2.new(0, 0, 0, 0)
+dragButton.Size = UDim2.new(0, 8, 0, 8)
+dragButton.ZIndex = 3
+dragButton.Text = ""
+dragButton.AutoButtonColor = false
+
+local dragcorner = Instance.new("UICorner")
+dragcorner.CornerRadius = UDim.new(1, 4)
+dragcorner.Parent = dragButton
+
+dragButtonHue.Name = "DragButtonHue"
+dragButtonHue.Parent = hue
+dragButtonHue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+dragButtonHue.BorderSizePixel = 2
+dragButtonHue.BorderColor3 = Color3.fromRGB(0, 0, 0)
+dragButtonHue.Position = UDim2.new(-0.5, 0, 0, 0)
+dragButtonHue.Size = UDim2.new(0, 20, 0, 4)
+dragButtonHue.ZIndex = 3
+dragButtonHue.Text = ""
+dragButtonHue.AutoButtonColor = false
+
+accept.Name = "Accept"
+accept.Parent = colorpickerpopup
+accept.BackgroundColor3 = Color3.fromRGB(52, 152, 219)
+accept.BorderSizePixel = 0
+accept.Position = UDim2.new(0.551724136, 0, 0.837499976, 0)
+accept.Size = UDim2.new(0, 40, 0, 20)
+accept.Font = Enum.Font.Gotham
+accept.Text = "OK"
+accept.TextColor3 = Color3.fromRGB(255, 255, 255)
+accept.TextSize = 11.000
+accept.AutoButtonColor = false
+
+acceptcorner.CornerRadius = UDim.new(0, 4)
+acceptcorner.Parent = accept
+
+canc.Name = "Cancel"
+canc.Parent = colorpickerpopup
+canc.BackgroundColor3 = Color3.fromRGB(220, 221, 222)
+canc.BorderSizePixel = 0
+canc.Position = UDim2.new(0.290640399, 0, 0.837499976, 0)
+canc.Size = UDim2.new(0, 40, 0, 20)
+canc.Font = Enum.Font.Gotham
+canc.Text = "Cancel"
+canc.TextColor3 = Color3.fromRGB(0, 0, 0)
+canc.TextSize = 11.000
+canc.AutoButtonColor = false
+
+cancelcorner.CornerRadius = UDim.new(0, 4)
+cancelcorner.Parent = canc
+
+local dragging = false
+local draggingHue = false
+local huePos = 0
+local currentColor = preset or Color3.fromRGB(255, 255, 255)
+local hueColor = Color3.fromRGB(255, 0, 0)
+
+local function updateColorFromPos(x, y)
+local containerSize = colorcontainer.AbsoluteSize
+local containerPos = colorcontainer.AbsolutePosition
+local relativeX = math.clamp(x - containerPos.X, 0, containerSize.X)
+local relativeY = math.clamp(y - containerPos.Y, 0, containerSize.Y)
+
+dragButton.Position = UDim2.new(0, relativeX - 4, 0, relativeY - 4)
+
+local sat = relativeX / containerSize.X
+local val = 1 - (relativeY / containerSize.Y)
+
+local newColor = Color3.fromHSV(huePos, sat, val)
+currentColor = newColor
+colorshow.BackgroundColor3 = newColor
 end
+
+local function updateHueFromPos(y)
+local hueSize = hue.AbsoluteSize
+local huePos = hue.AbsolutePosition
+local relativeY = math.clamp(y - huePos.Y, 0, hueSize.Y)
+
+dragButtonHue.Position = UDim2.new(-0.5, 0, 0, relativeY - 2)
+huePos = relativeY / hueSize.Y
+
+hueColor = Color3.fromHSV(huePos, 1, 1)
+saturationGradient.Color = ColorSequence.new({
+ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+ColorSequenceKeypoint.new(1, hueColor)
+})
+
+local sat = dragButton.Position.X.Offset / (colorcontainer.AbsoluteSize.X - 4)
+local val = 1 - (dragButton.Position.Y.Offset / (colorcontainer.AbsoluteSize.Y - 4))
+currentColor = Color3.fromHSV(huePos, sat, val)
+colorshow.BackgroundColor3 = currentColor
+end
+
+local function setupDragButton(button, isHue)
+button.InputBegan:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+if isHue then
+draggingHue = true
+else
+dragging = true
+end
+
+local connection
+connection = RunService.RenderStepped:Connect(function()
+local input2 = UserInputService:GetMouseLocation()
+if isHue then
+updateHueFromPos(input2.Y)
+else
+updateColorFromPos(input2.X, input2.Y)
+end
+end)
+
+input.Changed:Connect(function()
+if input.UserInputState == Enum.UserInputState.End then
+if isHue then
+draggingHue = false
+else
+dragging = false
+end
+connection:Disconnect()
+end
+end)
+end
+end)
+end
+
+setupDragButton(dragButton, false)
+setupDragButton(dragButtonHue, true)
+
+colorcontainer.InputBegan:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+local pos = UserInputService:GetMouseLocation()
+updateColorFromPos(pos.X, pos.Y)
+dragging = true
+
+local connection
+connection = RunService.RenderStepped:Connect(function()
+local pos2 = UserInputService:GetMouseLocation()
+updateColorFromPos(pos2.X, pos2.Y)
+end)
+
+input.Changed:Connect(function()
+if input.UserInputState == Enum.UserInputState.End then
+dragging = false
+connection:Disconnect()
+end
+end)
+end
+end)
+
+hue.InputBegan:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+local pos = UserInputService:GetMouseLocation()
+updateHueFromPos(pos.Y)
+draggingHue = true
+
+local connection
+connection = RunService.RenderStepped:Connect(function()
+local pos2 = UserInputService:GetMouseLocation()
+updateHueFromPos(pos2.Y)
+end)
+
+input.Changed:Connect(function()
+if input.UserInputState == Enum.UserInputState.End then
+draggingHue = false
+connection:Disconnect()
+end
+end)
+end
+end)
+
+local function openColorPicker()
+colorpickerpopup.Visible = not colorpickerpopup.Visible
+if colorpickerpopup.Visible then
+local h, s, v = currentColor:ToHSV()
+huePos = h
+
+local containerSize = colorcontainer.AbsoluteSize
+dragButton.Position = UDim2.new(0, s * containerSize.X - 4, 0, (1 - v) * containerSize.Y - 4)
+
+local hueSize = hue.AbsoluteSize
+dragButtonHue.Position = UDim2.new(-0.5, 0, 0, h * hueSize.Y - 2)
+
+hueColor = Color3.fromHSV(h, 1, 1)
+saturationGradient.Color = ColorSequence.new({
+ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+ColorSequenceKeypoint.new(1, hueColor)
+})
+end
+end
+
+textbutton.MouseButton1Click:Connect(openColorPicker)
+textbutton.TouchTap:Connect(openColorPicker)
+
+accept.MouseButton1Click:Connect(function()
+colorpickerpopup.Visible = false
+colorshow.BackgroundColor3 = currentColor
+pcall(callback, currentColor)
+end)
+
+canc.MouseButton1Click:Connect(function()
+colorpickerpopup.Visible = false
+colorshow.BackgroundColor3 = preset or Color3.fromRGB(255, 255, 255)
+currentColor = preset or Color3.fromRGB(255, 255, 255)
+end)
+
+accept.TouchTap:Connect(function()
+colorpickerpopup.Visible = false
+colorshow.BackgroundColor3 = currentColor
+pcall(callback, currentColor)
+end)
+
+canc.TouchTap:Connect(function()
+colorpickerpopup.Visible = false
+colorshow.BackgroundColor3 = preset or Color3.fromRGB(255, 255, 255)
+currentColor = preset or Color3.fromRGB(255, 255, 255)
+end)
+end -- End Colorpicker
 			
 			function ChannelContent:Textbox(text, placetext, disapper, callback)
 				local Textbox = Instance.new("Frame")
