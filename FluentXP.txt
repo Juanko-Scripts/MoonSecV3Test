@@ -1362,52 +1362,26 @@ function Creator.UpdateTheme()
 		Creator.Theme = "Dark"
 	end
 	if Creator.Theme == "BlackWhite" then
-		if getgenv().BackgroundXP then
-			Creator.Themes.BlackWhite.Background = getgenv().BackgroundXP
-		end
-		if getgenv().OthersColorsFunctions then
-			Creator.Themes.BlackWhite.Text = getgenv().OthersColorsFunctions
-			Creator.Themes.BlackWhite.ElementBackground = getgenv().OthersColorsFunctions
-		end
-		if getgenv().FullColorOthers then
-			Creator.Themes.BlackWhite.TextDisabled = getgenv().FullColorOthers
-			Creator.Themes.BlackWhite.TextHover = getgenv().FullColorOthers
-		end
-		if getgenv().DialogColorY then
-			Creator.Themes.BlackWhite.DialogBackground = getgenv().DialogColorY
-		end
-		if getgenv().SubTextX then
-			Creator.Themes.BlackWhite.SubText = getgenv().SubTextX
-		end
-		if getgenv().FrameDialogBorder then
-			Creator.Themes.BlackWhite.DialogBorder = getgenv().FrameDialogBorder
-		end
-		if getgenv().TitleXP then
-			Creator.Themes.BlackWhite.Title = getgenv().TitleXP
-		end
-		if getgenv().DialogIndicator then
-			Creator.Themes.BlackWhite.DialogIndicator = getgenv().DialogIndicator
-		end
-		if getgenv().ButtonBorderY then
-			Creator.Themes.BlackWhite.ButtonBorder = getgenv().ButtonBorderY
-		end
-		if getgenv().DialogBorderY then
-			Creator.Themes.BlackWhite.DialogBorder = getgenv().DialogBorderY
-		end
-		if getgenv().ElementTransparecyY then
-			Creator.Themes.BlackWhite.ElementTransparency = getgenv().ElementTransparecyY
-		end
-		if getgenv().HoverChangeV then
-			Creator.Themes.BlackWhite.HoverTransparency = getgenv().HoverChangeV
-		end
-		if getgenv().AcrylicNoiseY then
-			Creator.Themes.BlackWhite.AcrylicNoise = getgenv().AcrylicNoiseY
-		end
+		Creator.Themes.BlackWhite = {
+			Background = getgenv().BackgroundXP or Color3.fromRGB(255, 255, 255),
+			Text = getgenv().OthersColorsFunctions or Color3.fromRGB(255, 255, 255),
+			TextDisabled = getgenv().FullColorOthers or Color3.fromRGB(255, 255, 255),
+			DialogBackground = getgenv().DialogColorY or Color3.fromRGB(255, 255, 255),
+			SubText = getgenv().SubTextX or Color3.fromRGB(255, 255, 255),
+			DialogBorder = getgenv().FrameDialogBorder or Color3.fromRGB(255, 255, 255),
+			Title = getgenv().TitleXP or Color3.fromRGB(255, 255, 255),
+			DialogIndicator = getgenv().DialogIndicator or Color3.fromRGB(255, 255, 255),
+			ButtonBorder = getgenv().ButtonBorderY or Color3.fromRGB(255, 255, 255),
+			ElementBackground = getgenv().OthersColorsFunctions or Color3.fromRGB(255, 255, 255),
+			ElementTransparency = getgenv().ElementTransparecyY or 0.95,
+			HoverTransparency = getgenv().HoverChangeV or 0.04,
+			AcrylicNoise = getgenv().AcrylicNoiseY or 1,
+		}
 	end
 
 	for Instance, Object in next, Creator.Registry do
-	for Property, ColorIdx in next, Object.Properties do
-	local themeValue = Creator.GetThemeProperty(ColorIdx)
+		for Property, ColorIdx in next, Object.Properties do
+			local themeValue = Creator.GetThemeProperty(ColorIdx)
 			if themeValue then
 				Instance[Property] = themeValue
 			end
@@ -1416,8 +1390,8 @@ function Creator.UpdateTheme()
 
 	local transparency = Creator.GetThemeProperty("ElementTransparency")
 	if transparency then
-		for _, Motor in next, Creator.TransparencyMotors do
-		Motor:setGoal(Flipper.Instant.new(transparency))
+		for _, Motor in next, Creator.TransparencyMotors do 
+			Motor:setGoal(Flipper.Instant.new(transparency))
 		end
 	end
 end
