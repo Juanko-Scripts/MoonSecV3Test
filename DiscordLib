@@ -12,6 +12,7 @@ local pfp
 local user
 local tag
 local userinfo = {}
+local Sections = {}
 
 -- Temas predefinidos
 local Themes = {
@@ -392,38 +393,120 @@ function DiscordLib:Window(text)
     local ServerChannels = {}
     local Sections = {}
 
-    -- Función para cambiar el tema
-    function DiscordLib:SetTheme(themeName)
-        local newTheme
-        if type(themeName) == "string" then
-            newTheme = Themes[themeName] or Themes.Dark
-        else
-            newTheme = {
-                Main = themeName,
-                Secondary = themeName:lerp(Color3.new(0, 0, 0), 0.2),
-                Tertiary = themeName:lerp(Color3.new(0, 0, 0), 0.3),
-                Accent = Color3.fromRGB(114, 137, 218),
-                Text = Color3.fromRGB(255, 255, 255),
-                TextMuted = Color3.fromRGB(150, 150, 150),
-                Userpad = themeName:lerp(Color3.new(0, 0, 0), 0.4),
-                UserIcon = themeName:lerp(Color3.new(0, 0, 0), 0.5)
-            }
-        end
-        
-        currentTheme = newTheme
-        
-        MainFrame.BackgroundColor3 = newTheme.Main
-        TopFrame.BackgroundColor3 = newTheme.Main
-        TopFrameHolder.BackgroundColor3 = newTheme.Main
-        Title.TextColor3 = newTheme.TextMuted
-        ServersHoldFrame.BackgroundColor3 = newTheme.Secondary
-        ChannelsHoldFrame.BackgroundColor3 = newTheme.Secondary
-        Userpad.BackgroundColor3 = newTheme.Userpad
-        UserIcon.BackgroundColor3 = newTheme.UserIcon
-        UserCircleImage.ImageColor3 = newTheme.Userpad
-        UserName.TextColor3 = newTheme.Text
-        UserTag.TextColor3 = newTheme.Text
+-- Función para cambiar el tema (VERSIÓN MEJORADA)
+function DiscordLib:SetTheme(themeName)
+    local newTheme
+    if type(themeName) == "string" then
+        newTheme = Themes[themeName] or Themes.Dark
+    else
+        -- Tema personalizado basado en un color
+        newTheme = {
+            Main = themeName,
+            Secondary = themeName:lerp(Color3.new(0, 0, 0), 0.2),
+            Tertiary = themeName:lerp(Color3.new(0, 0, 0), 0.3),
+            Accent = Color3.fromRGB(114, 137, 218),
+            Text = Color3.fromRGB(255, 255, 255),
+            TextMuted = Color3.fromRGB(150, 150, 150),
+            Userpad = themeName:lerp(Color3.new(0, 0, 0), 0.4),
+            UserIcon = themeName:lerp(Color3.new(0, 0, 0), 0.5)
+        }
     end
+    
+    currentTheme = newTheme
+    
+    -- Elementos principales de la ventana
+    MainFrame.BackgroundColor3 = newTheme.Main
+    TopFrame.BackgroundColor3 = newTheme.Main
+    TopFrameHolder.BackgroundColor3 = newTheme.Main
+    Title.TextColor3 = newTheme.TextMuted
+    
+    -- Servidores
+    ServersHoldFrame.BackgroundColor3 = newTheme.Secondary
+    for _, serverBtn in pairs(ServersHold:GetChildren()) do
+        if serverBtn:IsA("TextButton") then
+            serverBtn.BackgroundColor3 = newTheme.Tertiary
+            local icon = serverBtn:FindFirstChild("ServerIcon")
+            if icon then
+                icon.ImageColor3 = newTheme.Text
+            end
+        end
+    end
+    
+    -- Canales
+    ChannelsHoldFrame.BackgroundColor3 = newTheme.Secondary
+    for _, channelBtn in pairs(ChannelsHold:GetChildren()) do
+        if channelBtn:IsA("TextButton") then
+            if channelBtn.BackgroundTransparency < 0.5 then
+                channelBtn.BackgroundColor3 = newTheme.Accent  -- Canal seleccionado
+            else
+                channelBtn.BackgroundColor3 = newTheme.Tertiary
+            end
+            local icon = channelBtn:FindFirstChild("ChannelIcon")
+            if icon then
+                icon.TextColor3 = newTheme.TextMuted
+            end
+            local label = channelBtn:FindFirstChildOfClass("TextLabel")
+            if label and label ~= icon then
+                label.TextColor3 = newTheme.Text
+            end
+        end
+    end
+    
+    -- Secciones y sus elementos
+    for _, sectionFrame in pairs(Sections) do
+        if sectionFrame:IsA("ScrollingFrame") then
+            sectionFrame.BackgroundColor3 = newTheme.Secondary
+            
+            -- Título de la sección
+            local title = sectionFrame:FindFirstChild("SectionTitle")
+            if title then
+                title.TextColor3 = newTheme.Text
+            end
+            
+            -- Actualizar todos los elementos dentro de la sección
+            for _, element in pairs(sectionFrame:GetChildren()) do
+                if element:IsA("TextLabel") and element ~= title then
+                    element.TextColor3 = newTheme.Text
+                elseif element:IsA("TextButton") then
+                    element.BackgroundColor3 = newTheme.Tertiary
+                    element.TextColor3 = newTheme.Text
+                    
+                    -- Buscar toggle image dentro del botón
+                    local toggleImage = element:FindFirstChildOfClass("ImageLabel")
+                    if toggleImage then
+                        toggleImage.BackgroundColor3 = newTheme.Secondary
+                    end
+                elseif element:IsA("Frame") then
+                    element.BackgroundColor3 = newTheme.Tertiary
+                    
+                    -- Actualizar sliders y sus componentes
+                    for _, child in pairs(element:GetChildren()) do
+                        if child:IsA("TextLabel") then
+                            child.TextColor3 = newTheme.Text
+                        elseif child.Name == "SliderBar" or child:IsA("Frame") and child.Position.Y.Offset > 20 then
+                            child.BackgroundColor3 = newTheme.Secondary
+                            local fill = child:FindFirstChildOfClass("Frame")
+                            if fill then
+                                fill.BackgroundColor3 = newTheme.Accent
+                            end
+                            local button = child:FindFirstChildOfClass("TextButton")
+                            if button then
+                                button.BackgroundColor3 = newTheme.Text
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+    
+    -- Userpad (información del jugador)
+    Userpad.BackgroundColor3 = newTheme.Userpad
+    UserIcon.BackgroundColor3 = newTheme.UserIcon
+    UserCircleImage.ImageColor3 = newTheme.Userpad
+    UserName.TextColor3 = newTheme.Text
+    UserTag.TextColor3 = newTheme.Text
+end
 
     -- Crear un servidor
     function Servers:Server(Name, Image)
@@ -642,8 +725,6 @@ function DiscordLib:Window(text)
         SectionPadding.PaddingTop = UDim.new(0, 30)  -- REDUCIDO de 35 a 30
 
         Sections[fullName] = SectionFrame
-
-        local Section = {}
 
         function Section:Label(text)
             local Label = Instance.new("TextLabel")
