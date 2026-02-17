@@ -1175,7 +1175,6 @@ function Section:Colorpicker(text, default, callback)
 
     local function closeColorPicker()
         if currentPopup and currentOverlay then
-            -- Animar TODOS los elementos
             for _, element in ipairs(popupElements) do
                 if element and element.Parent then
                     if element:IsA("TextLabel") then
@@ -1191,17 +1190,13 @@ function Section:Colorpicker(text, default, callback)
                         TweenService:Create(element, TweenInfo.new(0.2), {
                             BackgroundTransparency = 1
                         }):Play()
-                    elseif element:IsA("ScrollingFrame") then
-                        TweenService:Create(element, TweenInfo.new(0.2), {
-                            BackgroundTransparency = 1
-                        }):Play()
                     end
                 end
             end
             
             TweenService:Create(currentPopup, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-                Size = UDim2.new(0, 280, 0, 320),
-                Position = UDim2.new(0.5, -140, 0.5, -160),
+                Size = UDim2.new(0, 280, 0, 260),
+                Position = UDim2.new(0.5, -140, 0.5, -130),
                 BackgroundTransparency = 1
             }):Play()
             
@@ -1243,14 +1238,14 @@ function Section:Colorpicker(text, default, callback)
         currentOverlay = overlay
         table.insert(popupElements, overlay)
 
-        -- Popup (más grande para los sliders RGB)
+        -- Popup (tamaño compacto: 300x260)
         local popup = Instance.new("Frame")
         popup.Name = "ColorPickerPopup"
         popup.Parent = overlay
         popup.BackgroundColor3 = currentTheme.Main
         popup.BorderSizePixel = 0
-        popup.Position = UDim2.new(0.5, -140, 0.5, -160)
-        popup.Size = UDim2.new(0, 280, 0, 320)
+        popup.Position = UDim2.new(0.5, -150, 0.5, -130)
+        popup.Size = UDim2.new(0, 300, 0, 260)
         popup.ZIndex = 20
         popup.Active = true
         popup.Draggable = false
@@ -1268,8 +1263,8 @@ function Section:Colorpicker(text, default, callback)
         titleLabel.Parent = popup
         titleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         titleLabel.BackgroundTransparency = 1.000
-        titleLabel.Position = UDim2.new(0, 10, 0, 10)
-        titleLabel.Size = UDim2.new(0, 260, 0, 20)
+        titleLabel.Position = UDim2.new(0, 10, 0, 8)
+        titleLabel.Size = UDim2.new(0, 280, 0, 20)
         titleLabel.Font = Enum.Font.GothamBold
         titleLabel.Text = "Select Color"
         titleLabel.TextColor3 = currentTheme.Text
@@ -1279,13 +1274,13 @@ function Section:Colorpicker(text, default, callback)
         titleLabel.TextTransparency = 1
         table.insert(popupElements, titleLabel)
 
-        -- Selector de Hue
+        -- Selector de Hue (H:)
         local hueLabel = Instance.new("TextLabel")
         hueLabel.Parent = popup
         hueLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         hueLabel.BackgroundTransparency = 1.000
-        hueLabel.Position = UDim2.new(0, 10, 0, 40)
-        hueLabel.Size = UDim2.new(0, 30, 0, 20)
+        hueLabel.Position = UDim2.new(0, 10, 0, 35)
+        hueLabel.Size = UDim2.new(0, 20, 0, 18)
         hueLabel.Font = Enum.Font.Gotham
         hueLabel.Text = "H:"
         hueLabel.TextColor3 = currentTheme.Text
@@ -1299,14 +1294,14 @@ function Section:Colorpicker(text, default, callback)
         hueGradient.Parent = popup
         hueGradient.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         hueGradient.BorderSizePixel = 0
-        hueGradient.Position = UDim2.new(0, 45, 0, 42)
-        hueGradient.Size = UDim2.new(0, 180, 0, 16)
+        hueGradient.Position = UDim2.new(0, 35, 0, 37)
+        hueGradient.Size = UDim2.new(0, 200, 0, 14)
         hueGradient.ZIndex = 21
         hueGradient.BackgroundTransparency = 1
         table.insert(popupElements, hueGradient)
 
         local hueCorner = Instance.new("UICorner")
-        hueCorner.CornerRadius = UDim.new(0, 8)
+        hueCorner.CornerRadius = UDim.new(0, 7)
         hueCorner.Parent = hueGradient
         table.insert(popupElements, hueCorner)
 
@@ -1327,7 +1322,7 @@ function Section:Colorpicker(text, default, callback)
         hueSlider.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         hueSlider.BorderSizePixel = 0
         hueSlider.Position = UDim2.new(0, -4, 0, -2)
-        hueSlider.Size = UDim2.new(0, 8, 0, 20)
+        hueSlider.Size = UDim2.new(0, 8, 0, 18)
         hueSlider.Text = ""
         hueSlider.ZIndex = 22
         hueSlider.AutoButtonColor = false
@@ -1339,13 +1334,13 @@ function Section:Colorpicker(text, default, callback)
         hueSliderCorner.Parent = hueSlider
         table.insert(popupElements, hueSliderCorner)
 
-        -- SELECTOR ROJO (R)
+        -- SELECTOR ROJO (R:)
         local rLabel = Instance.new("TextLabel")
         rLabel.Parent = popup
         rLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         rLabel.BackgroundTransparency = 1.000
-        rLabel.Position = UDim2.new(0, 10, 0, 75)
-        rLabel.Size = UDim2.new(0, 20, 0, 20)
+        rLabel.Position = UDim2.new(0, 10, 0, 62)
+        rLabel.Size = UDim2.new(0, 20, 0, 18)
         rLabel.Font = Enum.Font.Gotham
         rLabel.Text = "R:"
         rLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
@@ -1359,14 +1354,14 @@ function Section:Colorpicker(text, default, callback)
         rBar.Parent = popup
         rBar.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
         rBar.BorderSizePixel = 0
-        rBar.Position = UDim2.new(0, 35, 0, 77)
-        rBar.Size = UDim2.new(0, 160, 0, 12)
+        rBar.Position = UDim2.new(0, 35, 0, 64)
+        rBar.Size = UDim2.new(0, 160, 0, 10)
         rBar.ZIndex = 21
         rBar.BackgroundTransparency = 1
         table.insert(popupElements, rBar)
 
         local rBarCorner = Instance.new("UICorner")
-        rBarCorner.CornerRadius = UDim.new(0, 6)
+        rBarCorner.CornerRadius = UDim.new(0, 5)
         rBarCorner.Parent = rBar
         table.insert(popupElements, rBarCorner)
 
@@ -1380,7 +1375,7 @@ function Section:Colorpicker(text, default, callback)
         table.insert(popupElements, rFill)
 
         local rFillCorner = Instance.new("UICorner")
-        rFillCorner.CornerRadius = UDim.new(0, 6)
+        rFillCorner.CornerRadius = UDim.new(0, 5)
         rFillCorner.Parent = rFill
         table.insert(popupElements, rFillCorner)
 
@@ -1389,7 +1384,7 @@ function Section:Colorpicker(text, default, callback)
         rButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         rButton.BorderSizePixel = 0
         rButton.Position = UDim2.new(selectedColor.R, -5, 0, -2)
-        rButton.Size = UDim2.new(0, 10, 0, 16)
+        rButton.Size = UDim2.new(0, 10, 0, 14)
         rButton.Text = ""
         rButton.ZIndex = 23
         rButton.BackgroundTransparency = 1
@@ -1404,8 +1399,8 @@ function Section:Colorpicker(text, default, callback)
         rValue.Parent = popup
         rValue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         rValue.BackgroundTransparency = 1.000
-        rValue.Position = UDim2.new(0, 205, 0, 75)
-        rValue.Size = UDim2.new(0, 35, 0, 20)
+        rValue.Position = UDim2.new(0, 205, 0, 62)
+        rValue.Size = UDim2.new(0, 35, 0, 18)
         rValue.Font = Enum.Font.Gotham
         rValue.Text = tostring(math.floor(selectedColor.R * 255))
         rValue.TextColor3 = currentTheme.Text
@@ -1415,13 +1410,13 @@ function Section:Colorpicker(text, default, callback)
         rValue.TextTransparency = 1
         table.insert(popupElements, rValue)
 
-        -- SELECTOR VERDE (G)
+        -- SELECTOR VERDE (G:)
         local gLabel = Instance.new("TextLabel")
         gLabel.Parent = popup
         gLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         gLabel.BackgroundTransparency = 1.000
-        gLabel.Position = UDim2.new(0, 10, 0, 105)
-        gLabel.Size = UDim2.new(0, 20, 0, 20)
+        gLabel.Position = UDim2.new(0, 10, 0, 87)
+        gLabel.Size = UDim2.new(0, 20, 0, 18)
         gLabel.Font = Enum.Font.Gotham
         gLabel.Text = "G:"
         gLabel.TextColor3 = Color3.fromRGB(100, 255, 100)
@@ -1435,14 +1430,14 @@ function Section:Colorpicker(text, default, callback)
         gBar.Parent = popup
         gBar.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
         gBar.BorderSizePixel = 0
-        gBar.Position = UDim2.new(0, 35, 0, 107)
-        gBar.Size = UDim2.new(0, 160, 0, 12)
+        gBar.Position = UDim2.new(0, 35, 0, 89)
+        gBar.Size = UDim2.new(0, 160, 0, 10)
         gBar.ZIndex = 21
         gBar.BackgroundTransparency = 1
         table.insert(popupElements, gBar)
 
         local gBarCorner = Instance.new("UICorner")
-        gBarCorner.CornerRadius = UDim.new(0, 6)
+        gBarCorner.CornerRadius = UDim.new(0, 5)
         gBarCorner.Parent = gBar
         table.insert(popupElements, gBarCorner)
 
@@ -1456,7 +1451,7 @@ function Section:Colorpicker(text, default, callback)
         table.insert(popupElements, gFill)
 
         local gFillCorner = Instance.new("UICorner")
-        gFillCorner.CornerRadius = UDim.new(0, 6)
+        gFillCorner.CornerRadius = UDim.new(0, 5)
         gFillCorner.Parent = gFill
         table.insert(popupElements, gFillCorner)
 
@@ -1465,7 +1460,7 @@ function Section:Colorpicker(text, default, callback)
         gButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         gButton.BorderSizePixel = 0
         gButton.Position = UDim2.new(selectedColor.G, -5, 0, -2)
-        gButton.Size = UDim2.new(0, 10, 0, 16)
+        gButton.Size = UDim2.new(0, 10, 0, 14)
         gButton.Text = ""
         gButton.ZIndex = 23
         gButton.BackgroundTransparency = 1
@@ -1480,8 +1475,8 @@ function Section:Colorpicker(text, default, callback)
         gValue.Parent = popup
         gValue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         gValue.BackgroundTransparency = 1.000
-        gValue.Position = UDim2.new(0, 205, 0, 105)
-        gValue.Size = UDim2.new(0, 35, 0, 20)
+        gValue.Position = UDim2.new(0, 205, 0, 87)
+        gValue.Size = UDim2.new(0, 35, 0, 18)
         gValue.Font = Enum.Font.Gotham
         gValue.Text = tostring(math.floor(selectedColor.G * 255))
         gValue.TextColor3 = currentTheme.Text
@@ -1491,13 +1486,13 @@ function Section:Colorpicker(text, default, callback)
         gValue.TextTransparency = 1
         table.insert(popupElements, gValue)
 
-        -- SELECTOR AZUL (B)
+        -- SELECTOR AZUL (B:)
         local bLabel = Instance.new("TextLabel")
         bLabel.Parent = popup
         bLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         bLabel.BackgroundTransparency = 1.000
-        bLabel.Position = UDim2.new(0, 10, 0, 135)
-        bLabel.Size = UDim2.new(0, 20, 0, 20)
+        bLabel.Position = UDim2.new(0, 10, 0, 112)
+        bLabel.Size = UDim2.new(0, 20, 0, 18)
         bLabel.Font = Enum.Font.Gotham
         bLabel.Text = "B:"
         bLabel.TextColor3 = Color3.fromRGB(100, 100, 255)
@@ -1511,14 +1506,14 @@ function Section:Colorpicker(text, default, callback)
         bBar.Parent = popup
         bBar.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
         bBar.BorderSizePixel = 0
-        bBar.Position = UDim2.new(0, 35, 0, 137)
-        bBar.Size = UDim2.new(0, 160, 0, 12)
+        bBar.Position = UDim2.new(0, 35, 0, 114)
+        bBar.Size = UDim2.new(0, 160, 0, 10)
         bBar.ZIndex = 21
         bBar.BackgroundTransparency = 1
         table.insert(popupElements, bBar)
 
         local bBarCorner = Instance.new("UICorner")
-        bBarCorner.CornerRadius = UDim.new(0, 6)
+        bBarCorner.CornerRadius = UDim.new(0, 5)
         bBarCorner.Parent = bBar
         table.insert(popupElements, bBarCorner)
 
@@ -1532,7 +1527,7 @@ function Section:Colorpicker(text, default, callback)
         table.insert(popupElements, bFill)
 
         local bFillCorner = Instance.new("UICorner")
-        bFillCorner.CornerRadius = UDim.new(0, 6)
+        bFillCorner.CornerRadius = UDim.new(0, 5)
         bFillCorner.Parent = bFill
         table.insert(popupElements, bFillCorner)
 
@@ -1541,7 +1536,7 @@ function Section:Colorpicker(text, default, callback)
         bButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         bButton.BorderSizePixel = 0
         bButton.Position = UDim2.new(selectedColor.B, -5, 0, -2)
-        bButton.Size = UDim2.new(0, 10, 0, 16)
+        bButton.Size = UDim2.new(0, 10, 0, 14)
         bButton.Text = ""
         bButton.ZIndex = 23
         bButton.BackgroundTransparency = 1
@@ -1556,8 +1551,8 @@ function Section:Colorpicker(text, default, callback)
         bValue.Parent = popup
         bValue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         bValue.BackgroundTransparency = 1.000
-        bValue.Position = UDim2.new(0, 205, 0, 135)
-        bValue.Size = UDim2.new(0, 35, 0, 20)
+        bValue.Position = UDim2.new(0, 205, 0, 112)
+        bValue.Size = UDim2.new(0, 35, 0, 18)
         bValue.Font = Enum.Font.Gotham
         bValue.Text = tostring(math.floor(selectedColor.B * 255))
         bValue.TextColor3 = currentTheme.Text
@@ -1567,13 +1562,13 @@ function Section:Colorpicker(text, default, callback)
         bValue.TextTransparency = 1
         table.insert(popupElements, bValue)
 
-        -- Vista previa
+        -- Vista previa (Preview:)
         local previewLabel = Instance.new("TextLabel")
         previewLabel.Parent = popup
         previewLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         previewLabel.BackgroundTransparency = 1.000
-        previewLabel.Position = UDim2.new(0, 10, 0, 170)
-        previewLabel.Size = UDim2.new(0, 60, 0, 20)
+        previewLabel.Position = UDim2.new(0, 10, 0, 142)
+        previewLabel.Size = UDim2.new(0, 55, 0, 20)
         previewLabel.Font = Enum.Font.Gotham
         previewLabel.Text = "Preview:"
         previewLabel.TextColor3 = currentTheme.Text
@@ -1587,8 +1582,8 @@ function Section:Colorpicker(text, default, callback)
         previewDisplay.Parent = popup
         previewDisplay.BackgroundColor3 = selectedColor
         previewDisplay.BorderSizePixel = 0
-        previewDisplay.Position = UDim2.new(0, 80, 0, 165)
-        previewDisplay.Size = UDim2.new(0, 60, 0, 30)
+        previewDisplay.Position = UDim2.new(0, 75, 0, 137)
+        previewDisplay.Size = UDim2.new(0, 70, 0, 30)
         previewDisplay.ZIndex = 21
         previewDisplay.BackgroundTransparency = 1
         table.insert(popupElements, previewDisplay)
@@ -1598,13 +1593,13 @@ function Section:Colorpicker(text, default, callback)
         previewCorner.Parent = previewDisplay
         table.insert(popupElements, previewCorner)
 
-        -- Botones
+        -- Botones Confirm/Cancel
         local confirmButton = Instance.new("TextButton")
         confirmButton.Parent = popup
         confirmButton.BackgroundColor3 = currentTheme.Accent
         confirmButton.BorderSizePixel = 0
-        confirmButton.Position = UDim2.new(0, 10, 0, 215)
-        confirmButton.Size = UDim2.new(0, 120, 0, 30)
+        confirmButton.Position = UDim2.new(0, 10, 0, 182)
+        confirmButton.Size = UDim2.new(0, 135, 0, 28)
         confirmButton.Text = "Confirm"
         confirmButton.Font = Enum.Font.Gotham
         confirmButton.TextColor3 = currentTheme.Text
@@ -1624,8 +1619,8 @@ function Section:Colorpicker(text, default, callback)
         cancelButton.Parent = popup
         cancelButton.BackgroundColor3 = currentTheme.Tertiary
         cancelButton.BorderSizePixel = 0
-        cancelButton.Position = UDim2.new(0, 150, 0, 215)
-        cancelButton.Size = UDim2.new(0, 120, 0, 30)
+        cancelButton.Position = UDim2.new(0, 155, 0, 182)
+        cancelButton.Size = UDim2.new(0, 135, 0, 28)
         cancelButton.Text = "Cancel"
         cancelButton.Font = Enum.Font.Gotham
         cancelButton.TextColor3 = currentTheme.Text
@@ -1647,8 +1642,8 @@ function Section:Colorpicker(text, default, callback)
         }):Play()
         
         TweenService:Create(popup, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-            Size = UDim2.new(0, 300, 0, 340),
-            Position = UDim2.new(0.5, -150, 0.5, -170),
+            Size = UDim2.new(0, 300, 0, 260),
+            Position = UDim2.new(0.5, -150, 0.5, -130),
             BackgroundTransparency = 0
         }):Play()
         
