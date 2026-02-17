@@ -2562,12 +2562,10 @@ end
 function DiscordLib:CreateAcrylicBlur()
     local acrylicEnabled = false
     local acrylicIntensity = 0.5
-    local acrylicBlurEnabled = true
     local acrylicNoiseEnabled = true
     local acrylicFrame = nil
     local acrylicConnection = nil
     local moveConnection = nil
-    local Lighting = game:GetService("Lighting")
     local RunService = game:GetService("RunService")
 
     local function createAcrylicFrame()
@@ -2587,9 +2585,15 @@ function DiscordLib:CreateAcrylicBlur()
         acrylicFrame.BorderSizePixel = 0
         acrylicFrame.Size = mainFrame.Size
         acrylicFrame.Position = mainFrame.Position
+        acrylicFrame.AnchorPoint = mainFrame.AnchorPoint
         acrylicFrame.ZIndex = 0
         acrylicFrame.Active = false
         acrylicFrame.ClipsDescendants = true
+
+        -- Mismo corner radius que MainFrame
+        local corner = Instance.new("UICorner")
+        corner.CornerRadius = UDim.new(0, 4)
+        corner.Parent = acrylicFrame
 
         local gradient = Instance.new("UIGradient")
         gradient.Color = ColorSequence.new({
@@ -2614,12 +2618,7 @@ function DiscordLib:CreateAcrylicBlur()
         noise.ScaleType = Enum.ScaleType.Tile
         noise.TileSize = UDim2.new(0, 128, 0, 128)
 
-        local blurEffect = Instance.new("BlurEffect")
-        blurEffect.Name = "AcrylicBlurEffect"
-        blurEffect.Parent = Lighting
-        blurEffect.Size = 12
-        blurEffect.Enabled = acrylicBlurEnabled
-
+        -- Conectar movimiento
         moveConnection = mainFrame:GetPropertyChangedSignal("Position"):Connect(function()
             if acrylicFrame and acrylicFrame.Parent then
                 acrylicFrame.Position = mainFrame.Position
@@ -2652,11 +2651,6 @@ function DiscordLib:CreateAcrylicBlur()
 
         acrylicConnection = RunService.RenderStepped:Connect(function()
             if acrylicFrame and acrylicFrame.Parent and acrylicEnabled then
-                local blur = Lighting:FindFirstChild("AcrylicBlurEffect")
-                if blur then
-                    blur.Size = 12 * acrylicIntensity
-                end
-                
                 local noise = acrylicFrame:FindFirstChild("Noise")
                 if noise then
                     noise.ImageTransparency = 0.96 * (1 - acrylicIntensity * 0.3)
@@ -2679,10 +2673,6 @@ function DiscordLib:CreateAcrylicBlur()
         if acrylicFrame then
             acrylicFrame:Destroy()
             acrylicFrame = nil
-        end
-        local blur = Lighting:FindFirstChild("AcrylicBlurEffect")
-        if blur then
-            blur:Destroy()
         end
     end
 
@@ -2712,14 +2702,6 @@ function DiscordLib:CreateAcrylicBlur()
     function acrylicObject:SetIntensity(intensity)
         intensity = math.clamp(intensity, 0, 1)
         acrylicIntensity = intensity
-    end
-
-    function acrylicObject:SetBlurEnabled(enabled)
-        acrylicBlurEnabled = enabled
-        local blur = Lighting:FindFirstChild("AcrylicBlurEffect")
-        if blur then
-            blur.Enabled = enabled
-        end
     end
 
     function acrylicObject:SetNoiseEnabled(enabled)
