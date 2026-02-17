@@ -500,15 +500,28 @@ function DiscordLib:Window(text)
             end
         end
         
-        -- Userpad
         Userpad.BackgroundColor3 = newTheme.Userpad
         UserIcon.BackgroundColor3 = newTheme.UserIcon
         UserCircleImage.ImageColor3 = newTheme.Userpad
         UserName.TextColor3 = newTheme.Text
         UserTag.TextColor3 = newTheme.Text
     end
-
-    -- Crear un servidor
+function DiscordLib:SetTransparency(transparency)
+    transparency = math.clamp(transparency, 0, 1)
+    local mainFrame = Discord:FindFirstChild("MainFrame")
+    if mainFrame then
+        mainFrame.BackgroundTransparency = transparency
+local serversFrame = mainFrame:FindFirstChild("ServersHoldFrame")
+        if serversFrame then
+    serversFrame.BackgroundTransparency = transparency
+        end
+        
+        local channelsFrame = mainFrame:FindFirstChild("ChannelsHoldFrame")
+        if channelsFrame then
+    channelsFrame.BackgroundTransparency = transparency
+        end
+    end
+end
     function Servers:Server(Name, Image)
         ServerChannels[Name] = ServerChannels[Name] or {}
         
