@@ -578,7 +578,6 @@ function DiscordLib:Window(text)
 
         Channels[Name] = SectionFrame
 
-        -- Label de sección
         function Section:Label(text)
             local Label = Instance.new("TextLabel")
             Label.Parent = SectionFrame
@@ -595,7 +594,20 @@ function DiscordLib:Window(text)
             return Label
         end
 
-        -- Botón normal
+function Section:Seperator()
+    local Seperator = Instance.new("Frame")
+    local SeperatorPadding = Instance.new("UIPadding")
+    
+    Seperator.Parent = SectionFrame
+    Seperator.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    Seperator.BackgroundTransparency = 0.9
+    Seperator.BorderSizePixel = 0
+    Seperator.Size = UDim2.new(0, 374, 0, 1)
+    
+    SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y)
+    return Seperator
+end
+
         function Section:Button(text, callback)
             local Button = Instance.new("TextButton")
             local ButtonCorner = Instance.new("UICorner")
