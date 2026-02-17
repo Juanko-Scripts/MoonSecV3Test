@@ -1115,6 +1115,7 @@ end
             return sliderObject
         end
 
+
 function Section:Colorpicker(text, default, callback)
     local ColorPickerFrame = Instance.new("Frame")
     local ColorPickerLabel = Instance.new("TextLabel")
@@ -1127,6 +1128,7 @@ function Section:Colorpicker(text, default, callback)
     local picking = false
     local currentPopup = nil
     local currentOverlay = nil
+    local popupElements = {}  -- Para guardar todos los elementos del popup
 
     ColorPickerFrame.Parent = SectionFrame
     ColorPickerFrame.BackgroundColor3 = currentTheme.Tertiary
@@ -1174,7 +1176,27 @@ function Section:Colorpicker(text, default, callback)
 
     local function closeColorPicker()
         if currentPopup and currentOverlay then
-            -- ANIMACIÓN DE SALIDA
+            -- Animar TODOS los elementos del popup
+            for _, element in ipairs(popupElements) do
+                if element and element.Parent then
+                    if element:IsA("TextLabel") then
+                        TweenService:Create(element, TweenInfo.new(0.2), {
+                            TextTransparency = 1
+                        }):Play()
+                    elseif element:IsA("TextButton") then
+                        TweenService:Create(element, TweenInfo.new(0.2), {
+                            BackgroundTransparency = 1,
+                            TextTransparency = 1
+                        }):Play()
+                    elseif element:IsA("Frame") then
+                        TweenService:Create(element, TweenInfo.new(0.2), {
+                            BackgroundTransparency = 1
+                        }):Play()
+                    end
+                end
+            end
+            
+            -- Animar el popup y overlay
             TweenService:Create(currentPopup, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
                 Size = UDim2.new(0, 280, 0, 230),
                 Position = UDim2.new(0.5, -140, 0.5, -115),
@@ -1188,10 +1210,12 @@ function Section:Colorpicker(text, default, callback)
             -- Esperar a que termine la animación
             task.wait(0.2)
             
+            -- Destruir todo
             currentPopup:Destroy()
             currentOverlay:Destroy()
             currentPopup = nil
             currentOverlay = nil
+            popupElements = {}
         end
         picking = false
     end
@@ -1202,13 +1226,14 @@ function Section:Colorpicker(text, default, callback)
             return 
         end
         picking = true
+        popupElements = {}
 
-        -- Overlay oscuro (comienza invisible)
+        -- Overlay oscuro
         local overlay = Instance.new("Frame")
         overlay.Name = "ColorPickerOverlay"
         overlay.Parent = MainFrame
         overlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-        overlay.BackgroundTransparency = 1  -- Invisible al inicio
+        overlay.BackgroundTransparency = 1
         overlay.BorderSizePixel = 0
         overlay.Size = UDim2.new(1, 0, 1, 0)
         overlay.Position = UDim2.new(0, 0, 0, 0)
@@ -1216,24 +1241,27 @@ function Section:Colorpicker(text, default, callback)
         overlay.Active = true
         overlay.Draggable = false
         currentOverlay = overlay
+        table.insert(popupElements, overlay)
 
-        -- Popup principal (comienza pequeño e invisible)
+        -- Popup principal
         local popup = Instance.new("Frame")
         popup.Name = "ColorPickerPopup"
         popup.Parent = overlay
         popup.BackgroundColor3 = currentTheme.Main
         popup.BorderSizePixel = 0
         popup.Position = UDim2.new(0.5, -140, 0.5, -115)
-        popup.Size = UDim2.new(0, 280, 0, 230)  -- Tamaño inicial más pequeño
+        popup.Size = UDim2.new(0, 280, 0, 230)
         popup.ZIndex = 20
         popup.Active = true
         popup.Draggable = false
-        popup.BackgroundTransparency = 1  -- Invisible al inicio
+        popup.BackgroundTransparency = 1
         currentPopup = popup
+        table.insert(popupElements, popup)
 
         local popupCorner = Instance.new("UICorner")
         popupCorner.CornerRadius = UDim.new(0, 8)
         popupCorner.Parent = popup
+        table.insert(popupElements, popupCorner)
 
         -- Título
         local titleLabel = Instance.new("TextLabel")
@@ -1248,7 +1276,8 @@ function Section:Colorpicker(text, default, callback)
         titleLabel.TextSize = 16.000
         titleLabel.TextXAlignment = Enum.TextXAlignment.Center
         titleLabel.ZIndex = 21
-        titleLabel.TextTransparency = 1  -- Invisible al inicio
+        titleLabel.TextTransparency = 1
+        table.insert(popupElements, titleLabel)
 
         -- Selector de Hue
         local hueGradient = Instance.new("Frame")
@@ -1258,11 +1287,13 @@ function Section:Colorpicker(text, default, callback)
         hueGradient.Position = UDim2.new(0, 10, 0, 40)
         hueGradient.Size = UDim2.new(0, 260, 0, 20)
         hueGradient.ZIndex = 21
-        hueGradient.BackgroundTransparency = 1  -- Invisible al inicio
+        hueGradient.BackgroundTransparency = 1
+        table.insert(popupElements, hueGradient)
 
         local hueCorner = Instance.new("UICorner")
         hueCorner.CornerRadius = UDim.new(0, 10)
         hueCorner.Parent = hueGradient
+        table.insert(popupElements, hueCorner)
 
         local hueGradientObject = Instance.new("UIGradient")
         hueGradientObject.Color = ColorSequence.new({
@@ -1275,6 +1306,7 @@ function Section:Colorpicker(text, default, callback)
             ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 0, 0))
         })
         hueGradientObject.Parent = hueGradient
+        -- No añadimos UIGradient a popupElements porque no es animable
 
         local hueSlider = Instance.new("TextButton")
         hueSlider.Parent = hueGradient
@@ -1285,11 +1317,13 @@ function Section:Colorpicker(text, default, callback)
         hueSlider.Text = ""
         hueSlider.ZIndex = 22
         hueSlider.AutoButtonColor = false
-        hueSlider.BackgroundTransparency = 1  -- Invisible al inicio
+        hueSlider.BackgroundTransparency = 1
+        table.insert(popupElements, hueSlider)
 
         local hueSliderCorner = Instance.new("UICorner")
         hueSliderCorner.CornerRadius = UDim.new(0, 5)
         hueSliderCorner.Parent = hueSlider
+        table.insert(popupElements, hueSliderCorner)
 
         -- Vista previa
         local previewLabel = Instance.new("TextLabel")
@@ -1304,7 +1338,8 @@ function Section:Colorpicker(text, default, callback)
         previewLabel.TextSize = 14.000
         previewLabel.TextXAlignment = Enum.TextXAlignment.Left
         previewLabel.ZIndex = 21
-        previewLabel.TextTransparency = 1  -- Invisible al inicio
+        previewLabel.TextTransparency = 1
+        table.insert(popupElements, previewLabel)
 
         local previewDisplay = Instance.new("Frame")
         previewDisplay.Parent = popup
@@ -1313,11 +1348,13 @@ function Section:Colorpicker(text, default, callback)
         previewDisplay.Position = UDim2.new(0, 100, 0, 70)
         previewDisplay.Size = UDim2.new(0, 70, 0, 40)
         previewDisplay.ZIndex = 21
-        previewDisplay.BackgroundTransparency = 1  -- Invisible al inicio
+        previewDisplay.BackgroundTransparency = 1
+        table.insert(popupElements, previewDisplay)
 
         local previewCorner = Instance.new("UICorner")
         previewCorner.CornerRadius = UDim.new(0, 6)
         previewCorner.Parent = previewDisplay
+        table.insert(popupElements, previewCorner)
 
         -- Botones
         local confirmButton = Instance.new("TextButton")
@@ -1332,12 +1369,14 @@ function Section:Colorpicker(text, default, callback)
         confirmButton.TextSize = 14
         confirmButton.ZIndex = 21
         confirmButton.AutoButtonColor = false
-        confirmButton.BackgroundTransparency = 1  -- Invisible al inicio
+        confirmButton.BackgroundTransparency = 1
         confirmButton.TextTransparency = 1
+        table.insert(popupElements, confirmButton)
 
         local confirmCorner = Instance.new("UICorner")
         confirmCorner.CornerRadius = UDim.new(0, 6)
         confirmCorner.Parent = confirmButton
+        table.insert(popupElements, confirmCorner)
 
         local cancelButton = Instance.new("TextButton")
         cancelButton.Parent = popup
@@ -1351,14 +1390,16 @@ function Section:Colorpicker(text, default, callback)
         cancelButton.TextSize = 14
         cancelButton.ZIndex = 21
         cancelButton.AutoButtonColor = false
-        cancelButton.BackgroundTransparency = 1  -- Invisible al inicio
+        cancelButton.BackgroundTransparency = 1
         cancelButton.TextTransparency = 1
+        table.insert(popupElements, cancelButton)
 
         local cancelCorner = Instance.new("UICorner")
         cancelCorner.CornerRadius = UDim.new(0, 6)
         cancelCorner.Parent = cancelButton
+        table.insert(popupElements, cancelCorner)
 
-        -- Selectores RGB simples
+        -- Label RGB
         local rgbLabel = Instance.new("TextLabel")
         rgbLabel.Parent = popup
         rgbLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -1371,7 +1412,8 @@ function Section:Colorpicker(text, default, callback)
         rgbLabel.TextSize = 12.000
         rgbLabel.TextXAlignment = Enum.TextXAlignment.Center
         rgbLabel.ZIndex = 21
-        rgbLabel.TextTransparency = 1  -- Invisible al inicio
+        rgbLabel.TextTransparency = 1
+        table.insert(popupElements, rgbLabel)
 
         -- ANIMACIÓN DE ENTRADA
         TweenService:Create(overlay, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
@@ -1386,20 +1428,24 @@ function Section:Colorpicker(text, default, callback)
         
         -- Animar todos los elementos
         local fadeTime = 0.25
-        TweenService:Create(titleLabel, TweenInfo.new(fadeTime), {TextTransparency = 0}):Play()
-        TweenService:Create(hueGradient, TweenInfo.new(fadeTime), {BackgroundTransparency = 0}):Play()
-        TweenService:Create(hueSlider, TweenInfo.new(fadeTime), {BackgroundTransparency = 0}):Play()
-        TweenService:Create(previewLabel, TweenInfo.new(fadeTime), {TextTransparency = 0}):Play()
-        TweenService:Create(previewDisplay, TweenInfo.new(fadeTime), {BackgroundTransparency = 0}):Play()
-        TweenService:Create(confirmButton, TweenInfo.new(fadeTime), {
-            BackgroundTransparency = 0,
-            TextTransparency = 0
-        }):Play()
-        TweenService:Create(cancelButton, TweenInfo.new(fadeTime), {
-            BackgroundTransparency = 0,
-            TextTransparency = 0
-        }):Play()
-        TweenService:Create(rgbLabel, TweenInfo.new(fadeTime), {TextTransparency = 0}):Play()
+        for _, element in ipairs(popupElements) do
+            if element and element ~= overlay and element ~= popup then
+                if element:IsA("TextLabel") then
+                    TweenService:Create(element, TweenInfo.new(fadeTime), {
+                        TextTransparency = 0
+                    }):Play()
+                elseif element:IsA("TextButton") then
+                    TweenService:Create(element, TweenInfo.new(fadeTime), {
+                        BackgroundTransparency = 0,
+                        TextTransparency = 0
+                    }):Play()
+                elseif element:IsA("Frame") and element ~= popup and element ~= overlay then
+                    TweenService:Create(element, TweenInfo.new(fadeTime), {
+                        BackgroundTransparency = 0
+                    }):Play()
+                end
+            end
+        end
 
         -- Funcionalidad del hue
         local hueDragging = false
