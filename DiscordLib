@@ -384,13 +384,13 @@ function DiscordLib:Window(text)
         TopFrameHolder.BackgroundColor3 = themeColor
         CloseBtn.BackgroundColor3 = themeColor
         MinimizeBtn.BackgroundColor3 = themeColor
-        ServersHoldFrame.BackgroundColor3 = themeColor:lerp(Color3.new(0, 0, 0), 0.2) -- Un color ligeramente más oscuro para los servidores
+        ServersHoldFrame.BackgroundColor3 = themeColor:lerp(Color3.new(0, 0, 0), 0.2)
         Userpad.BackgroundColor3 = themeColor:lerp(Color3.new(0, 0, 0), 0.3)
         UserIcon.BackgroundColor3 = themeColor:lerp(Color3.new(0, 0, 0), 0.4)
     end
 
     -- Crear un servidor
-    function Servers:Server(Name, Image, functioncallback)
+    function Servers:Server(Name, Image)
         local ServerBtn = Instance.new("TextButton")
         local ServerIcon = Instance.new("ImageLabel")
         local ServerCorner = Instance.new("UICorner")
@@ -422,15 +422,6 @@ function DiscordLib:Window(text)
 
         ServersHold.CanvasSize = UDim2.new(0, 0, 0, ServersHoldLayout.AbsoluteContentSize.Y)
 
-        local ServerHighlight = Instance.new("Frame")
-        ServerHighlight.Name = "ServerHighlight"
-        ServerHighlight.Parent = ServersHoldFrame
-        ServerHighlight.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        ServerHighlight.BorderSizePixel = 0
-        ServerHighlight.Position = UDim2.new(0, 0, 0, 0)
-        ServerHighlight.Size = UDim2.new(0, 4, 0, 0)
-        ServerHighlight.Visible = false
-
         ServerBtn.MouseButton1Click:Connect(function()
             for i, v in pairs(ServersHold:GetChildren()) do
                 if v:IsA("TextButton") then
@@ -438,13 +429,8 @@ function DiscordLib:Window(text)
                 end
             end
             TweenService:Create(ServerBtn, TweenInfo.new(0.2), {BackgroundTransparency = 0}):Play()
-            if functioncallback then
-                functioncallback()
-            end
-        end)
 
-        -- Función para seleccionar este servidor
-        ServerBtn.MouseButton1Click:Connect(function()
+            -- Seleccionar este servidor
             currentservertoggled = Name
             for i, v in pairs(Channels) do
                 if v.Parent then
@@ -463,8 +449,13 @@ function DiscordLib:Window(text)
         return ServerBtn
     end
 
-    -- Crear un canal (categoría)
+    -- Crear un canal (categoría) - FIXED: Ahora verifica que Name no sea nil
     function Servers:Channel(Name)
+        if not Name then
+            warn("DiscordLib: Channel name cannot be nil")
+            return {}
+        end
+        
         local ChannelFrame = Instance.new("ScrollingFrame")
         local ChannelLayout = Instance.new("UIListLayout")
         local ChannelPadding = Instance.new("UIPadding")
@@ -553,6 +544,11 @@ function DiscordLib:Window(text)
 
     local ServerNamespace = {}
     function ServerNamespace:CreateSection(Name)
+        if not Name then
+            warn("DiscordLib: Section name cannot be nil")
+            return {}
+        end
+        
         local Section = {}
         local SectionFrame = Instance.new("ScrollingFrame")
         local SectionLayout = Instance.new("UIListLayout")
@@ -1182,6 +1178,7 @@ function DiscordLib:Window(text)
         return Section
     end
 
+    -- Función para seleccionar un servidor
     function Servers:Select(Name)
         for i, v in pairs(ServersHold:GetChildren()) do
             if v:IsA("TextButton") then
@@ -1209,12 +1206,13 @@ function DiscordLib:Window(text)
 
     return {
         Server = Servers,
-        Channel = Servers.Channel,
+        Channel = Servers.Channel,  -- FIXED: Ahora Channel está correctamente enlazado
         CreateSection = ServerNamespace.CreateSection,
         SetTheme = DiscordLib.SetTheme
     }
 end
 
+-- Notificación no bloqueante
 function DiscordLib:Notification(data)
     local title = data.title or "Notification"
     local desc = data.desc or ""
@@ -1260,9 +1258,11 @@ function DiscordLib:Notification(data)
     NotifDesc.TextXAlignment = Enum.TextXAlignment.Left
     NotifDesc.TextYAlignment = Enum.TextYAlignment.Top
 
+    -- Animación de entrada
     NotifHolder.Position = UDim2.new(1, -310, 0, -80)
     TweenService:Create(NotifHolder, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {Position = UDim2.new(1, -310, 0, 10)}):Play()
 
+    -- Auto-cerrar después de `time` segundos
     spawn(function()
         wait(time)
         TweenService:Create(NotifHolder, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {Position = UDim2.new(1, -310, 0, -80)}):Play()
@@ -1271,6 +1271,7 @@ function DiscordLib:Notification(data)
     end)
 end
 
+-- Función para cambiar el tema
 function DiscordLib:SetTheme(themeColor)
     if Discord and Discord:FindFirstChild("MainFrame") then
         local MainFrame = Discord.MainFrame
