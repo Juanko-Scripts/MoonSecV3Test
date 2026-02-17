@@ -400,7 +400,7 @@ function DiscordLib:SetTheme(themeName)
             Main = themeName,
             Secondary = themeName:lerp(Color3.new(0, 0, 0), 0.2),
             Tertiary = themeName:lerp(Color3.new(0, 0, 0), 0.3),
-            Accent = themeName:lerp(Color3.new(1, 1, 1), 0.3), -- Cambiado: el acento ahora es una variación del color principal
+            Accent = themeName:lerp(Color3.new(1, 1, 1), 0.3),
             Text = themeName:lerp(Color3.new(1, 1, 1), 0.8),
             TextMuted = themeName:lerp(Color3.new(1, 1, 1), 0.5),
             Userpad = themeName:lerp(Color3.new(0, 0, 0), 0.4),
@@ -412,7 +412,6 @@ function DiscordLib:SetTheme(themeName)
     
     currentTheme = newTheme
     
-    -- Buscar el ScreenGui principal
     local discordGui = game:GetService("CoreGui"):FindFirstChild("Discord")
     if not discordGui then return end
     
@@ -441,7 +440,7 @@ function DiscordLib:SetTheme(themeName)
         end
     end
     
-    -- 3. CHANNELS - CORREGIDO: ahora usa el color del tema para el canal seleccionado
+    -- 3. CHANNELS
     local channelsHoldFrame = mainFrame:FindFirstChild("ChannelsHoldFrame")
     if channelsHoldFrame then
         channelsHoldFrame.BackgroundColor3 = newTheme.Secondary
@@ -450,9 +449,8 @@ function DiscordLib:SetTheme(themeName)
         if channelsHold then
             for _, channelBtn in ipairs(channelsHold:GetChildren()) do
                 if channelBtn:IsA("TextButton") then
-                    -- Detectar canal seleccionado (transparencia baja)
                     if channelBtn.BackgroundTransparency < 0.5 then
-                        channelBtn.BackgroundColor3 = newTheme.Accent  -- Ahora usa el acento del tema actual
+                        channelBtn.BackgroundColor3 = newTheme.Accent
                         channelBtn.BackgroundTransparency = 0
                     else
                         channelBtn.BackgroundColor3 = newTheme.Tertiary
@@ -474,7 +472,7 @@ function DiscordLib:SetTheme(themeName)
         end
     end
     
-    -- 4. USERPAD
+    -- 4. USERPAD (CORREGIDO - respeta la foto)
     local userpad = mainFrame:FindFirstChild("Userpad", true)
     if userpad then
         userpad.BackgroundColor3 = newTheme.Userpad
@@ -484,11 +482,8 @@ function DiscordLib:SetTheme(themeName)
             userIcon.BackgroundColor3 = newTheme.UserIcon
         end
         
-        local userCircle = userpad:FindFirstChild("UserImage", true)
-        if userCircle and userCircle:IsA("ImageLabel") then
-            userCircle.ImageColor3 = newTheme.Userpad
-        end
-        
+        -- NO TOCAR UserImage (la foto de perfil)
+        -- Solo actualizar textos
         for _, label in ipairs(userpad:GetChildren()) do
             if label:IsA("TextLabel") then
                 label.TextColor3 = newTheme.Text
@@ -496,7 +491,7 @@ function DiscordLib:SetTheme(themeName)
         end
     end
     
-    -- 5. SECCIONES Y ELEMENTOS
+    -- 5. SECCIONES (resto del código igual...)
     for _, sectionFrame in pairs(Sections) do
         if sectionFrame and sectionFrame.Parent then
             sectionFrame.BackgroundColor3 = newTheme.Secondary
@@ -514,7 +509,6 @@ function DiscordLib:SetTheme(themeName)
                     element.BackgroundColor3 = newTheme.Tertiary
                     element.TextColor3 = newTheme.Text
                     
-                    -- Toggles
                     local toggleFrame = element:FindFirstChildOfClass("Frame")
                     if toggleFrame then
                         toggleFrame.BackgroundColor3 = newTheme.Secondary
@@ -535,17 +529,14 @@ function DiscordLib:SetTheme(themeName)
                             child.TextColor3 = newTheme.Text
                         
                         elseif child:IsA("Frame") then
-                            -- SLIDER - CORREGIDO: busca el fill específicamente
                             if child.Position.Y.Offset > 20 and child.Size.Y.Offset < 20 then
-                                child.BackgroundColor3 = newTheme.Secondary  -- Barra
+                                child.BackgroundColor3 = newTheme.Secondary
                                 
-                                -- El fill es el primer frame dentro de la barra
                                 local fill = child:FindFirstChildOfClass("Frame")
                                 if fill then
-                                    fill.BackgroundColor3 = newTheme.Accent  -- FILL usa el acento del tema
+                                    fill.BackgroundColor3 = newTheme.Accent
                                 end
                                 
-                                -- Botón del slider
                                 local button = child:FindFirstChildOfClass("TextButton")
                                 if button then
                                     button.BackgroundColor3 = newTheme.Text
@@ -553,7 +544,6 @@ function DiscordLib:SetTheme(themeName)
                             end
                         
                         elseif child:IsA("ScrollingFrame") then
-                            -- DROPDOWN
                             child.BackgroundColor3 = newTheme.Secondary
                             child.BorderColor3 = newTheme.Border
                             child.ScrollBarImageColor3 = newTheme.Accent
@@ -566,12 +556,10 @@ function DiscordLib:SetTheme(themeName)
                             end
                         
                         elseif child:IsA("TextButton") then
-                            -- COLORPICKER button
                             child.BackgroundColor3 = newTheme.Secondary
                         end
                     end
                     
-                    -- Flecha del dropdown
                     local arrow = element:FindFirstChildOfClass("TextLabel")
                     if arrow and arrow.Text:match("[▼▲]") then
                         arrow.TextColor3 = newTheme.Accent
