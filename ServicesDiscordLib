@@ -196,7 +196,9 @@ function GrobalSettingsLibXP:CreateSettingsInChannel(channel, discordLib)
 
     channel:Label("THEME SETTINGS")
     channel:Seperator()
-
+channel:Colorpicker("Pick Color", Color3.fromRGB(32, 34, 37), function(color)
+        discordLib:SetTheme(color)
+    end)
     local themeNames = self:GetThemeNames()
     channel:Dropdown("Select Theme", themeNames, function(selectedTheme)
         self:ApplyTheme(selectedTheme, discordLib)
@@ -206,36 +208,23 @@ function GrobalSettingsLibXP:CreateSettingsInChannel(channel, discordLib)
             time = 2
         })
     end)
-
-    channel:Label("QUICK THEMES")
-    channel:Button("Dark Theme", function()
-        self:ApplyTheme("DiscordDark", discordLib)
-        discordLib:Notification({title = "Dark Theme", desc = "Activated", time = 1.5})
-    end)
-
-    channel:Button("Light Theme", function()
-        self:ApplyTheme("DiscordLight", discordLib)
-        discordLib:Notification({title = "Light Theme", desc = "Activated", time = 1.5})
-    end)
-
-    channel:Button("AMOLED Theme", function()
-        self:ApplyTheme("Black", discordLib)
-        discordLib:Notification({title = "AMOLED Theme", desc = "Activated", time = 1.5})
-    end)
-
-    channel:Button("Random Theme", function()
+channel:Button("Random Theme", function()
         local randomTheme = self:GetRandomTheme()
         self:ApplyTheme(randomTheme, discordLib)
         discordLib:Notification({title = "Random Theme", desc = randomTheme, time = 1.5})
     end)
 
-    channel:Seperator()
-    channel:Label("CUSTOM COLOR")
-    
-    channel:Colorpicker("Pick Color", Color3.fromRGB(32, 34, 37), function(color)
-        discordLib:SetTheme(color)
+    channel:Label("DISCORD TOPICS")
+    channel:Button("Dark Theme", function()
+        discordLib:SetTheme("Dark")
     end)
-    
+    channel:Button("Light Theme", function()
+        discordLib:SetTheme("Light")
+    end)
+    channel:Button("AMOLED Theme", function()
+        discordLib:SetTheme("Amoled")
+    end)
+
     channel:Seperator()
     channel:Label("TRANSPARENCY")
     
