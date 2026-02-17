@@ -505,52 +505,90 @@ function DiscordLib:SetTheme(themeName)
                     end
                 
                 elseif element:IsA("Frame") then
-                    element.BackgroundColor3 = newTheme.Tertiary
-                    
-                    for _, child in ipairs(element:GetChildren()) do
-                        if child:IsA("TextLabel") then
-                            child.TextColor3 = newTheme.Text
+                    if element.Name == "ToggleSliderMain" then
+                        element.BackgroundColor3 = newTheme.Tertiary
                         
-                        elseif child:IsA("Frame") then
-                            if child.Position.Y.Offset > 20 and child.Size.Y.Offset < 20 then
+                        for _, child in ipairs(element:GetChildren()) do
+                            if child:IsA("TextLabel") then
+                                child.TextColor3 = newTheme.Text
+                            elseif child.Name == "ToggleContainer" then
                                 child.BackgroundColor3 = newTheme.Secondary
+                                child.BorderColor3 = newTheme.Border
                                 
-                                local fill = child:FindFirstChildOfClass("Frame")
+                                local fill = child:FindFirstChild("ToggleFill")
                                 if fill then
                                     fill.BackgroundColor3 = newTheme.Accent
                                 end
+                            elseif child.Name == "SliderContainer" then
+                                child.BackgroundColor3 = newTheme.Tertiary
                                 
-                                local button = child:FindFirstChildOfClass("TextButton")
-                                if button then
-                                    button.BackgroundColor3 = newTheme.Text
+                                for _, sliderChild in ipairs(child:GetChildren()) do
+                                    if sliderChild:IsA("TextLabel") then
+                                        sliderChild.TextColor3 = newTheme.Text
+                                    elseif sliderChild.Name == "SliderBar" then
+                                        sliderChild.BackgroundColor3 = newTheme.Secondary
+                                        
+                                        local fill = sliderChild:FindFirstChild("SliderFill")
+                                        if fill then
+                                            fill.BackgroundColor3 = newTheme.Accent
+                                        end
+                                        
+                                        local button = sliderChild:FindFirstChild("SliderButton")
+                                        if button then
+                                            button.BackgroundColor3 = newTheme.Text
+                                        end
+                                    end
                                 end
                             end
-                        
-                        elseif child:IsA("ScrollingFrame") then
-                            child.BackgroundColor3 = newTheme.Secondary
-                            child.BorderColor3 = newTheme.Border
-                            child.ScrollBarImageColor3 = newTheme.Accent
-                            
-                            for _, optionBtn in ipairs(child:GetChildren()) do
-                                if optionBtn:IsA("TextButton") then
-                                    optionBtn.BackgroundColor3 = newTheme.Tertiary
-                                    optionBtn.TextColor3 = newTheme.Text
-                                end
-                            end
-                        
-                        elseif child:IsA("TextButton") then
-                            child.BackgroundColor3 = newTheme.Secondary
-                        
-                        elseif child:IsA("TextBox") then
-                            child.BackgroundColor3 = newTheme.Secondary
-                            child.TextColor3 = newTheme.Text
-                            child.PlaceholderColor3 = newTheme.TextMuted
                         end
-                    end
-                    
-                    local arrow = element:FindFirstChildOfClass("TextLabel")
-                    if arrow and arrow.Text:match("[▼▲]") then
-                        arrow.TextColor3 = newTheme.Accent
+                    else
+                        element.BackgroundColor3 = newTheme.Tertiary
+                        
+                        for _, child in ipairs(element:GetChildren()) do
+                            if child:IsA("TextLabel") then
+                                child.TextColor3 = newTheme.Text
+                            
+                            elseif child:IsA("Frame") then
+                                if child.Position.Y.Offset > 20 and child.Size.Y.Offset < 20 then
+                                    child.BackgroundColor3 = newTheme.Secondary
+                                    
+                                    local fill = child:FindFirstChildOfClass("Frame")
+                                    if fill then
+                                        fill.BackgroundColor3 = newTheme.Accent
+                                    end
+                                    
+                                    local button = child:FindFirstChildOfClass("TextButton")
+                                    if button then
+                                        button.BackgroundColor3 = newTheme.Text
+                                    end
+                                end
+                            
+                            elseif child:IsA("ScrollingFrame") then
+                                child.BackgroundColor3 = newTheme.Secondary
+                                child.BorderColor3 = newTheme.Border
+                                child.ScrollBarImageColor3 = newTheme.Accent
+                                
+                                for _, optionBtn in ipairs(child:GetChildren()) do
+                                    if optionBtn:IsA("TextButton") then
+                                        optionBtn.BackgroundColor3 = newTheme.Tertiary
+                                        optionBtn.TextColor3 = newTheme.Text
+                                    end
+                                end
+                            
+                            elseif child:IsA("TextButton") then
+                                child.BackgroundColor3 = newTheme.Secondary
+                            
+                            elseif child:IsA("TextBox") then
+                                child.BackgroundColor3 = newTheme.Secondary
+                                child.TextColor3 = newTheme.Text
+                                child.PlaceholderColor3 = newTheme.TextMuted
+                            end
+                        end
+                        
+                        local arrow = element:FindFirstChildOfClass("TextLabel")
+                        if arrow and arrow.Text:match("[▼▲]") then
+                            arrow.TextColor3 = newTheme.Accent
+                        end
                     end
                 end
             end
@@ -981,9 +1019,9 @@ end
             return Toggle
         end
 
-
 function Section:ToggleSlider(text, defaultState, min, max, defaultVal, callback)
     local MainFrame = Instance.new("Frame")
+    MainFrame.Name = "ToggleSliderMain"
     MainFrame.Parent = SectionFrame
     MainFrame.BackgroundColor3 = currentTheme.Tertiary
     MainFrame.BorderSizePixel = 0
@@ -994,99 +1032,103 @@ function Section:ToggleSlider(text, defaultState, min, max, defaultVal, callback
     MainCorner.CornerRadius = UDim.new(0, 4)
     MainCorner.Parent = MainFrame
 
-    -- Label principal
-    local ToggleLabel = Instance.new("TextLabel")
-    ToggleLabel.Parent = MainFrame
-    ToggleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    ToggleLabel.BackgroundTransparency = 1.000
-    ToggleLabel.Position = UDim2.new(0, 5, 0, 5)
-    ToggleLabel.Size = UDim2.new(0, 280, 0, 18)
-    ToggleLabel.Font = Enum.Font.Gotham
-    ToggleLabel.Text = text
-    ToggleLabel.TextColor3 = currentTheme.Text
-    ToggleLabel.TextSize = 13.000
-    ToggleLabel.TextXAlignment = Enum.TextXAlignment.Left
-    ToggleLabel.ZIndex = 7
+    local TitleLabel = Instance.new("TextLabel")
+    TitleLabel.Name = "TitleLabel"
+    TitleLabel.Parent = MainFrame
+    TitleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    TitleLabel.BackgroundTransparency = 1.000
+    TitleLabel.Position = UDim2.new(0, 5, 0, 5)
+    TitleLabel.Size = UDim2.new(0, 280, 0, 18)
+    TitleLabel.Font = Enum.Font.Gotham
+    TitleLabel.Text = text
+    TitleLabel.TextColor3 = currentTheme.Text
+    TitleLabel.TextSize = 13.000
+    TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    TitleLabel.ZIndex = 7
 
-    -- TOGGLE (exactamente igual al Toggle normal)
-    local Toggle = Instance.new("TextButton")
-    Toggle.Parent = MainFrame
-    Toggle.BackgroundColor3 = currentTheme.Tertiary
-    Toggle.BackgroundTransparency = 1
-    Toggle.BorderSizePixel = 0
-    Toggle.Size = UDim2.new(0, 30, 0, 28)
-    Toggle.Position = UDim2.new(0, 335, 0, 0)
-    Toggle.AutoButtonColor = false
-    Toggle.Text = ""
-    Toggle.ZIndex = 7
+    local ToggleContainer = Instance.new("Frame")
+    ToggleContainer.Name = "ToggleContainer"
+    ToggleContainer.Parent = MainFrame
+    ToggleContainer.BackgroundColor3 = currentTheme.Secondary
+    ToggleContainer.BorderSizePixel = 1
+    ToggleContainer.BorderColor3 = currentTheme.Border
+    ToggleContainer.Position = UDim2.new(0, 340, 0, 5)
+    ToggleContainer.Size = UDim2.new(0, 18, 0, 18)
+    ToggleContainer.ZIndex = 7
 
-    local ToggleFrame = Instance.new("Frame")
-    ToggleFrame.Parent = Toggle
-    ToggleFrame.BackgroundColor3 = currentTheme.Secondary
-    ToggleFrame.BorderSizePixel = 1
-    ToggleFrame.BorderColor3 = currentTheme.Border
-    ToggleFrame.Position = UDim2.new(0, 0, 0, 5)
-    ToggleFrame.Size = UDim2.new(0, 18, 0, 18)
-    ToggleFrame.ZIndex = 8
-
-    local ToggleFrameCorner = Instance.new("UICorner")
-    ToggleFrameCorner.CornerRadius = UDim.new(0, 3)
-    ToggleFrameCorner.Parent = ToggleFrame
+    local ToggleContainerCorner = Instance.new("UICorner")
+    ToggleContainerCorner.CornerRadius = UDim.new(0, 3)
+    ToggleContainerCorner.Parent = ToggleContainer
 
     local ToggleFill = Instance.new("Frame")
-    ToggleFill.Parent = ToggleFrame
+    ToggleFill.Name = "ToggleFill"
+    ToggleFill.Parent = ToggleContainer
     ToggleFill.BackgroundColor3 = currentTheme.Accent
     ToggleFill.BorderSizePixel = 0
     ToggleFill.Size = UDim2.new(0, 0, 0, 0)
     ToggleFill.Position = UDim2.new(0, 2, 0, 2)
-    ToggleFill.ZIndex = 9
+    ToggleFill.ZIndex = 8
     ToggleFill.Visible = false
 
     local ToggleFillCorner = Instance.new("UICorner")
     ToggleFillCorner.CornerRadius = UDim.new(0, 2)
     ToggleFillCorner.Parent = ToggleFill
 
-    -- SLIDER (exactamente igual al Slider normal)
-    local SliderFrame = Instance.new("Frame")
-    SliderFrame.Parent = MainFrame
-    SliderFrame.BackgroundColor3 = currentTheme.Tertiary
-    SliderFrame.BorderSizePixel = 0
-    SliderFrame.Position = UDim2.new(0, 5, 0, 30)
-    SliderFrame.Size = UDim2.new(0, 360, 0, 40)
-    SliderFrame.ZIndex = 6
+    local ToggleButton = Instance.new("TextButton")
+    ToggleButton.Name = "ToggleButton"
+    ToggleButton.Parent = ToggleContainer
+    ToggleButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    ToggleButton.BackgroundTransparency = 1
+    ToggleButton.BorderSizePixel = 0
+    ToggleButton.Size = UDim2.new(1, 0, 1, 0)
+    ToggleButton.Text = ""
+    ToggleButton.ZIndex = 9
+    ToggleButton.AutoButtonColor = false
 
-    local SliderCorner = Instance.new("UICorner")
-    SliderCorner.CornerRadius = UDim.new(0, 4)
-    SliderCorner.Parent = SliderFrame
+    local SliderContainer = Instance.new("Frame")
+    SliderContainer.Name = "SliderContainer"
+    SliderContainer.Parent = MainFrame
+    SliderContainer.BackgroundColor3 = currentTheme.Tertiary
+    SliderContainer.BorderSizePixel = 0
+    SliderContainer.Position = UDim2.new(0, 5, 0, 30)
+    SliderContainer.Size = UDim2.new(0, 360, 0, 40)
+    SliderContainer.ZIndex = 6
 
-    local SliderLabel = Instance.new("TextLabel")
-    SliderLabel.Parent = SliderFrame
-    SliderLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    SliderLabel.BackgroundTransparency = 1.000
-    SliderLabel.Position = UDim2.new(0, 5, 0, 5)
-    SliderLabel.Size = UDim2.new(0, 200, 0, 16)
-    SliderLabel.Font = Enum.Font.Gotham
-    SliderLabel.Text = "Value"
-    SliderLabel.TextColor3 = currentTheme.Text
-    SliderLabel.TextSize = 12.000
-    SliderLabel.TextXAlignment = Enum.TextXAlignment.Left
-    SliderLabel.ZIndex = 7
+    local SliderContainerCorner = Instance.new("UICorner")
+    SliderContainerCorner.CornerRadius = UDim.new(0, 4)
+    SliderContainerCorner.Parent = SliderContainer
 
-    local SliderValue = Instance.new("TextLabel")
-    SliderValue.Parent = SliderFrame
-    SliderValue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    SliderValue.BackgroundTransparency = 1.000
-    SliderValue.Position = UDim2.new(0, 320, 0, 5)
-    SliderValue.Size = UDim2.new(0, 35, 0, 16)
-    SliderValue.Font = Enum.Font.Gotham
-    SliderValue.Text = tostring(defaultVal)
-    SliderValue.TextColor3 = currentTheme.Text
-    SliderValue.TextSize = 12.000
-    SliderValue.TextXAlignment = Enum.TextXAlignment.Right
-    SliderValue.ZIndex = 7
+    local ValueLabel = Instance.new("TextLabel")
+    ValueLabel.Name = "ValueLabel"
+    ValueLabel.Parent = SliderContainer
+    ValueLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    ValueLabel.BackgroundTransparency = 1.000
+    ValueLabel.Position = UDim2.new(0, 5, 0, 5)
+    ValueLabel.Size = UDim2.new(0, 200, 0, 16)
+    ValueLabel.Font = Enum.Font.Gotham
+    ValueLabel.Text = "Value"
+    ValueLabel.TextColor3 = currentTheme.Text
+    ValueLabel.TextSize = 12.000
+    ValueLabel.TextXAlignment = Enum.TextXAlignment.Left
+    ValueLabel.ZIndex = 7
+
+    local NumberValue = Instance.new("TextLabel")
+    NumberValue.Name = "NumberValue"
+    NumberValue.Parent = SliderContainer
+    NumberValue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    NumberValue.BackgroundTransparency = 1.000
+    NumberValue.Position = UDim2.new(0, 320, 0, 5)
+    NumberValue.Size = UDim2.new(0, 35, 0, 16)
+    NumberValue.Font = Enum.Font.Gotham
+    NumberValue.Text = tostring(defaultVal)
+    NumberValue.TextColor3 = currentTheme.Text
+    NumberValue.TextSize = 12.000
+    NumberValue.TextXAlignment = Enum.TextXAlignment.Right
+    NumberValue.ZIndex = 7
 
     local SliderBar = Instance.new("Frame")
-    SliderBar.Parent = SliderFrame
+    SliderBar.Name = "SliderBar"
+    SliderBar.Parent = SliderContainer
     SliderBar.BackgroundColor3 = currentTheme.Secondary
     SliderBar.BorderSizePixel = 0
     SliderBar.Position = UDim2.new(0, 10, 0, 24)
@@ -1098,6 +1140,7 @@ function Section:ToggleSlider(text, defaultState, min, max, defaultVal, callback
     SliderBarCorner.Parent = SliderBar
 
     local SliderFill = Instance.new("Frame")
+    SliderFill.Name = "SliderFill"
     SliderFill.Parent = SliderBar
     SliderFill.BackgroundColor3 = currentTheme.Accent
     SliderFill.BorderSizePixel = 0
@@ -1109,6 +1152,7 @@ function Section:ToggleSlider(text, defaultState, min, max, defaultVal, callback
     SliderFillCorner.Parent = SliderFill
 
     local SliderButton = Instance.new("TextButton")
+    SliderButton.Name = "SliderButton"
     SliderButton.Parent = SliderBar
     SliderButton.BackgroundColor3 = currentTheme.Text
     SliderButton.BorderSizePixel = 0
@@ -1136,7 +1180,7 @@ function Section:ToggleSlider(text, defaultState, min, max, defaultVal, callback
         local size = SliderBar.AbsoluteSize.X
         local percent = math.clamp(pos / size, 0, 1)
         value = min + (max - min) * percent
-        SliderValue.Text = tostring(math.floor(value))
+        NumberValue.Text = tostring(math.floor(value))
         SliderFill.Size = UDim2.new(percent, 0, 1, 0)
         SliderButton.Position = UDim2.new(percent, -5, 0, -2)
         if toggled and callback then
@@ -1194,13 +1238,14 @@ function Section:ToggleSlider(text, defaultState, min, max, defaultVal, callback
         end
     end
 
-    Toggle.MouseButton1Click:Connect(updateToggle)
+    ToggleButton.MouseButton1Click:Connect(updateToggle)
 
-    local toggleObject = {}
-    function toggleObject:SetValue(newValue)
+    local toggleSliderObject = {}
+
+    function toggleSliderObject:SetValue(newValue)
         value = math.clamp(newValue, min, max)
         local percent = (value - min) / (max - min)
-        SliderValue.Text = tostring(math.floor(value))
+        NumberValue.Text = tostring(math.floor(value))
         SliderFill.Size = UDim2.new(percent, 0, 1, 0)
         SliderButton.Position = UDim2.new(percent, -5, 0, -2)
         if toggled and callback then
@@ -1208,22 +1253,31 @@ function Section:ToggleSlider(text, defaultState, min, max, defaultVal, callback
         end
     end
 
-    function toggleObject:SetState(state)
+    function toggleSliderObject:SetState(state)
         if state ~= toggled then
             updateToggle()
         end
     end
 
-    function toggleObject:GetState()
+    function toggleSliderObject:GetState()
         return toggled
     end
 
-    function toggleObject:GetValue()
+    function toggleSliderObject:GetValue()
         return value
     end
 
+    function toggleSliderObject:GetMin()
+        return min
+    end
+
+    function toggleSliderObject:GetMax()
+        return max
+    end
+
     SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 30)
-    return toggleObject
+    
+    return toggleSliderObject
 end
 
         function Section:Slider(text, min, max, default, callback)
@@ -2596,7 +2650,6 @@ function DiscordLib:CreateAcrylicBlur()
         acrylicFrame.Active = false
         acrylicFrame.ClipsDescendants = true
 
-        -- Mismo corner radius que MainFrame
         local corner = Instance.new("UICorner")
         corner.CornerRadius = UDim.new(0, 4)
         corner.Parent = acrylicFrame
@@ -2624,7 +2677,6 @@ function DiscordLib:CreateAcrylicBlur()
         noise.ScaleType = Enum.ScaleType.Tile
         noise.TileSize = UDim2.new(0, 128, 0, 128)
 
-        -- Conectar movimiento
         moveConnection = mainFrame:GetPropertyChangedSignal("Position"):Connect(function()
             if acrylicFrame and acrylicFrame.Parent then
                 acrylicFrame.Position = mainFrame.Position
