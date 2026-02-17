@@ -116,7 +116,7 @@ end
 local Discord = Instance.new("ScreenGui")
 Discord.Name = "Discord"
 Discord.Parent = game.CoreGui
-Discord.ZIndexBehavior = Enum.ZIndexBehavior.Global  -- Cambiado a Global para mejor control
+Discord.ZIndexBehavior = Enum.ZIndexBehavior.Global
 
 -- Toggle Button
 spawn(function()
@@ -210,7 +210,7 @@ function DiscordLib:Window(text)
     MainFrame.ClipsDescendants = true
     MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
     MainFrame.Size = UDim2.new(0, 681, 0, 396)
-    MainFrame.ZIndex = 1  -- ZIndex base
+    MainFrame.ZIndex = 1
 
     MainCorner.CornerRadius = UDim.new(0, 8)
     MainCorner.Parent = MainFrame
@@ -297,14 +297,14 @@ function DiscordLib:Window(text)
     ServersHolder.Name = "ServersHolder"
     ServersHolder.Parent = TopFrameHolder
 
-    -- FIXED: Userpad ahora tiene ZIndex alto para estar encima
+    -- FIXED: Userpad ampliado hacia la izquierda y con ZIndex alto
     Userpad.Name = "Userpad"
     Userpad.Parent = TopFrameHolder
     Userpad.BackgroundColor3 = currentTheme.Userpad
     Userpad.BorderSizePixel = 0
-    Userpad.Position = UDim2.new(0.106243297, 0, 15.9807148, 0)
-    Userpad.Size = UDim2.new(0, 179, 0, 43)
-    Userpad.ZIndex = 5  -- ZIndex alto para estar encima
+    Userpad.Position = UDim2.new(0.05, 0, 15.9807148, 0)  -- Movido más a la izquierda
+    Userpad.Size = UDim2.new(0, 220, 0, 43)  -- Más ancho
+    Userpad.ZIndex = 10  -- ZIndex alto
 
     UserIcon.Name = "UserIcon"
     UserIcon.Parent = Userpad
@@ -312,7 +312,7 @@ function DiscordLib:Window(text)
     UserIcon.BorderSizePixel = 0
     UserIcon.Position = UDim2.new(0.0340000018, 0, 0.123999998, 0)
     UserIcon.Size = UDim2.new(0, 32, 0, 32)
-    UserIcon.ZIndex = 6
+    UserIcon.ZIndex = 11
 
     UserIconCorner.CornerRadius = UDim.new(1, 8)
     UserIconCorner.Name = "UserIconCorner"
@@ -324,7 +324,7 @@ function DiscordLib:Window(text)
     UserImage.BackgroundTransparency = 1.000
     UserImage.Size = UDim2.new(0, 32, 0, 32)
     UserImage.Image = pfp
-    UserImage.ZIndex = 7
+    UserImage.ZIndex = 12
 
     UserCircleImage.Name = "UserImage"
     UserCircleImage.Parent = UserImage
@@ -333,55 +333,47 @@ function DiscordLib:Window(text)
     UserCircleImage.Size = UDim2.new(0, 32, 0, 32)
     UserCircleImage.Image = "rbxassetid://4031889928"
     UserCircleImage.ImageColor3 = currentTheme.Userpad
-    UserCircleImage.ZIndex = 8
+    UserCircleImage.ZIndex = 13
 
     UserName.Name = "UserName"
     UserName.Parent = Userpad
     UserName.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     UserName.BackgroundTransparency = 1.000
     UserName.BorderSizePixel = 0
-    UserName.Position = UDim2.new(0.230000004, 0, 0.115999997, 0)
-    UserName.Size = UDim2.new(0, 98, 0, 17)
+    UserName.Position = UDim2.new(0.18, 0, 0.115999997, 0)  -- Ajustado por el ancho
+    UserName.Size = UDim2.new(0, 130, 0, 17)  -- Más ancho
     UserName.Font = Enum.Font.GothamSemibold
     UserName.TextColor3 = currentTheme.Text
     UserName.TextSize = 13.000
     UserName.TextXAlignment = Enum.TextXAlignment.Left
     UserName.ClipsDescendants = true
-    UserName.ZIndex = 6
+    UserName.ZIndex = 11
 
     UserTag.Name = "UserTag"
     UserTag.Parent = Userpad
     UserTag.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     UserTag.BackgroundTransparency = 1.000
     UserTag.BorderSizePixel = 0
-    UserTag.Position = UDim2.new(0.230000004, 0, 0.455000013, 0)
-    UserTag.Size = UDim2.new(0, 95, 0, 17)
+    UserTag.Position = UDim2.new(0.18, 0, 0.455000013, 0)  -- Ajustado por el ancho
+    UserTag.Size = UDim2.new(0, 130, 0, 17)  -- Más ancho
     UserTag.Font = Enum.Font.Gotham
     UserTag.TextColor3 = currentTheme.Text
     UserTag.TextSize = 13.000
     UserTag.TextTransparency = 0.300
     UserTag.TextXAlignment = Enum.TextXAlignment.Left
-    UserTag.ZIndex = 6
+    UserTag.ZIndex = 11
 
     UserName.Text = user
     UserTag.Text = "#" .. tag
 
-    -- Funciones de los botones de la ventana
-    CloseBtn.MouseButton1Click:Connect(function()
-        Discord.Enabled = false
-        local toggle = Players.LocalPlayer:FindFirstChild("PlayerGui"):FindFirstChild("DiscordToggle")
-        if toggle then
-            local btn = toggle:FindFirstChildOfClass("TextButton")
-            if btn then
-                btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-                btn.Text = "Disabled"
-            end
-        end
-    end)
-
+    -- FIXED: Minimizar correctamente hacia arriba
     MinimizeBtn.MouseButton1Click:Connect(function()
         if minimized == false then
+            -- Guardar posición actual antes de minimizar
+            local currentPos = MainFrame.Position
             MainFrame:TweenSize(UDim2.new(0, 681, 0, 22), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, 0.2, true)
+            -- Mantener la misma posición X, pero ajustar Y para que no se mueva al centro
+            wait(0.2)
             minimized = true
         else
             MainFrame:TweenSize(UDim2.new(0, 681, 0, 396), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, 0.2, true)
@@ -435,7 +427,7 @@ function DiscordLib:Window(text)
         if type(themeName) == "string" then
             newTheme = Themes[themeName] or Themes.Dark
         else
-            newTheme = {  -- Tema personalizado
+            newTheme = {
                 Main = themeName,
                 Secondary = themeName:lerp(Color3.new(0, 0, 0), 0.2),
                 Tertiary = themeName:lerp(Color3.new(0, 0, 0), 0.3),
@@ -449,7 +441,6 @@ function DiscordLib:Window(text)
         
         currentTheme = newTheme
         
-        -- Aplicar tema a todos los elementos
         MainFrame.BackgroundColor3 = newTheme.Main
         TopFrame.BackgroundColor3 = newTheme.Main
         TopFrameHolder.BackgroundColor3 = newTheme.Main
@@ -549,7 +540,7 @@ function DiscordLib:Window(text)
         ChannelFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
         ChannelFrame.ScrollBarThickness = 4
         ChannelFrame.Visible = false
-        ChannelFrame.ZIndex = 2
+        ChannelFrame.ZIndex = 5  -- ZIndex aumentado
 
         ChannelLayout.Name = "ChannelLayout"
         ChannelLayout.Parent = ChannelFrame
@@ -565,7 +556,6 @@ function DiscordLib:Window(text)
 
         local ChannelItems = {}
 
-        -- Crear un botón de canal
         function ChannelItems:Button(Name, functioncallback)
             local Button = Instance.new("TextButton")
             local ButtonCorner = Instance.new("UICorner")
@@ -582,7 +572,7 @@ function DiscordLib:Window(text)
             Button.Font = Enum.Font.SourceSans
             Button.TextColor3 = currentTheme.Text
             Button.TextSize = 14.000
-            Button.ZIndex = 3
+            Button.ZIndex = 6
 
             ButtonCorner.CornerRadius = UDim.new(0, 4)
             ButtonCorner.Parent = Button
@@ -598,7 +588,7 @@ function DiscordLib:Window(text)
             ButtonLabel.TextColor3 = currentTheme.TextMuted
             ButtonLabel.TextSize = 14.000
             ButtonLabel.TextXAlignment = Enum.TextXAlignment.Left
-            ButtonLabel.ZIndex = 4
+            ButtonLabel.ZIndex = 7
 
             ChannelFrame.CanvasSize = UDim2.new(0, 0, 0, ChannelLayout.AbsoluteContentSize.Y)
 
@@ -647,7 +637,7 @@ function DiscordLib:Window(text)
         SectionFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
         SectionFrame.ScrollBarThickness = 4
         SectionFrame.Visible = false
-        SectionFrame.ZIndex = 2
+        SectionFrame.ZIndex = 5  -- ZIndex aumentado
 
         SectionLayout.Name = "SectionLayout"
         SectionLayout.Parent = SectionFrame
@@ -662,7 +652,6 @@ function DiscordLib:Window(text)
 
         Channels[fullName] = SectionFrame
 
-        -- Label de sección
         function Section:Label(text)
             local Label = Instance.new("TextLabel")
             Label.Parent = SectionFrame
@@ -674,13 +663,12 @@ function DiscordLib:Window(text)
             Label.TextColor3 = currentTheme.Text
             Label.TextSize = 12.000
             Label.TextXAlignment = Enum.TextXAlignment.Left
-            Label.ZIndex = 3
+            Label.ZIndex = 6
 
             SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y)
             return Label
         end
 
-        -- Separador
         function Section:Seperator()
             local Seperator = Instance.new("Frame")
             local SeperatorCorner = Instance.new("UICorner")
@@ -690,7 +678,7 @@ function DiscordLib:Window(text)
             Seperator.BackgroundTransparency = 0.7
             Seperator.BorderSizePixel = 0
             Seperator.Size = UDim2.new(0, 374, 0, 2)
-            Seperator.ZIndex = 3
+            Seperator.ZIndex = 6
             
             SeperatorCorner.CornerRadius = UDim.new(0, 1)
             SeperatorCorner.Parent = Seperator
@@ -699,7 +687,6 @@ function DiscordLib:Window(text)
             return Seperator
         end
 
-        -- Botón normal
         function Section:Button(text, callback)
             local Button = Instance.new("TextButton")
             local ButtonCorner = Instance.new("UICorner")
@@ -713,7 +700,7 @@ function DiscordLib:Window(text)
             Button.Font = Enum.Font.Gotham
             Button.TextColor3 = currentTheme.Text
             Button.TextSize = 14.000
-            Button.ZIndex = 3
+            Button.ZIndex = 6
 
             ButtonCorner.CornerRadius = UDim.new(0, 4)
             ButtonCorner.Parent = Button
@@ -728,7 +715,6 @@ function DiscordLib:Window(text)
             return Button
         end
 
-        -- Toggle (Checkbox)
         function Section:Toggle(text, default, callback)
             local Toggle = Instance.new("TextButton")
             local ToggleLabel = Instance.new("TextLabel")
@@ -747,7 +733,7 @@ function DiscordLib:Window(text)
             Toggle.Font = Enum.Font.Gotham
             Toggle.TextColor3 = currentTheme.Text
             Toggle.TextSize = 14.000
-            Toggle.ZIndex = 3
+            Toggle.ZIndex = 6
 
             ToggleCorner.CornerRadius = UDim.new(0, 4)
             ToggleCorner.Parent = Toggle
@@ -762,7 +748,7 @@ function DiscordLib:Window(text)
             ToggleLabel.TextColor3 = currentTheme.Text
             ToggleLabel.TextSize = 14.000
             ToggleLabel.TextXAlignment = Enum.TextXAlignment.Left
-            ToggleLabel.ZIndex = 4
+            ToggleLabel.ZIndex = 7
 
             ToggleImage.Parent = Toggle
             ToggleImage.BackgroundColor3 = currentTheme.Secondary
@@ -770,7 +756,7 @@ function DiscordLib:Window(text)
             ToggleImage.Position = UDim2.new(0, 340, 0, 6)
             ToggleImage.Size = UDim2.new(0, 20, 0, 20)
             ToggleImage.Image = toggled and "rbxassetid://6035067836" or ""
-            ToggleImage.ZIndex = 4
+            ToggleImage.ZIndex = 7
 
             ToggleImageCorner.CornerRadius = UDim.new(0, 4)
             ToggleImageCorner.Parent = ToggleImage
@@ -789,7 +775,6 @@ function DiscordLib:Window(text)
             return Toggle
         end
 
-        -- Slider
         function Section:Slider(text, min, max, default, callback)
             local SliderFrame = Instance.new("Frame")
             local SliderLabel = Instance.new("TextLabel")
@@ -808,7 +793,7 @@ function DiscordLib:Window(text)
             SliderFrame.BackgroundColor3 = currentTheme.Tertiary
             SliderFrame.BorderSizePixel = 0
             SliderFrame.Size = UDim2.new(0, 374, 0, 52)
-            SliderFrame.ZIndex = 3
+            SliderFrame.ZIndex = 6
 
             SliderCorner.CornerRadius = UDim.new(0, 4)
             SliderCorner.Parent = SliderFrame
@@ -823,7 +808,7 @@ function DiscordLib:Window(text)
             SliderLabel.TextColor3 = currentTheme.Text
             SliderLabel.TextSize = 14.000
             SliderLabel.TextXAlignment = Enum.TextXAlignment.Left
-            SliderLabel.ZIndex = 4
+            SliderLabel.ZIndex = 7
 
             SliderValue.Parent = SliderFrame
             SliderValue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -834,14 +819,14 @@ function DiscordLib:Window(text)
             SliderValue.Text = tostring(value)
             SliderValue.TextColor3 = currentTheme.Text
             SliderValue.TextSize = 14.000
-            SliderValue.ZIndex = 4
+            SliderValue.ZIndex = 7
 
             SliderBar.Parent = SliderFrame
             SliderBar.BackgroundColor3 = currentTheme.Secondary
             SliderBar.BorderSizePixel = 0
             SliderBar.Position = UDim2.new(0, 10, 0, 30)
             SliderBar.Size = UDim2.new(0, 354, 0, 12)
-            SliderBar.ZIndex = 4
+            SliderBar.ZIndex = 7
 
             local SliderBarCorner = Instance.new("UICorner")
             SliderBarCorner.CornerRadius = UDim.new(0, 6)
@@ -851,7 +836,7 @@ function DiscordLib:Window(text)
             SliderFill.BackgroundColor3 = currentTheme.Accent
             SliderFill.BorderSizePixel = 0
             SliderFill.Size = UDim2.new((value - min) / (max - min), 0, 1, 0)
-            SliderFill.ZIndex = 5
+            SliderFill.ZIndex = 8
 
             SliderFillCorner.CornerRadius = UDim.new(0, 6)
             SliderFillCorner.Parent = SliderFill
@@ -863,7 +848,7 @@ function DiscordLib:Window(text)
             SliderButton.Size = UDim2.new(0, 12, 0, 12)
             SliderButton.Text = ""
             SliderButton.AutoButtonColor = false
-            SliderButton.ZIndex = 6
+            SliderButton.ZIndex = 9
 
             SliderButtonCorner.CornerRadius = UDim.new(0, 6)
             SliderButtonCorner.Parent = SliderButton
@@ -908,12 +893,24 @@ function DiscordLib:Window(text)
                 end
             end)
 
+            -- FIXED: Método Change para el slider
+            local sliderObject = {}
+            function sliderObject:Change(newValue)
+                value = math.clamp(newValue, min, max)
+                local percent = (value - min) / (max - min)
+                SliderValue.Text = tostring(math.floor(value))
+                SliderFill.Size = UDim2.new(percent, 0, 1, 0)
+                SliderButton.Position = UDim2.new(percent, -6, 0, 0)
+                if callback then
+                    callback(math.floor(value))
+                end
+            end
+
             SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y)
-            return SliderFrame
+            return sliderObject
         end
 
-        -- ColorPicker
-        function Section:ColorPicker(text, default, callback)
+        function Section:Colorpicker(text, default, callback)
             local ColorPickerFrame = Instance.new("Frame")
             local ColorPickerLabel = Instance.new("TextLabel")
             local ColorButton = Instance.new("TextButton")
@@ -928,7 +925,7 @@ function DiscordLib:Window(text)
             ColorPickerFrame.BackgroundColor3 = currentTheme.Tertiary
             ColorPickerFrame.BorderSizePixel = 0
             ColorPickerFrame.Size = UDim2.new(0, 374, 0, 42)
-            ColorPickerFrame.ZIndex = 3
+            ColorPickerFrame.ZIndex = 6
 
             ColorPickerCorner.CornerRadius = UDim.new(0, 4)
             ColorPickerCorner.Parent = ColorPickerFrame
@@ -943,7 +940,7 @@ function DiscordLib:Window(text)
             ColorPickerLabel.TextColor3 = currentTheme.Text
             ColorPickerLabel.TextSize = 14.000
             ColorPickerLabel.TextXAlignment = Enum.TextXAlignment.Left
-            ColorPickerLabel.ZIndex = 4
+            ColorPickerLabel.ZIndex = 7
 
             ColorButton.Parent = ColorPickerFrame
             ColorButton.BackgroundColor3 = currentTheme.Secondary
@@ -952,7 +949,7 @@ function DiscordLib:Window(text)
             ColorButton.Size = UDim2.new(0, 30, 0, 30)
             ColorButton.Text = ""
             ColorButton.AutoButtonColor = false
-            ColorButton.ZIndex = 4
+            ColorButton.ZIndex = 7
 
             local ColorButtonCorner = Instance.new("UICorner")
             ColorButtonCorner.CornerRadius = UDim.new(0, 6)
@@ -963,7 +960,7 @@ function DiscordLib:Window(text)
             ColorDisplay.BorderSizePixel = 0
             ColorDisplay.Position = UDim2.new(0, 3, 0, 3)
             ColorDisplay.Size = UDim2.new(0, 24, 0, 24)
-            ColorDisplay.ZIndex = 5
+            ColorDisplay.ZIndex = 8
 
             ColorDisplayCorner.CornerRadius = UDim.new(0, 4)
             ColorDisplayCorner.Parent = ColorDisplay
@@ -990,7 +987,7 @@ function DiscordLib:Window(text)
                 popup.BorderSizePixel = 0
                 popup.Position = UDim2.new(0.5, -150, 0.5, -100)
                 popup.Size = UDim2.new(0, 300, 0, 200)
-                popup.ZIndex = 10
+                popup.ZIndex = 20
 
                 popupCorner.CornerRadius = UDim.new(0, 8)
                 popupCorner.Parent = popup
@@ -1000,7 +997,7 @@ function DiscordLib:Window(text)
                 hueGradient.BorderSizePixel = 0
                 hueGradient.Position = UDim2.new(0, 10, 0, 10)
                 hueGradient.Size = UDim2.new(0, 200, 0, 20)
-                hueGradient.ZIndex = 11
+                hueGradient.ZIndex = 21
 
                 hueCorner.CornerRadius = UDim.new(0, 10)
                 hueCorner.Parent = hueGradient
@@ -1023,7 +1020,7 @@ function DiscordLib:Window(text)
                 hueSlider.Position = UDim2.new(0, -5, 0, -2)
                 hueSlider.Size = UDim2.new(0, 10, 0, 24)
                 hueSlider.Text = ""
-                hueSlider.ZIndex = 12
+                hueSlider.ZIndex = 22
 
                 hueSliderCorner.CornerRadius = UDim.new(0, 5)
                 hueSliderCorner.Parent = hueSlider
@@ -1033,7 +1030,7 @@ function DiscordLib:Window(text)
                 colorDisplay.BorderSizePixel = 0
                 colorDisplay.Position = UDim2.new(0, 220, 0, 10)
                 colorDisplay.Size = UDim2.new(0, 70, 0, 70)
-                colorDisplay.ZIndex = 11
+                colorDisplay.ZIndex = 21
 
                 colorDisplayCorner.CornerRadius = UDim.new(0, 6)
                 colorDisplayCorner.Parent = colorDisplay
@@ -1047,7 +1044,7 @@ function DiscordLib:Window(text)
                 confirmButton.Font = Enum.Font.Gotham
                 confirmButton.TextColor3 = currentTheme.Text
                 confirmButton.TextSize = 14
-                confirmButton.ZIndex = 11
+                confirmButton.ZIndex = 21
 
                 confirmCorner.CornerRadius = UDim.new(0, 6)
                 confirmCorner.Parent = confirmButton
@@ -1061,20 +1058,18 @@ function DiscordLib:Window(text)
                 cancelButton.Font = Enum.Font.Gotham
                 cancelButton.TextColor3 = currentTheme.Text
                 cancelButton.TextSize = 14
-                cancelButton.ZIndex = 11
+                cancelButton.ZIndex = 21
 
                 cancelCorner.CornerRadius = UDim.new(0, 6)
                 cancelCorner.Parent = cancelButton
 
                 local hueDragging = false
-                local currentHue = 0
 
                 local function updateHue(input)
                     local pos = input.Position.X - hueGradient.AbsolutePosition.X
                     local size = hueGradient.AbsoluteSize.X
                     local percent = math.clamp(pos / size, 0, 1)
                     hueSlider.Position = UDim2.new(percent, -5, 0, -2)
-                    currentHue = percent
                     colorDisplay.BackgroundColor3 = Color3.fromHSV(percent, 1, 1)
                 end
 
@@ -1127,7 +1122,6 @@ function DiscordLib:Window(text)
             return ColorPickerFrame
         end
 
-        -- Dropdown
         function Section:Dropdown(text, options, callback)
             local DropdownFrame = Instance.new("Frame")
             local DropdownLabel = Instance.new("TextLabel")
@@ -1140,13 +1134,14 @@ function DiscordLib:Window(text)
 
             local expanded = false
             local selected = text
+            local items = {}
 
             DropdownFrame.Parent = SectionFrame
             DropdownFrame.BackgroundColor3 = currentTheme.Tertiary
             DropdownFrame.BorderSizePixel = 0
             DropdownFrame.Size = UDim2.new(0, 374, 0, 32)
             DropdownFrame.ClipsDescendants = true
-            DropdownFrame.ZIndex = 3
+            DropdownFrame.ZIndex = 6
 
             DropdownCorner.CornerRadius = UDim.new(0, 4)
             DropdownCorner.Parent = DropdownFrame
@@ -1161,7 +1156,7 @@ function DiscordLib:Window(text)
             DropdownLabel.TextColor3 = currentTheme.Text
             DropdownLabel.TextSize = 14.000
             DropdownLabel.TextXAlignment = Enum.TextXAlignment.Left
-            DropdownLabel.ZIndex = 4
+            DropdownLabel.ZIndex = 7
 
             DropdownButton.Parent = DropdownFrame
             DropdownButton.BackgroundColor3 = currentTheme.Secondary
@@ -1170,7 +1165,7 @@ function DiscordLib:Window(text)
             DropdownButton.Size = UDim2.new(0, 20, 0, 20)
             DropdownButton.Text = ""
             DropdownButton.AutoButtonColor = false
-            DropdownButton.ZIndex = 4
+            DropdownButton.ZIndex = 7
 
             DropdownButtonCorner.CornerRadius = UDim.new(0, 4)
             DropdownButtonCorner.Parent = DropdownButton
@@ -1183,7 +1178,7 @@ function DiscordLib:Window(text)
             DropdownList.CanvasSize = UDim2.new(0, 0, 0, 0)
             DropdownList.Visible = false
             DropdownList.ScrollBarThickness = 4
-            DropdownList.ZIndex = 5
+            DropdownList.ZIndex = 8
 
             DropdownListCorner.CornerRadius = UDim.new(0, 4)
             DropdownListCorner.Parent = DropdownList
@@ -1198,7 +1193,11 @@ function DiscordLib:Window(text)
                 end
             end
 
-            for i, option in ipairs(options) do
+            -- FIXED: Métodos para el dropdown
+            local dropdownObject = {}
+            
+            function dropdownObject:Add(option)
+                table.insert(items, option)
                 local OptionButton = Instance.new("TextButton")
                 OptionButton.Parent = DropdownList
                 OptionButton.BackgroundColor3 = currentTheme.Tertiary
@@ -1209,7 +1208,7 @@ function DiscordLib:Window(text)
                 OptionButton.TextColor3 = currentTheme.Text
                 OptionButton.TextSize = 13.000
                 OptionButton.AutoButtonColor = false
-                OptionButton.ZIndex = 6
+                OptionButton.ZIndex = 9
 
                 local OptionCorner = Instance.new("UICorner")
                 OptionCorner.CornerRadius = UDim.new(0, 4)
@@ -1225,9 +1224,21 @@ function DiscordLib:Window(text)
                     DropdownList.Visible = false
                     DropdownFrame.Size = UDim2.new(0, 374, 0, 32)
                 end)
+
+                updateListHeight()
             end
 
-            updateListHeight()
+            function dropdownObject:Clear()
+                for _, child in ipairs(DropdownList:GetChildren()) do
+                    if child:IsA("TextButton") then
+                        child:Destroy()
+                    end
+                end
+                items = {}
+                selected = text
+                DropdownLabel.Text = selected
+                updateListHeight()
+            end
 
             DropdownButton.MouseButton1Click:Connect(function()
                 expanded = not expanded
@@ -1240,11 +1251,10 @@ function DiscordLib:Window(text)
             end)
 
             SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y)
-            return DropdownFrame
+            return dropdownObject
         end
 
-        -- TextBox
-        function Section:Textbox(text, placeholder, callback)
+        function Section:Textbox(text, placeholder, numbersOnly, callback)
             local TextboxFrame = Instance.new("Frame")
             local TextboxLabel = Instance.new("TextLabel")
             local Textbox = Instance.new("TextBox")
@@ -1255,7 +1265,7 @@ function DiscordLib:Window(text)
             TextboxFrame.BackgroundColor3 = currentTheme.Tertiary
             TextboxFrame.BorderSizePixel = 0
             TextboxFrame.Size = UDim2.new(0, 374, 0, 52)
-            TextboxFrame.ZIndex = 3
+            TextboxFrame.ZIndex = 6
 
             TextboxFrameCorner.CornerRadius = UDim.new(0, 4)
             TextboxFrameCorner.Parent = TextboxFrame
@@ -1270,7 +1280,7 @@ function DiscordLib:Window(text)
             TextboxLabel.TextColor3 = currentTheme.Text
             TextboxLabel.TextSize = 14.000
             TextboxLabel.TextXAlignment = Enum.TextXAlignment.Left
-            TextboxLabel.ZIndex = 4
+            TextboxLabel.ZIndex = 7
 
             Textbox.Parent = TextboxFrame
             Textbox.BackgroundColor3 = currentTheme.Secondary
@@ -1283,15 +1293,27 @@ function DiscordLib:Window(text)
             Textbox.TextColor3 = currentTheme.Text
             Textbox.TextSize = 13.000
             Textbox.ClearTextOnFocus = false
-            Textbox.ZIndex = 4
+            Textbox.ZIndex = 7
+
+            if numbersOnly then
+                Textbox.Text = "0"
+            end
 
             TextboxCorner.CornerRadius = UDim.new(0, 4)
             TextboxCorner.Parent = Textbox
 
             Textbox.FocusLost:Connect(function(enterPressed)
                 if enterPressed then
-                    if callback then
-                        callback(Textbox.Text)
+                    if numbersOnly then
+                        local num = tonumber(Textbox.Text) or 0
+                        Textbox.Text = tostring(num)
+                        if callback then
+                            callback(num)
+                        end
+                    else
+                        if callback then
+                            callback(Textbox.Text)
+                        end
                     end
                 end
             end)
@@ -1300,10 +1322,88 @@ function DiscordLib:Window(text)
             return Textbox
         end
 
+        -- FIXED: Bind añadido
+        function Section:Bind(text, defaultKey, callback)
+            local BindFrame = Instance.new("Frame")
+            local BindLabel = Instance.new("TextLabel")
+            local BindButton = Instance.new("TextButton")
+            local BindCorner = Instance.new("UICorner")
+            local BindFrameCorner = Instance.new("UICorner")
+
+            local binding = false
+            local currentKey = defaultKey or Enum.KeyCode.RightShift
+            local keyName = currentKey.Name or "RightShift"
+
+            BindFrame.Parent = SectionFrame
+            BindFrame.BackgroundColor3 = currentTheme.Tertiary
+            BindFrame.BorderSizePixel = 0
+            BindFrame.Size = UDim2.new(0, 374, 0, 32)
+            BindFrame.ZIndex = 6
+
+            BindFrameCorner.CornerRadius = UDim.new(0, 4)
+            BindFrameCorner.Parent = BindFrame
+
+            BindLabel.Parent = BindFrame
+            BindLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            BindLabel.BackgroundTransparency = 1.000
+            BindLabel.Position = UDim2.new(0, 5, 0, 0)
+            BindLabel.Size = UDim2.new(0, 250, 0, 32)
+            BindLabel.Font = Enum.Font.Gotham
+            BindLabel.Text = text
+            BindLabel.TextColor3 = currentTheme.Text
+            BindLabel.TextSize = 14.000
+            BindLabel.TextXAlignment = Enum.TextXAlignment.Left
+            BindLabel.ZIndex = 7
+
+            BindButton.Parent = BindFrame
+            BindButton.BackgroundColor3 = currentTheme.Secondary
+            BindButton.BorderSizePixel = 0
+            BindButton.Position = UDim2.new(0, 260, 0, 4)
+            BindButton.Size = UDim2.new(0, 100, 0, 24)
+            BindButton.Text = keyName
+            BindButton.Font = Enum.Font.Gotham
+            BindButton.TextColor3 = currentTheme.Text
+            BindButton.TextSize = 13.000
+            BindButton.AutoButtonColor = false
+            BindButton.ZIndex = 7
+
+            BindCorner.CornerRadius = UDim.new(0, 4)
+            BindCorner.Parent = BindButton
+
+            BindButton.MouseButton1Click:Connect(function()
+                binding = true
+                BindButton.Text = "..."
+            end)
+
+            UserInputService.InputBegan:Connect(function(input, gameProcessed)
+                if gameProcessed then return end
+                
+                if binding then
+                    if input.UserInputType == Enum.UserInputType.Keyboard then
+                        currentKey = input.KeyCode
+                        keyName = currentKey.Name
+                        BindButton.Text = keyName
+                        binding = false
+                        if callback then
+                            callback(currentKey)
+                        end
+                    end
+                else
+                    if input.KeyCode == currentKey then
+                        if callback then
+                            callback(currentKey)
+                        end
+                    end
+                end
+            end)
+
+            SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y)
+            return BindFrame
+        end
+
         return Section
     end
 
-    -- Función para seleccionar un servidor
     function Servers:Select(Name)
         for i, v in pairs(ServersHold:GetChildren()) do
             if v:IsA("TextButton") then
@@ -1337,7 +1437,6 @@ function DiscordLib:Window(text)
     }
 end
 
--- Notificación mejorada con fade in/out
 function DiscordLib:Notification(data)
     local title = data.title or "Notification"
     local desc = data.desc or ""
@@ -1356,7 +1455,7 @@ function DiscordLib:Notification(data)
     NotifHolder.Size = UDim2.new(0, 300, 0, 70)
     NotifHolder.ClipsDescendants = true
     NotifHolder.BackgroundTransparency = 1
-    NotifHolder.ZIndex = 100  -- ZIndex muy alto para estar encima de todo
+    NotifHolder.ZIndex = 100
 
     NotifCorner.CornerRadius = UDim.new(0, 8)
     NotifCorner.Parent = NotifHolder
@@ -1389,13 +1488,11 @@ function DiscordLib:Notification(data)
     NotifDesc.TextTransparency = 1
     NotifDesc.ZIndex = 101
 
-    -- Animación de entrada con fade
     NotifHolder.Position = UDim2.new(1, -310, 0, -80)
     TweenService:Create(NotifHolder, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {Position = UDim2.new(1, -310, 0, 10), BackgroundTransparency = 0}):Play()
     TweenService:Create(NotifTitle, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {TextTransparency = 0}):Play()
     TweenService:Create(NotifDesc, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {TextTransparency = 0}):Play()
 
-    -- Auto-cerrar con fade out
     spawn(function()
         wait(time)
         TweenService:Create(NotifHolder, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {Position = UDim2.new(1, -310, 0, -80), BackgroundTransparency = 1}):Play()
