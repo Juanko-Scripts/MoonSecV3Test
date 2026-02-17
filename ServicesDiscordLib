@@ -226,7 +226,7 @@ channel:Button("Random Theme", function()
     end)
 
     channel:Seperator()
-local blur = discordLib:CreateBlur()
+local blur = discordLib:CreateBackgroundBlur()
     channel:Label("TRANSPARENCY / EFFECTS / BETA")
 channel:Toggle("Blur Effect", false, function(Y)
     if Y then
