@@ -168,6 +168,27 @@ function GrobalSettingsLibXP:GetThemesByCategory(category)
     return results
 end
 
+function GrobalSettingsLibXP:SetTransparency(transparency, discordLib)
+    transparency = math.clamp(transparency, 0, 1)
+    local discordGui = game:GetService("CoreGui"):FindFirstChild("Discord")
+    if not discordGui then return end
+    
+    local mainFrame = discordGui:FindFirstChild("MainFrame")
+    if mainFrame then
+        mainFrame.BackgroundTransparency = transparency
+        
+        local serversFrame = mainFrame:FindFirstChild("ServersHoldFrame")
+        if serversFrame then
+            serversFrame.BackgroundTransparency = transparency
+        end
+        
+        local channelsFrame = mainFrame:FindFirstChild("ChannelsHoldFrame")
+        if channelsFrame then
+            channelsFrame.BackgroundTransparency = transparency
+        end
+    end
+end
+
 function GrobalSettingsLibXP:CreateSettingsInChannel(channel, discordLib)
     if not channel then
         return
@@ -186,20 +207,20 @@ function GrobalSettingsLibXP:CreateSettingsInChannel(channel, discordLib)
         })
     end)
 
-    channel:Label("QUICK TOPICS")
+    channel:Label("QUICK THEMES")
     channel:Button("Dark Theme", function()
         self:ApplyTheme("DiscordDark", discordLib)
-        discordLib:Notification({title = "Dark Theme", desc = "Activado", time = 1.5})
+        discordLib:Notification({title = "Dark Theme", desc = "Activated", time = 1.5})
     end)
 
-    channel:Button("Clear Theme", function()
+    channel:Button("Light Theme", function()
         self:ApplyTheme("DiscordLight", discordLib)
-        discordLib:Notification({title = "Clear Theme", desc = "Activado", time = 1.5})
+        discordLib:Notification({title = "Light Theme", desc = "Activated", time = 1.5})
     end)
 
     channel:Button("AMOLED Theme", function()
         self:ApplyTheme("Black", discordLib)
-        discordLib:Notification({title = "AMOLED Theme", desc = "Activado", time = 1.5})
+        discordLib:Notification({title = "AMOLED Theme", desc = "Activated", time = 1.5})
     end)
 
     channel:Button("Random Theme", function()
@@ -213,6 +234,18 @@ function GrobalSettingsLibXP:CreateSettingsInChannel(channel, discordLib)
     
     channel:Colorpicker("Pick Color", Color3.fromRGB(32, 34, 37), function(color)
         discordLib:SetTheme(color)
+    end)
+    
+    channel:Seperator()
+    channel:Label("TRANSPARENCY")
+    
+    channel:Slider("Background Opacity", 0, 100, 100, function(value)
+        local transparency = 1 - (value / 100)
+        self:SetTransparency(transparency, discordLib)
+    end)
+    
+    channel:Button("Reset Transparency", function()
+        self:SetTransparency(0, discordLib)
     end)
 
     return channel
