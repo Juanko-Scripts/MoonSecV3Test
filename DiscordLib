@@ -726,6 +726,8 @@ end
 
         Sections[fullName] = SectionFrame
 
+        Section = {}
+
         function Section:Label(text)
             local Label = Instance.new("TextLabel")
             Label.Parent = SectionFrame
