@@ -2558,5 +2558,64 @@ function DiscordLib:Notification(data)
         processNextNotification()
     end
 end
+function DiscordLib:CreateBlur()
+    local blurEnabled = false
+    local blurIntensity = 10
+    local blurInstance = nil
+    
+    local function applyBlur(intensity)
+        if not blurInstance then
+            blurInstance = Instance.new("BlurEffect")
+            blurInstance.Name = "DiscordLibBlur"
+            blurInstance.Parent = game:GetService("Lighting")
+        end
+        blurInstance.Size = intensity
+        blurEnabled = intensity > 0
+    end
+    
+    local function removeBlur()
+        if blurInstance then
+            blurInstance:Destroy()
+            blurInstance = nil
+        end
+        blurEnabled = false
+    end
+    
+    local blurObject = {}
+    
+    function blurObject:Enable()
+        applyBlur(blurIntensity)
+    end
+    
+    function blurObject:Disable()
+        removeBlur()
+    end
+    
+    function blurObject:Toggle()
+        if blurEnabled then
+            self:Disable()
+        else
+            self:Enable()
+        end
+    end
+    
+    function blurObject:SetIntensity(intensity)
+        intensity = math.clamp(intensity, 0, 100)
+        blurIntensity = intensity
+        if blurEnabled then
+            applyBlur(intensity)
+        end
+    end
+    
+    function blurObject:GetIntensity()
+        return blurIntensity
+    end
+    
+    function blurObject:IsEnabled()
+        return blurEnabled
+    end
+    
+    return blurObject
+end
 
 return DiscordLib
