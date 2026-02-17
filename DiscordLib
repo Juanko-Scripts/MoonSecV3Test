@@ -390,18 +390,18 @@ function DiscordLib:Window(text)
 
     local Servers = {}
     local ServerChannels = {}
+
 function DiscordLib:SetTheme(themeName)
     local newTheme
     if type(themeName) == "string" then
         newTheme = Themes[themeName] or Themes.Dark
     else
-        -- Tema personalizado basado en un color
         newTheme = {
             Main = themeName,
             Secondary = themeName:lerp(Color3.new(0, 0, 0), 0.2),
             Tertiary = themeName:lerp(Color3.new(0, 0, 0), 0.3),
-            Accent = Color3.fromRGB(114, 137, 218),
-            Text = Color3.fromRGB(255, 255, 255),
+            Accent = themeName:lerp(Color3.new(1, 1, 1), 0.3), -- Cambiado: el acento ahora es una variación del color principal
+            Text = themeName:lerp(Color3.new(1, 1, 1), 0.8),
             TextMuted = themeName:lerp(Color3.new(1, 1, 1), 0.5),
             Userpad = themeName:lerp(Color3.new(0, 0, 0), 0.4),
             UserIcon = themeName:lerp(Color3.new(0, 0, 0), 0.5),
@@ -419,20 +419,10 @@ function DiscordLib:SetTheme(themeName)
     local mainFrame = discordGui:FindFirstChild("MainFrame")
     if not mainFrame then return end
     
-    -- 1. ACTUALIZAR FRAMES PRINCIPALES
+    -- 1. FRAMES PRINCIPALES
     mainFrame.BackgroundColor3 = newTheme.Main
     
-    local topFrame = mainFrame:FindFirstChild("TopFrame")
-    if topFrame then
-        topFrame.BackgroundColor3 = newTheme.Main
-    end
-    
-    local title = mainFrame:FindFirstChild("Title", true)
-    if title and title:IsA("TextLabel") then
-        title.TextColor3 = newTheme.TextMuted
-    end
-    
-    -- 2. ACTUALIZAR SERVERS
+    -- 2. SERVERS
     local serversHoldFrame = mainFrame:FindFirstChild("ServersHoldFrame")
     if serversHoldFrame then
         serversHoldFrame.BackgroundColor3 = newTheme.Secondary
@@ -451,7 +441,7 @@ function DiscordLib:SetTheme(themeName)
         end
     end
     
-    -- 3. ACTUALIZAR CHANNELS
+    -- 3. CHANNELS - CORREGIDO: ahora usa el color del tema para el canal seleccionado
     local channelsHoldFrame = mainFrame:FindFirstChild("ChannelsHoldFrame")
     if channelsHoldFrame then
         channelsHoldFrame.BackgroundColor3 = newTheme.Secondary
@@ -460,11 +450,13 @@ function DiscordLib:SetTheme(themeName)
         if channelsHold then
             for _, channelBtn in ipairs(channelsHold:GetChildren()) do
                 if channelBtn:IsA("TextButton") then
-                    -- Si es el canal seleccionado, usar accent
-                    if channelBtn.BackgroundColor3 == currentTheme.Accent or channelBtn.BackgroundTransparency < 0.5 then
-                        channelBtn.BackgroundColor3 = newTheme.Accent
+                    -- Detectar canal seleccionado (transparencia baja)
+                    if channelBtn.BackgroundTransparency < 0.5 then
+                        channelBtn.BackgroundColor3 = newTheme.Accent  -- Ahora usa el acento del tema actual
+                        channelBtn.BackgroundTransparency = 0
                     else
                         channelBtn.BackgroundColor3 = newTheme.Tertiary
+                        channelBtn.BackgroundTransparency = 0.7
                     end
                     
                     local icon = channelBtn:FindFirstChild("ChannelIcon")
@@ -482,7 +474,7 @@ function DiscordLib:SetTheme(themeName)
         end
     end
     
-    -- 4. ACTUALIZAR USERPAD
+    -- 4. USERPAD
     local userpad = mainFrame:FindFirstChild("Userpad", true)
     if userpad then
         userpad.BackgroundColor3 = newTheme.Userpad
@@ -493,7 +485,7 @@ function DiscordLib:SetTheme(themeName)
         end
         
         local userCircle = userpad:FindFirstChild("UserImage", true)
-        if userCircle and userCircle:IsA("ImageLabel") and userCircle.Name == "UserImage" then
+        if userCircle and userCircle:IsA("ImageLabel") then
             userCircle.ImageColor3 = newTheme.Userpad
         end
         
@@ -504,73 +496,64 @@ function DiscordLib:SetTheme(themeName)
         end
     end
     
-    -- 5. ACTUALIZAR TODAS LAS SECCIONES Y SUS ELEMENTOS
+    -- 5. SECCIONES Y ELEMENTOS
     for _, sectionFrame in pairs(Sections) do
         if sectionFrame and sectionFrame.Parent then
             sectionFrame.BackgroundColor3 = newTheme.Secondary
             
-            -- Título de la sección
             local sectionTitle = sectionFrame:FindFirstChild("SectionTitle")
             if sectionTitle and sectionTitle:IsA("TextLabel") then
                 sectionTitle.TextColor3 = newTheme.Text
             end
             
-            -- Recorrer todos los elementos de la sección
             for _, element in ipairs(sectionFrame:GetChildren()) do
-                -- LABELS
                 if element:IsA("TextLabel") and element ~= sectionTitle then
                     element.TextColor3 = newTheme.Text
                 
-                -- BUTTONS y TOGGLES (son TextButton)
                 elseif element:IsA("TextButton") then
                     element.BackgroundColor3 = newTheme.Tertiary
                     element.TextColor3 = newTheme.Text
                     
-                    -- Buscar toggle frame (el cuadro del toggle)
+                    -- Toggles
                     local toggleFrame = element:FindFirstChildOfClass("Frame")
                     if toggleFrame then
                         toggleFrame.BackgroundColor3 = newTheme.Secondary
                         toggleFrame.BorderColor3 = newTheme.Border
                         
-                        -- Buscar el relleno del toggle
                         for _, child in ipairs(toggleFrame:GetChildren()) do
                             if child:IsA("Frame") then
                                 child.BackgroundColor3 = newTheme.Accent
                             end
                         end
                     end
-                    
-                    -- Buscar imagen de toggle antiguo (por si acaso)
-                    local toggleImage = element:FindFirstChildOfClass("ImageLabel")
-                    if toggleImage then
-                        toggleImage.BackgroundColor3 = newTheme.Secondary
-                        toggleImage.ImageColor3 = newTheme.Text
-                    end
                 
-                -- FRAMES (como Sliders, Dropdowns, ColorPickers)
                 elseif element:IsA("Frame") then
                     element.BackgroundColor3 = newTheme.Tertiary
                     
-                    -- Buscar labels dentro del frame
                     for _, child in ipairs(element:GetChildren()) do
                         if child:IsA("TextLabel") then
                             child.TextColor3 = newTheme.Text
                         
-                        -- SLIDER: barra y botón
-                        elseif child.Name == "SliderBar" or (child:IsA("Frame") and child.Position.Y.Offset > 20) then
-                            child.BackgroundColor3 = newTheme.Secondary
-                            
-                            -- Fill del slider
-                            for _, fillChild in ipairs(child:GetChildren()) do
-                                if fillChild:IsA("Frame") then
-                                    fillChild.BackgroundColor3 = newTheme.Accent
-                                elseif fillChild:IsA("TextButton") then
-                                    fillChild.BackgroundColor3 = newTheme.Text
+                        elseif child:IsA("Frame") then
+                            -- SLIDER - CORREGIDO: busca el fill específicamente
+                            if child.Position.Y.Offset > 20 and child.Size.Y.Offset < 20 then
+                                child.BackgroundColor3 = newTheme.Secondary  -- Barra
+                                
+                                -- El fill es el primer frame dentro de la barra
+                                local fill = child:FindFirstChildOfClass("Frame")
+                                if fill then
+                                    fill.BackgroundColor3 = newTheme.Accent  -- FILL usa el acento del tema
+                                end
+                                
+                                -- Botón del slider
+                                local button = child:FindFirstChildOfClass("TextButton")
+                                if button then
+                                    button.BackgroundColor3 = newTheme.Text
                                 end
                             end
                         
-                        -- DROPDOWN: lista y elementos
                         elseif child:IsA("ScrollingFrame") then
+                            -- DROPDOWN
                             child.BackgroundColor3 = newTheme.Secondary
                             child.BorderColor3 = newTheme.Border
                             child.ScrollBarImageColor3 = newTheme.Accent
@@ -579,16 +562,16 @@ function DiscordLib:SetTheme(themeName)
                                 if optionBtn:IsA("TextButton") then
                                     optionBtn.BackgroundColor3 = newTheme.Tertiary
                                     optionBtn.TextColor3 = newTheme.Text
-                                    
-                                    -- Efecto hover se actualizará solo
                                 end
                             end
-
+                        
                         elseif child:IsA("TextButton") then
-                child.BackgroundColor3 = newTheme.Secondary
+                            -- COLORPICKER button
+                            child.BackgroundColor3 = newTheme.Secondary
                         end
                     end
                     
+                    -- Flecha del dropdown
                     local arrow = element:FindFirstChildOfClass("TextLabel")
                     if arrow and arrow.Text:match("[▼▲]") then
                         arrow.TextColor3 = newTheme.Accent
@@ -598,6 +581,7 @@ function DiscordLib:SetTheme(themeName)
         end
     end
     
+    -- 6. NOTIFICACIONES
     for _, notif in ipairs(activeNotifications) do
         if notif and notif.Parent then
             notif.BackgroundColor3 = newTheme.Main
@@ -612,6 +596,7 @@ function DiscordLib:SetTheme(themeName)
         end
     end
 end
+
 function DiscordLib:SetTransparency(transparency)
     transparency = math.clamp(transparency, 0, 1)
     local mainFrame = Discord:FindFirstChild("MainFrame")
