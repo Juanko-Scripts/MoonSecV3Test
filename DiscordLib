@@ -126,59 +126,49 @@ Discord.Parent = game.CoreGui
 Discord.ZIndexBehavior = Enum.ZIndexBehavior.Global
 
 spawn(function()
-    local ScreenGui = Instance.new("ScreenGui")
-    local ABDC = Instance.new("TextButton")
-    ScreenGui.Name = "DiscordToggle"
-    ScreenGui.ResetOnSpawn = false
-    ScreenGui.Parent = Players.LocalPlayer:FindFirstChild("PlayerGui")
-    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
-    ABDC.Name = math.random()
-    ABDC.Parent = ScreenGui
-    ABDC.Draggable = true
-    ABDC.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    ABDC.BorderSizePixel = 0
-    ABDC.Position = UDim2.new(0.8, 0, 0.9, 0)
-    ABDC.Size = UDim2.new(0, 80, 0, 25)
-    ABDC.Font = Enum.Font.SourceSans
-    ABDC.Text = "Enabled"
-    ABDC.TextColor3 = Color3.fromRGB(255, 255, 255)
-    ABDC.TextSize = 14
-    ABDC.ZIndex = 10
-    local isEnabled = false
-    local function toggleState()
-        isEnabled = not isEnabled
-        local DiscordGui = game:GetService("CoreGui"):FindFirstChild("Discord")
-        if isEnabled then
-            ABDC.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-            ABDC.Text = "Enabled"
-            if DiscordGui then
-                DiscordGui.Enabled = true
-            end
-        else
-            ABDC.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-            ABDC.Text = "Disabled"
-            if DiscordGui then
-                DiscordGui.Enabled = false
-            end
-        end
-    end
-    ABDC.MouseButton1Click:Connect(toggleState)
-    local function initialize()
-        local DiscordGui = game:GetService("CoreGui"):FindFirstChild("Discord")
-        if DiscordGui then
-            isEnabled = DiscordGui.Enabled
-            if isEnabled then
-                ABDC.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-                ABDC.Text = "Enabled"
-            else
-                ABDC.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-                ABDC.Text = "Disabled"
-            end
-        else
-            ABDC.Text = "Error Found Lib"
-        end
-    end
-    initialize()
+local P,TS=game:GetService("Players"),game:GetService("TweenService")
+local plr,CG=P.LocalPlayer,game:GetService("CoreGui")
+local sg=Instance.new("ScreenGui")
+sg.Name,sg.ResetOnSpawn,sg.Parent,sg.ZIndexBehavior,sg.IgnoreGuiInset="DiscordToggle",false,plr:WaitForChild("PlayerGui"),Enum.ZIndexBehavior.Global,true
+local btn=Instance.new("TextButton")
+btn.Name,btn.Parent,btn.Draggable,btn.BackgroundColor3,btn.BorderSizePixel,btn.Position,btn.Size,btn.Font,btn.TextColor3,btn.TextSize,btn.ZIndex,btn.AutoButtonColor,btn.ClipsDescendants="ToggleButton",sg,true,Color3.fromRGB(50,50,50),0,UDim2.new(0.8,0,0.9,0),UDim2.new(0,100,0,35),Enum.Font.SourceSansBold,Color3.fromRGB(255,255,255),16,2,false,true
+Instance.new("UICorner").CornerRadius=UDim.new(0,10);Instance.new("UICorner").Parent=btn
+local bh=Instance.new("Frame")
+bh.Name,bh.Parent,bh.BackgroundTransparency,bh.Size,bh.Position,bh.ZIndex="BorderHolder",sg,1,UDim2.new(0,104,0,39),UDim2.new(0.8,-2,0.9,-2),1
+local bf=Instance.new("Frame")
+bf.Name,bf.Parent,bf.BackgroundColor3,bf.BackgroundTransparency,bf.Size,bf.Position,bf.ZIndex="BorderFrame",bh,Color3.fromRGB(255,255,255),0,UDim2.new(1,0,1,0),UDim2.new(0,0,0,0),1
+Instance.new("UICorner").CornerRadius=UDim.new(0,12);Instance.new("UICorner").Parent=bf
+local bg=Instance.new("UIGradient")
+bg.Name,bg.Rotation,bg.Color,bg.Parent="BorderGradient",45,ColorSequence.new({ColorSequenceKeypoint.new(0,Color3.fromRGB(0,0,0)),ColorSequenceKeypoint.new(0.5,Color3.fromRGB(128,128,128)),ColorSequenceKeypoint.new(1,Color3.fromRGB(255,255,255))}),bf
+btn:GetPropertyChangedSignal("Position"):Connect(function()bh.Position=UDim2.new(btn.Position.X.Scale,btn.Position.X.Offset-2,btn.Position.Y.Scale,btn.Position.Y.Offset-2)end)
+bh.Position=UDim2.new(0.8,-2,0.9,-2)
+local e,d=false,CG:FindFirstChild("Discord")
+local ti=TS:Create(bg,TweenInfo.new(3,Enum.EasingStyle.Linear,Enum.EasingDirection.In,-1),{Rotation=405})
+ti:Play()
+TS:Create(bf,TweenInfo.new(2,Enum.EasingStyle.Sine,Enum.EasingDirection.InOut,-1,true),{BackgroundTransparency=0.3}):Play()
+local u=function()
+ local c,t
+ if e then c,t=Color3.fromRGB(255,255,255),"Enabled"
+ else c,t=Color3.fromRGB(0,0,0),"Disabled" end
+ TS:Create(btn,TweenInfo.new(0.3,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),{BackgroundColor3=c}):Play()
+ btn.Text=t
+ btn.TextColor3=e and Color3.fromRGB(0,0,0)or Color3.fromRGB(255,255,255)
+ TS:Create(btn,TweenInfo.new(0.15),{Size=UDim2.new(0,105,0,38)}):Play()
+ wait(0.15)
+ TS:Create(btn,TweenInfo.new(0.15),{Size=UDim2.new(0,100,0,35)}):Play()
+ bh.Position=UDim2.new(btn.Position.X.Scale,btn.Position.X.Offset-2,btn.Position.Y.Scale,btn.Position.Y.Offset-2)
+ if d then d.Enabled=e end
+end
+btn.MouseEnter:Connect(function()
+ TS:Create(btn,TweenInfo.new(0.2),{TextColor3=e and Color3.fromRGB(255,255,255)or Color3.fromRGB(0,0,0)}):Play()
+ TS:Create(bf,TweenInfo.new(0.2),{BackgroundTransparency=0}):Play()
+end)
+btn.MouseLeave:Connect(function()
+ TS:Create(btn,TweenInfo.new(0.2),{TextColor3=e and Color3.fromRGB(0,0,0)or Color3.fromRGB(255,255,255)}):Play()
+ TS:Create(bf,TweenInfo.new(0.2),{BackgroundTransparency=0.3}):Play()
+end)
+btn.MouseButton1Click:Connect(function()e=not e;u()end)
+if d then e=d.Enabled;u()else btn.Text,btn.BackgroundColor3,btn.TextColor3="JuankoLib",Color3.fromRGB(0,0,0),Color3.fromRGB(255,255,255)end
 end)
 
 function DiscordLib:Window(text)
