@@ -208,99 +208,17 @@ function GrobalSettingsLibXP:CreateSettingsPanel(discordLib, windowName)
         discordLib:Notification({title = "Tema AMOLED", desc = "Activado", time = 1.5})
     end)
     
-    configChannel:Button("Random theme", function()
+    configChannel:Button("Random Theme", function()
         local randomTheme = self:GetRandomTheme()
         self:ApplyTheme(randomTheme, discordLib)
-        discordLib:Notification({title = "Tema Aleatorio", desc = randomTheme, time = 1.5})
+        discordLib:Notification({title = "Random Theme", desc = randomTheme, time = 1.5})
     end)
     
-    configChannel:Seperator()
-    configChannel:Label("CATEGORIES")
-    
-    local darkThemes = self:GetThemesByCategory("Dark")
-    if #darkThemes > 0 then
-        configChannel:Dropdown("Dark color", darkThemes, function(selected)
-            self:ApplyTheme(selected, discordLib)
-            discordLib:Notification({title = "Tema " .. selected, desc = "Activado", time = 1.5})
-        end)
-    end
-    
-    local lightThemes = self:GetThemesByCategory("Light")
-    if #lightThemes > 0 then
-        configChannel:Dropdown("Light color", lightThemes, function(selected)
-            self:ApplyTheme(selected, discordLib)
-            discordLib:Notification({title = "Tema " .. selected, desc = "Activado", time = 1.5})
-        end)
-    end
-    
-    local neonThemes = self:GetThemesByCategory("Neon")
-    if #neonThemes > 0 then
-        configChannel:Dropdown("Neon color", neonThemes, function(selected)
-            self:ApplyTheme(selected, discordLib)
-            discordLib:Notification({title = "Tema " .. selected, desc = "Activado", time = 1.5})
-        end)
-    end
-    
-    local pastelThemes = self:GetThemesByCategory("Pastel")
-    if #pastelThemes > 0 then
-        configChannel:Dropdown("Color Pastel", pastelThemes, function(selected)
-            self:ApplyTheme(selected, discordLib)
-            discordLib:Notification({title = "Tema " .. selected, desc = "Activado", time = 1.5})
-        end)
-    end
-    
-    configChannel:Seperator()
-    ChannelXP:Colorpicker("ESP Color", Color3.fromRGB(255, 1, 1), function(Y) 
-discordLib:SetTheme(Y)
-end)
-    configChannel:Button("Reset", function()
-        r, g, b = 32, 34, 37
-        discordLib:SetTheme(Color3.fromRGB(r, g, b))
-        discordLib:Notification({title = "Reset", desc = "Tema oscuro restaurado", time = 1.5})
-    end)
-    
-    configChannel:Seperator()
-configChannel:Slider("Background opacity", 0, 100, 100, function(value)
-    local transparency = 1 - (value / 100)
-    
-    local mainFrame = Discord:FindFirstChild("MainFrame")
-    if mainFrame then
-        mainFrame.BackgroundTransparency = transparency
-        
-        local serversFrame = mainFrame:FindFirstChild("ServersHoldFrame")
-        if serversFrame then
-            serversFrame.BackgroundTransparency = transparency
-        end
-        
-        local channelsFrame = mainFrame:FindFirstChild("ChannelsHoldFrame")
-        if channelsFrame then
-            channelsFrame.BackgroundTransparency = transparency
-        end
-    end
-end)
-    local rainbowActive = false
-    local rainbowConnection
-    configChannel:Toggle("Mode Rgb", false, function(state)
-        rainbowActive = state
-        if rainbowConnection then
-            rainbowConnection:Disconnect()
-            rainbowConnection = nil
-        end
-        if rainbowActive then
-            local hue = 0
-            rainbowConnection = game:GetService("RunService").Heartbeat:Connect(function()
-                hue = (hue + 0.005) % 1
-                discordLib:SetTheme(Color3.fromHSV(hue, 1, 1))
-            end)
-        end
-    end)
-    
-    configChannel:Seperator()
     return ventana, serverName, configChannel
 end
 
 function GrobalSettingsLibXP:Init(discordLib)
-    return self:CreateSettingsPanel(discordLib, "Configuración Global")
+    return self:CreateSettingsPanel(discordLib, "Grobal Settings")
 end
 
 return GrobalSettingsLibXP
