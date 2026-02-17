@@ -380,7 +380,6 @@ function DiscordLib:Window(text)
 
     local Servers = {}
     local ServerChannels = {}
-
 function DiscordLib:SetTheme(themeName)
     local newTheme
     if type(themeName) == "string" then
@@ -404,10 +403,8 @@ function DiscordLib:SetTheme(themeName)
     
     local discordGui = game:GetService("CoreGui"):FindFirstChild("Discord")
     if not discordGui then return end
-    
     local mainFrame = discordGui:FindFirstChild("MainFrame")
     if not mainFrame then return end
-    
     mainFrame.BackgroundColor3 = newTheme.Main
     
     local serversHoldFrame = mainFrame:FindFirstChild("ServersHoldFrame")
@@ -501,6 +498,17 @@ function DiscordLib:SetTheme(themeName)
                             if child:IsA("Frame") then
                                 child.BackgroundColor3 = newTheme.Accent
                             end
+                        end
+                    end
+                
+                elseif element.Name and element.Name:match("^Paragraph_") then
+                    element.BackgroundColor3 = newTheme.Tertiary
+                    
+                    for _, child in ipairs(element:GetChildren()) do
+                        if child.Name == "ParagraphTitle" then
+                            child.TextColor3 = newTheme.Text
+                        elseif child.Name == "ParagraphContent" then
+                            child.TextColor3 = newTheme.TextMuted
                         end
                     end
                 
@@ -847,47 +855,81 @@ end
             return Label
         end
 
-        function Section:Paragraph(title, content)
-            local ParagraphFrame = Instance.new("Frame")
-            ParagraphFrame.Parent = SectionFrame
-            ParagraphFrame.BackgroundColor3 = currentTheme.Tertiary
-            ParagraphFrame.BorderSizePixel = 0
-            ParagraphFrame.Size = UDim2.new(0, 370, 0, 45)
-            ParagraphFrame.ZIndex = 6
+function Section:Paragraph(title, content)
+    local ParagraphFrame = Instance.new("Frame")
+    ParagraphFrame.Name = "Paragraph_" .. title:gsub("%s+", "")
+    ParagraphFrame.Parent = SectionFrame
+    ParagraphFrame.BackgroundColor3 = currentTheme.Tertiary
+    ParagraphFrame.BorderSizePixel = 0
+    ParagraphFrame.Size = UDim2.new(0, 370, 0, 45)
+    ParagraphFrame.ZIndex = 6
 
-            local ParagraphCorner = Instance.new("UICorner")
-            ParagraphCorner.CornerRadius = UDim.new(0, 4)
-            ParagraphCorner.Parent = ParagraphFrame
+    local ParagraphCorner = Instance.new("UICorner")
+    ParagraphCorner.CornerRadius = UDim.new(0, 4)
+    ParagraphCorner.Parent = ParagraphFrame
 
-            local TitleLabel = Instance.new("TextLabel")
-            TitleLabel.Parent = ParagraphFrame
-            TitleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            TitleLabel.BackgroundTransparency = 1.000
-            TitleLabel.Position = UDim2.new(0, 8, 0, 5)
-            TitleLabel.Size = UDim2.new(0, 354, 0, 16)
-            TitleLabel.Font = Enum.Font.GothamBold
-            TitleLabel.Text = title
-            TitleLabel.TextColor3 = currentTheme.Text
-            TitleLabel.TextSize = 12.000
-            TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
-            TitleLabel.ZIndex = 7
+    local TitleLabel = Instance.new("TextLabel")
+    TitleLabel.Name = "ParagraphTitle"
+    TitleLabel.Parent = ParagraphFrame
+    TitleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    TitleLabel.BackgroundTransparency = 1.000
+    TitleLabel.Position = UDim2.new(0, 8, 0, 5)
+    TitleLabel.Size = UDim2.new(0, 354, 0, 16)
+    TitleLabel.Font = Enum.Font.GothamBold
+    TitleLabel.Text = title
+    TitleLabel.TextColor3 = currentTheme.Text
+    TitleLabel.TextSize = 12.000
+    TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    TitleLabel.ZIndex = 7
 
-            local ContentLabel = Instance.new("TextLabel")
-            ContentLabel.Parent = ParagraphFrame
-            ContentLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            ContentLabel.BackgroundTransparency = 1.000
-            ContentLabel.Position = UDim2.new(0, 8, 0, 23)
-            ContentLabel.Size = UDim2.new(0, 354, 0, 16)
-            ContentLabel.Font = Enum.Font.Gotham
-            ContentLabel.Text = content
-            ContentLabel.TextColor3 = currentTheme.TextMuted
-            ContentLabel.TextSize = 11.000
-            ContentLabel.TextXAlignment = Enum.TextXAlignment.Left
-            ContentLabel.ZIndex = 7
+    local ContentLabel = Instance.new("TextLabel")
+    ContentLabel.Name = "ParagraphContent"
+    ContentLabel.Parent = ParagraphFrame
+    ContentLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    ContentLabel.BackgroundTransparency = 1.000
+    ContentLabel.Position = UDim2.new(0, 8, 0, 23)
+    ContentLabel.Size = UDim2.new(0, 354, 0, 16)
+    ContentLabel.Font = Enum.Font.Gotham
+    ContentLabel.Text = content
+    ContentLabel.TextColor3 = currentTheme.TextMuted
+    ContentLabel.TextSize = 11.000
+    ContentLabel.TextXAlignment = Enum.TextXAlignment.Left
+    ContentLabel.ZIndex = 7
 
-            SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 30)
-            return ParagraphFrame
-        end
+    local paragraphObject = {}
+
+    function paragraphObject:SetTitle(newTitle)
+        TitleLabel.Text = newTitle
+    end
+
+    function paragraphObject:SetContent(newContent)
+        ContentLabel.Text = newContent
+    end
+
+    function paragraphObject:SetBoth(newTitle, newContent)
+        TitleLabel.Text = newTitle
+        ContentLabel.Text = newContent
+    end
+
+    function paragraphObject:GetTitle()
+        return TitleLabel.Text
+    end
+
+    function paragraphObject:GetContent()
+        return ContentLabel.Text
+    end
+
+    function paragraphObject:SetVisible(visible)
+        ParagraphFrame.Visible = visible
+    end
+
+    function paragraphObject:Destroy()
+        ParagraphFrame:Destroy()
+    end
+
+    SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 30)
+    return paragraphObject
+end
 
         function Section:Seperator()
             local Seperator = Instance.new("Frame")
