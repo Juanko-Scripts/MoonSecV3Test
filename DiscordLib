@@ -981,6 +981,7 @@ end
             return Toggle
         end
 
+
 function Section:ToggleSlider(text, defaultState, min, max, defaultVal, callback)
     local MainFrame = Instance.new("Frame")
     MainFrame.Parent = SectionFrame
@@ -993,6 +994,7 @@ function Section:ToggleSlider(text, defaultState, min, max, defaultVal, callback
     MainCorner.CornerRadius = UDim.new(0, 4)
     MainCorner.Parent = MainFrame
 
+    -- Label principal
     local ToggleLabel = Instance.new("TextLabel")
     ToggleLabel.Parent = MainFrame
     ToggleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -1006,14 +1008,26 @@ function Section:ToggleSlider(text, defaultState, min, max, defaultVal, callback
     ToggleLabel.TextXAlignment = Enum.TextXAlignment.Left
     ToggleLabel.ZIndex = 7
 
+    -- TOGGLE (exactamente igual al Toggle normal)
+    local Toggle = Instance.new("TextButton")
+    Toggle.Parent = MainFrame
+    Toggle.BackgroundColor3 = currentTheme.Tertiary
+    Toggle.BackgroundTransparency = 1
+    Toggle.BorderSizePixel = 0
+    Toggle.Size = UDim2.new(0, 30, 0, 28)
+    Toggle.Position = UDim2.new(0, 335, 0, 0)
+    Toggle.AutoButtonColor = false
+    Toggle.Text = ""
+    Toggle.ZIndex = 7
+
     local ToggleFrame = Instance.new("Frame")
-    ToggleFrame.Parent = MainFrame
+    ToggleFrame.Parent = Toggle
     ToggleFrame.BackgroundColor3 = currentTheme.Secondary
     ToggleFrame.BorderSizePixel = 1
     ToggleFrame.BorderColor3 = currentTheme.Border
-    ToggleFrame.Position = UDim2.new(0, 340, 0, 5)
+    ToggleFrame.Position = UDim2.new(0, 0, 0, 5)
     ToggleFrame.Size = UDim2.new(0, 18, 0, 18)
-    ToggleFrame.ZIndex = 7
+    ToggleFrame.ZIndex = 8
 
     local ToggleFrameCorner = Instance.new("UICorner")
     ToggleFrameCorner.CornerRadius = UDim.new(0, 3)
@@ -1025,13 +1039,14 @@ function Section:ToggleSlider(text, defaultState, min, max, defaultVal, callback
     ToggleFill.BorderSizePixel = 0
     ToggleFill.Size = UDim2.new(0, 0, 0, 0)
     ToggleFill.Position = UDim2.new(0, 2, 0, 2)
-    ToggleFill.ZIndex = 8
+    ToggleFill.ZIndex = 9
     ToggleFill.Visible = false
 
     local ToggleFillCorner = Instance.new("UICorner")
     ToggleFillCorner.CornerRadius = UDim.new(0, 2)
     ToggleFillCorner.Parent = ToggleFill
 
+    -- SLIDER (exactamente igual al Slider normal)
     local SliderFrame = Instance.new("Frame")
     SliderFrame.Parent = MainFrame
     SliderFrame.BackgroundColor3 = currentTheme.Tertiary
@@ -1179,11 +1194,7 @@ function Section:ToggleSlider(text, defaultState, min, max, defaultVal, callback
         end
     end
 
-    ToggleFrame.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            updateToggle()
-        end
-    end)
+    Toggle.MouseButton1Click:Connect(updateToggle)
 
     local toggleObject = {}
     function toggleObject:SetValue(newValue)
