@@ -1,6 +1,306 @@
-local GrobalSettingsLibXP = {
-        ["White"] = 
+local GrobalSettingsLibXP = {}
 
-} 
+GrobalSettingsLibXP["White"] = Color3.fromRGB(255, 255, 255)
+GrobalSettingsLibXP["Black"] = Color3.fromRGB(0, 0, 0)
+GrobalSettingsLibXP["Red"] = Color3.fromRGB(255, 0, 0)
+GrobalSettingsLibXP["Green"] = Color3.fromRGB(0, 255, 0)
+GrobalSettingsLibXP["Blue"] = Color3.fromRGB(0, 0, 255)
+GrobalSettingsLibXP["Yellow"] = Color3.fromRGB(255, 255, 0)
+GrobalSettingsLibXP["Cyan"] = Color3.fromRGB(0, 255, 255)
+GrobalSettingsLibXP["Magenta"] = Color3.fromRGB(255, 0, 255)
+GrobalSettingsLibXP["Orange"] = Color3.fromRGB(255, 165, 0)
+GrobalSettingsLibXP["Purple"] = Color3.fromRGB(128, 0, 128)
+GrobalSettingsLibXP["Pink"] = Color3.fromRGB(255, 192, 203)
+GrobalSettingsLibXP["Brown"] = Color3.fromRGB(165, 42, 42)
+GrobalSettingsLibXP["Gray"] = Color3.fromRGB(128, 128, 128)
+GrobalSettingsLibXP["Silver"] = Color3.fromRGB(192, 192, 192)
+GrobalSettingsLibXP["Gold"] = Color3.fromRGB(255, 215, 0)
+
+GrobalSettingsLibXP["DarkRed"] = Color3.fromRGB(139, 0, 0)
+GrobalSettingsLibXP["DarkGreen"] = Color3.fromRGB(0, 100, 0)
+GrobalSettingsLibXP["DarkBlue"] = Color3.fromRGB(0, 0, 139)
+GrobalSettingsLibXP["DarkCyan"] = Color3.fromRGB(0, 139, 139)
+GrobalSettingsLibXP["DarkMagenta"] = Color3.fromRGB(139, 0, 139)
+GrobalSettingsLibXP["DarkOrange"] = Color3.fromRGB(255, 140, 0)
+GrobalSettingsLibXP["DarkPurple"] = Color3.fromRGB(75, 0, 130)
+GrobalSettingsLibXP["DarkGray"] = Color3.fromRGB(64, 64, 64)
+GrobalSettingsLibXP["DarkBrown"] = Color3.fromRGB(101, 67, 33)
+
+GrobalSettingsLibXP["LightRed"] = Color3.fromRGB(255, 102, 102)
+GrobalSettingsLibXP["LightGreen"] = Color3.fromRGB(144, 238, 144)
+GrobalSettingsLibXP["LightBlue"] = Color3.fromRGB(173, 216, 230)
+GrobalSettingsLibXP["LightCyan"] = Color3.fromRGB(224, 255, 255)
+GrobalSettingsLibXP["LightMagenta"] = Color3.fromRGB(255, 182, 193)
+GrobalSettingsLibXP["LightOrange"] = Color3.fromRGB(255, 218, 185)
+GrobalSettingsLibXP["LightPurple"] = Color3.fromRGB(216, 191, 216)
+GrobalSettingsLibXP["LightGray"] = Color3.fromRGB(211, 211, 211)
+GrobalSettingsLibXP["LightYellow"] = Color3.fromRGB(255, 255, 224)
+
+GrobalSettingsLibXP["PastelPink"] = Color3.fromRGB(255, 209, 220)
+GrobalSettingsLibXP["PastelBlue"] = Color3.fromRGB(174, 198, 207)
+GrobalSettingsLibXP["PastelGreen"] = Color3.fromRGB(204, 255, 204)
+GrobalSettingsLibXP["PastelPurple"] = Color3.fromRGB(200, 162, 200)
+GrobalSettingsLibXP["PastelYellow"] = Color3.fromRGB(253, 253, 150)
+GrobalSettingsLibXP["PastelOrange"] = Color3.fromRGB(255, 219, 172)
+
+GrobalSettingsLibXP["NeonRed"] = Color3.fromRGB(255, 51, 51)
+GrobalSettingsLibXP["NeonGreen"] = Color3.fromRGB(57, 255, 20)
+GrobalSettingsLibXP["NeonBlue"] = Color3.fromRGB(77, 77, 255)
+GrobalSettingsLibXP["NeonPink"] = Color3.fromRGB(255, 20, 147)
+GrobalSettingsLibXP["NeonYellow"] = Color3.fromRGB(255, 255, 51)
+GrobalSettingsLibXP["NeonOrange"] = Color3.fromRGB(255, 95, 31)
+GrobalSettingsLibXP["NeonPurple"] = Color3.fromRGB(191, 0, 255)
+
+GrobalSettingsLibXP["Coral"] = Color3.fromRGB(255, 127, 80)
+GrobalSettingsLibXP["Salmon"] = Color3.fromRGB(250, 128, 114)
+GrobalSettingsLibXP["Tomato"] = Color3.fromRGB(255, 99, 71)
+GrobalSettingsLibXP["Crimson"] = Color3.fromRGB(220, 20, 60)
+GrobalSettingsLibXP["Firebrick"] = Color3.fromRGB(178, 34, 34)
+GrobalSettingsLibXP["IndianRed"] = Color3.fromRGB(205, 92, 92)
+GrobalSettingsLibXP["HotPink"] = Color3.fromRGB(255, 105, 180)
+GrobalSettingsLibXP["DeepPink"] = Color3.fromRGB(255, 20, 147)
+GrobalSettingsLibXP["Violet"] = Color3.fromRGB(238, 130, 238)
+GrobalSettingsLibXP["Orchid"] = Color3.fromRGB(218, 112, 214)
+GrobalSettingsLibXP["Plum"] = Color3.fromRGB(221, 160, 221)
+GrobalSettingsLibXP["Lavender"] = Color3.fromRGB(230, 230, 250)
+GrobalSettingsLibXP["Thistle"] = Color3.fromRGB(216, 191, 216)
+GrobalSettingsLibXP["SkyBlue"] = Color3.fromRGB(135, 206, 235)
+GrobalSettingsLibXP["SteelBlue"] = Color3.fromRGB(70, 130, 180)
+GrobalSettingsLibXP["CornflowerBlue"] = Color3.fromRGB(100, 149, 237)
+GrobalSettingsLibXP["RoyalBlue"] = Color3.fromRGB(65, 105, 225)
+GrobalSettingsLibXP["Navy"] = Color3.fromRGB(0, 0, 128)
+GrobalSettingsLibXP["Teal"] = Color3.fromRGB(0, 128, 128)
+GrobalSettingsLibXP["Turquoise"] = Color3.fromRGB(64, 224, 208)
+GrobalSettingsLibXP["Aquamarine"] = Color3.fromRGB(127, 255, 212)
+GrobalSettingsLibXP["SpringGreen"] = Color3.fromRGB(0, 255, 127)
+GrobalSettingsLibXP["LimeGreen"] = Color3.fromRGB(50, 205, 50)
+GrobalSettingsLibXP["ForestGreen"] = Color3.fromRGB(34, 139, 34)
+GrobalSettingsLibXP["Olive"] = Color3.fromRGB(128, 128, 0)
+GrobalSettingsLibXP["OliveDrab"] = Color3.fromRGB(107, 142, 35)
+GrobalSettingsLibXP["Goldenrod"] = Color3.fromRGB(218, 165, 32)
+GrobalSettingsLibXP["DarkGoldenrod"] = Color3.fromRGB(184, 134, 11)
+GrobalSettingsLibXP["SaddleBrown"] = Color3.fromRGB(139, 69, 19)
+GrobalSettingsLibXP["Sienna"] = Color3.fromRGB(160, 82, 45)
+GrobalSettingsLibXP["Chocolate"] = Color3.fromRGB(210, 105, 30)
+GrobalSettingsLibXP["Peru"] = Color3.fromRGB(205, 133, 63)
+GrobalSettingsLibXP["SandyBrown"] = Color3.fromRGB(244, 164, 96)
+GrobalSettingsLibXP["Burlywood"] = Color3.fromRGB(222, 184, 135)
+GrobalSettingsLibXP["Tan"] = Color3.fromRGB(210, 180, 140)
+
+GrobalSettingsLibXP["RainbowRed"] = Color3.fromRGB(255, 0, 0)
+GrobalSettingsLibXP["RainbowOrange"] = Color3.fromRGB(255, 127, 0)
+GrobalSettingsLibXP["RainbowYellow"] = Color3.fromRGB(255, 255, 0)
+GrobalSettingsLibXP["RainbowGreen"] = Color3.fromRGB(0, 255, 0)
+GrobalSettingsLibXP["RainbowBlue"] = Color3.fromRGB(0, 0, 255)
+GrobalSettingsLibXP["RainbowIndigo"] = Color3.fromRGB(75, 0, 130)
+GrobalSettingsLibXP["RainbowViolet"] = Color3.fromRGB(148, 0, 211)
+
+GrobalSettingsLibXP["MetallicSilver"] = Color3.fromRGB(192, 192, 192)
+GrobalSettingsLibXP["MetallicGold"] = Color3.fromRGB(255, 215, 0)
+GrobalSettingsLibXP["MetallicCopper"] = Color3.fromRGB(184, 115, 51)
+GrobalSettingsLibXP["MetallicBronze"] = Color3.fromRGB(205, 127, 50)
+GrobalSettingsLibXP["MetallicSteel"] = Color3.fromRGB(160, 160, 160)
+
+GrobalSettingsLibXP["DiscordDark"] = Color3.fromRGB(32, 34, 37)
+GrobalSettingsLibXP["DiscordLight"] = Color3.fromRGB(255, 255, 255)
+GrobalSettingsLibXP["DiscordBlurple"] = Color3.fromRGB(88, 101, 242)
+GrobalSettingsLibXP["DiscordGreen"] = Color3.fromRGB(87, 242, 135)
+GrobalSettingsLibXP["DiscordYellow"] = Color3.fromRGB(254, 231, 92)
+GrobalSettingsLibXP["DiscordRed"] = Color3.fromRGB(242, 63, 67)
+GrobalSettingsLibXP["DiscordMagenta"] = Color3.fromRGB(235, 69, 158)
+
+GrobalSettingsLibXP["Midnight"] = Color3.fromRGB(25, 25, 50)
+GrobalSettingsLibXP["Twilight"] = Color3.fromRGB(50, 25, 50)
+GrobalSettingsLibXP["Sunset"] = Color3.fromRGB(255, 100, 50)
+GrobalSettingsLibXP["Ocean"] = Color3.fromRGB(0, 105, 148)
+GrobalSettingsLibXP["Forest"] = Color3.fromRGB(34, 139, 34)
+GrobalSettingsLibXP["Lava"] = Color3.fromRGB(255, 69, 0)
+GrobalSettingsLibXP["Ice"] = Color3.fromRGB(173, 216, 230)
+GrobalSettingsLibXP["Coffee"] = Color3.fromRGB(111, 78, 55)
+GrobalSettingsLibXP["Mint"] = Color3.fromRGB(189, 252, 201)
+GrobalSettingsLibXP["Peach"] = Color3.fromRGB(255, 218, 185)
+GrobalSettingsLibXP["Rose"] = Color3.fromRGB(255, 228, 225)
+GrobalSettingsLibXP["Wine"] = Color3.fromRGB(114, 47, 55)
+GrobalSettingsLibXP["Charcoal"] = Color3.fromRGB(54, 69, 79)
+GrobalSettingsLibXP["Slate"] = Color3.fromRGB(112, 128, 144)
+GrobalSettingsLibXP["Sand"] = Color3.fromRGB(194, 178, 128)
+GrobalSettingsLibXP["Clay"] = Color3.fromRGB(180, 100, 60)
+GrobalSettingsLibXP["Rust"] = Color3.fromRGB(183, 65, 14)
+GrobalSettingsLibXP["Moss"] = Color3.fromRGB(118, 139, 81)
+GrobalSettingsLibXP["Fern"] = Color3.fromRGB(113, 188, 120)
+GrobalSettingsLibXP["Mauve"] = Color3.fromRGB(224, 176, 255)
+GrobalSettingsLibXP["Lilac"] = Color3.fromRGB(200, 162, 200)
+GrobalSettingsLibXP["Wisteria"] = Color3.fromRGB(169, 143, 215)
+GrobalSettingsLibXP["Periwinkle"] = Color3.fromRGB(204, 204, 255)
+
+function GrobalSettingsLibXP:GetThemeNames()
+    local names = {}
+    for name, value in pairs(self) do
+        if type(value) == "userdata" and typeof(value) == "Color3" then
+            table.insert(names, name)
+        end
+    end
+    table.sort(names)
+    return names
+end
+
+function GrobalSettingsLibXP:GetRandomTheme()
+    local names = self:GetThemeNames()
+    return names[math.random(1, #names)]
+end
+
+function GrobalSettingsLibXP:ApplyTheme(themeName, discordLib)
+    if self[themeName] and discordLib and discordLib.SetTheme then
+        discordLib:SetTheme(self[themeName])
+        return true
+    end
+    return false
+end
+
+function GrobalSettingsLibXP:GetThemesByCategory(category)
+    local results = {}
+    for name, value in pairs(self) do
+        if type(value) == "userdata" and typeof(value) == "Color3" and name:lower():find(category:lower()) then
+            table.insert(results, name)
+        end
+    end
+    table.sort(results)
+    return results
+end
+
+function GrobalSettingsLibXP:CreateSettingsPanel(discordLib, windowName)
+    windowName = windowName or "Configuración Global"
+    
+    local ventana = discordLib:Window(windowName)
+    
+    local serverName = "ConfigServer"
+    ventana.Server:Server(serverName, "")
+    
+    local configChannel = ventana:Channel(serverName, "Ajustes")
+    
+    configChannel:Label("GLOBAL SETTINGS")
+    configChannel:Seperator()
+    
+    local themeNames = self:GetThemeNames()
+    configChannel:Label("SELECT THEME")
+    configChannel:Dropdown("Change theme", themeNames, function(selectedTheme)
+        self:ApplyTheme(selectedTheme, discordLib)
+        discordLib:Notification({
+            title = "The subject was changed",
+            desc = "Theme: " .. selectedTheme,
+            time = 2
+        })
+    end)
+    
+    configChannel:Label("TOPICS INSTANT THEME SWITCHING")
+    configChannel:Button("Dark Discord", function()
+        self:ApplyTheme("DiscordDark", discordLib)
+        discordLib:Notification({title = "Tema Oscuro", desc = "Activado", time = 1.5})
+    end)
+    
+    configChannel:Button("Discord light", function()
+        self:ApplyTheme("DiscordLight", discordLib)
+        discordLib:Notification({title = "Tema Claro", desc = "Activado", time = 1.5})
+    end)
+    
+    configChannel:Button("Theme Amoled", function()
+        self:ApplyTheme("Black", discordLib)
+        discordLib:Notification({title = "Tema AMOLED", desc = "Activado", time = 1.5})
+    end)
+    
+    configChannel:Button("Random theme", function()
+        local randomTheme = self:GetRandomTheme()
+        self:ApplyTheme(randomTheme, discordLib)
+        discordLib:Notification({title = "Tema Aleatorio", desc = randomTheme, time = 1.5})
+    end)
+    
+    configChannel:Seperator()
+    configChannel:Label("CATEGORIES")
+    
+    local darkThemes = self:GetThemesByCategory("Dark")
+    if #darkThemes > 0 then
+        configChannel:Dropdown("Dark color", darkThemes, function(selected)
+            self:ApplyTheme(selected, discordLib)
+            discordLib:Notification({title = "Tema " .. selected, desc = "Activado", time = 1.5})
+        end)
+    end
+    
+    local lightThemes = self:GetThemesByCategory("Light")
+    if #lightThemes > 0 then
+        configChannel:Dropdown("Light color", lightThemes, function(selected)
+            self:ApplyTheme(selected, discordLib)
+            discordLib:Notification({title = "Tema " .. selected, desc = "Activado", time = 1.5})
+        end)
+    end
+    
+    local neonThemes = self:GetThemesByCategory("Neon")
+    if #neonThemes > 0 then
+        configChannel:Dropdown("Neon color", neonThemes, function(selected)
+            self:ApplyTheme(selected, discordLib)
+            discordLib:Notification({title = "Tema " .. selected, desc = "Activado", time = 1.5})
+        end)
+    end
+    
+    local pastelThemes = self:GetThemesByCategory("Pastel")
+    if #pastelThemes > 0 then
+        configChannel:Dropdown("Color Pastel", pastelThemes, function(selected)
+            self:ApplyTheme(selected, discordLib)
+            discordLib:Notification({title = "Tema " .. selected, desc = "Activado", time = 1.5})
+        end)
+    end
+    
+    configChannel:Seperator()
+    ChannelXP:Colorpicker("ESP Color", Color3.fromRGB(255, 1, 1), function(Y) 
+discordLib:SetTheme(Y)
+end)
+    configChannel:Button("Reset", function()
+        r, g, b = 32, 34, 37
+        discordLib:SetTheme(Color3.fromRGB(r, g, b))
+        discordLib:Notification({title = "Reset", desc = "Tema oscuro restaurado", time = 1.5})
+    end)
+    
+    configChannel:Seperator()
+configChannel:Slider("Background opacity", 0, 100, 100, function(value)
+    local transparency = 1 - (value / 100)
+    
+    local mainFrame = Discord:FindFirstChild("MainFrame")
+    if mainFrame then
+        mainFrame.BackgroundTransparency = transparency
+        
+        local serversFrame = mainFrame:FindFirstChild("ServersHoldFrame")
+        if serversFrame then
+            serversFrame.BackgroundTransparency = transparency
+        end
+        
+        local channelsFrame = mainFrame:FindFirstChild("ChannelsHoldFrame")
+        if channelsFrame then
+            channelsFrame.BackgroundTransparency = transparency
+        end
+    end
+end)
+    local rainbowActive = false
+    local rainbowConnection
+    configChannel:Toggle("Mode Rgb", false, function(state)
+        rainbowActive = state
+        if rainbowConnection then
+            rainbowConnection:Disconnect()
+            rainbowConnection = nil
+        end
+        if rainbowActive then
+            local hue = 0
+            rainbowConnection = game:GetService("RunService").Heartbeat:Connect(function()
+                hue = (hue + 0.005) % 1
+                discordLib:SetTheme(Color3.fromHSV(hue, 1, 1))
+            end)
+        end
+    end)
+    
+    configChannel:Seperator()
+    return ventana, serverName, configChannel
+end
+
+function GrobalSettingsLibXP:Init(discordLib)
+    return self:CreateSettingsPanel(discordLib, "Configuración Global")
+end
 
 return GrobalSettingsLibXP
