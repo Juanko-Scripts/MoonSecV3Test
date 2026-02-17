@@ -804,66 +804,91 @@ end
             return Button
         end
 
-        function Section:Toggle(text, default, callback)
-            local Toggle = Instance.new("TextButton")
-            local ToggleLabel = Instance.new("TextLabel")
-            local ToggleImage = Instance.new("ImageLabel")
-            local ToggleCorner = Instance.new("UICorner")
-            local ToggleImageCorner = Instance.new("UICorner")
+function Section:Toggle(text, default, callback)
+    local Toggle = Instance.new("TextButton")
+    local ToggleLabel = Instance.new("TextLabel")
+    local ToggleFrame = Instance.new("Frame")
+    local ToggleFill = Instance.new("Frame")
+    local ToggleCorner = Instance.new("UICorner")
+    local ToggleFrameCorner = Instance.new("UICorner")
+    local ToggleFillCorner = Instance.new("UICorner")
 
-            local toggled = default or false
+    local toggled = default or false
 
-            Toggle.Parent = SectionFrame
-            Toggle.BackgroundColor3 = currentTheme.Tertiary
-            Toggle.BorderSizePixel = 0
-            Toggle.Size = UDim2.new(0, 370, 0, 28)
-            Toggle.AutoButtonColor = false
-            Toggle.Text = ""
-            Toggle.Font = Enum.Font.Gotham
-            Toggle.TextColor3 = currentTheme.Text
-            Toggle.TextSize = 13.000
-            Toggle.ZIndex = 6
+    Toggle.Parent = SectionFrame
+    Toggle.BackgroundColor3 = currentTheme.Tertiary
+    Toggle.BorderSizePixel = 0
+    Toggle.Size = UDim2.new(0, 370, 0, 28)
+    Toggle.AutoButtonColor = false
+    Toggle.Text = ""
+    Toggle.Font = Enum.Font.Gotham
+    Toggle.TextColor3 = currentTheme.Text
+    Toggle.TextSize = 13.000
+    Toggle.ZIndex = 6
 
-            ToggleCorner.CornerRadius = UDim.new(0, 4)
-            ToggleCorner.Parent = Toggle
+    ToggleCorner.CornerRadius = UDim.new(0, 4)
+    ToggleCorner.Parent = Toggle
 
-            ToggleLabel.Parent = Toggle
-            ToggleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            ToggleLabel.BackgroundTransparency = 1.000
-            ToggleLabel.Position = UDim2.new(0, 5, 0, 0)
-            ToggleLabel.Size = UDim2.new(0, 310, 0, 28)
-            ToggleLabel.Font = Enum.Font.Gotham
-            ToggleLabel.Text = text
-            ToggleLabel.TextColor3 = currentTheme.Text
-            ToggleLabel.TextSize = 13.000
-            ToggleLabel.TextXAlignment = Enum.TextXAlignment.Left
-            ToggleLabel.ZIndex = 7
+    ToggleLabel.Parent = Toggle
+    ToggleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    ToggleLabel.BackgroundTransparency = 1.000
+    ToggleLabel.Position = UDim2.new(0, 5, 0, 0)
+    ToggleLabel.Size = UDim2.new(0, 310, 0, 28)
+    ToggleLabel.Font = Enum.Font.Gotham
+    ToggleLabel.Text = text
+    ToggleLabel.TextColor3 = currentTheme.Text
+    ToggleLabel.TextSize = 13.000
+    ToggleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    ToggleLabel.ZIndex = 7
 
-            ToggleImage.Parent = Toggle
-            ToggleImage.BackgroundColor3 = currentTheme.Secondary
-            ToggleImage.BorderSizePixel = 0
-            ToggleImage.Position = UDim2.new(0, 340, 0, 4)
-            ToggleImage.Size = UDim2.new(0, 18, 0, 18)
-            ToggleImage.Image = toggled and "rbxassetid://6035067836" or ""
-            ToggleImage.ImageColor3 = currentTheme.Text
-            ToggleImage.ZIndex = 7
+    ToggleFrame.Parent = Toggle
+    ToggleFrame.BackgroundColor3 = currentTheme.Secondary
+    ToggleFrame.BorderSizePixel = 1
+    ToggleFrame.BorderColor3 = currentTheme.TextMuted
+    ToggleFrame.Position = UDim2.new(0, 340, 0, 4)
+    ToggleFrame.Size = UDim2.new(0, 18, 0, 18)
+    ToggleFrame.ZIndex = 7
 
-            ToggleImageCorner.CornerRadius = UDim.new(0, 3)
-            ToggleImageCorner.Parent = ToggleImage
+    ToggleFrameCorner.CornerRadius = UDim.new(0, 3)
+    ToggleFrameCorner.Parent = ToggleFrame
 
-            local function updateToggle()
-                toggled = not toggled
-                ToggleImage.Image = toggled and "rbxassetid://6035067836" or ""
-                if callback then
-                    callback(toggled)
-                end
-            end
+    -- Relleno del toggle (aparece cuando está activado)
+    ToggleFill.Parent = ToggleFrame
+    ToggleFill.BackgroundColor3 = currentTheme.Accent
+    ToggleFill.BorderSizePixel = 0
+    ToggleFill.Size = toggled and UDim2.new(1, -4, 1, -4) or UDim2.new(0, 0, 0, 0)
+    ToggleFill.Position = UDim2.new(0, 2, 0, 2)
+    ToggleFill.ZIndex = 8
+    ToggleFill.Visible = toggled
 
-            Toggle.MouseButton1Click:Connect(updateToggle)
+    ToggleFillCorner.CornerRadius = UDim.new(0, 2)
+    ToggleFillCorner.Parent = ToggleFill
 
-            SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 30)
-            return Toggle
+    local function updateToggle()
+        toggled = not toggled
+        if toggled then
+            ToggleFill.Visible = true
+            TweenService:Create(ToggleFill, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+                Size = UDim2.new(1, -4, 1, -4)
+            }):Play()
+        else
+            TweenService:Create(ToggleFill, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+                Size = UDim2.new(0, 0, 0, 0)
+            }):Play()
+            task.wait(0.2)
+            ToggleFill.Visible = false
         end
+        
+        if callback then
+            callback(toggled)
+        end
+    end
+
+    Toggle.MouseButton1Click:Connect(updateToggle)
+
+    SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 30)
+    return Toggle
+end
 
         function Section:Slider(text, min, max, default, callback)
             local SliderFrame = Instance.new("Frame")
@@ -1695,158 +1720,158 @@ end
             return ColorPickerFrame
         end
 
-        function Section:Dropdown(text, options, callback)
-            local DropdownFrame = Instance.new("Frame")
-            local DropdownLabel = Instance.new("TextLabel")
-            local DropdownButton = Instance.new("TextButton")
-            local DropdownArrow = Instance.new("TextLabel")
-            local DropdownList = Instance.new("ScrollingFrame")
-            local DropdownListLayout = Instance.new("UIListLayout")
-            local DropdownCorner = Instance.new("UICorner")
-            local DropdownButtonCorner = Instance.new("UICorner")
-            local DropdownListCorner = Instance.new("UICorner")
+function Section:Dropdown(text, options, callback)
+    local DropdownFrame = Instance.new("Frame")
+    local DropdownLabel = Instance.new("TextLabel")
+    local DropdownButton = Instance.new("TextButton")
+    local DropdownArrow = Instance.new("TextLabel")
+    local DropdownList = Instance.new("ScrollingFrame")
+    local DropdownListLayout = Instance.new("UIListLayout")
+    local DropdownCorner = Instance.new("UICorner")
+    local DropdownButtonCorner = Instance.new("UICorner")
+    local DropdownListCorner = Instance.new("UICorner")
 
-            local expanded = false
-            local selected = text
-            local items = {}
+    local expanded = false
+    local selected = text
+    local items = {}
 
-            DropdownFrame.Parent = SectionFrame
-            DropdownFrame.BackgroundColor3 = currentTheme.Tertiary
-            DropdownFrame.BorderSizePixel = 0
-            DropdownFrame.Size = UDim2.new(0, 370, 0, 28)
-            DropdownFrame.ClipsDescendants = true
-            DropdownFrame.ZIndex = 6
+    DropdownFrame.Parent = SectionFrame
+    DropdownFrame.BackgroundColor3 = currentTheme.Tertiary
+    DropdownFrame.BorderSizePixel = 0
+    DropdownFrame.Size = UDim2.new(0, 370, 0, 28)
+    DropdownFrame.ClipsDescendants = true
+    DropdownFrame.ZIndex = 6
 
-            DropdownCorner.CornerRadius = UDim.new(0, 4)
-            DropdownCorner.Parent = DropdownFrame
+    DropdownCorner.CornerRadius = UDim.new(0, 4)
+    DropdownCorner.Parent = DropdownFrame
 
-            DropdownLabel.Parent = DropdownFrame
-            DropdownLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            DropdownLabel.BackgroundTransparency = 1.000
-            DropdownLabel.Position = UDim2.new(0, 8, 0, 0)
-            DropdownLabel.Size = UDim2.new(0, 300, 0, 28)
-            DropdownLabel.Font = Enum.Font.Gotham
-            DropdownLabel.Text = text .. ": " .. selected
-            DropdownLabel.TextColor3 = currentTheme.Text
-            DropdownLabel.TextSize = 13.000
-            DropdownLabel.TextXAlignment = Enum.TextXAlignment.Left
-            DropdownLabel.ZIndex = 7
+    DropdownLabel.Parent = DropdownFrame
+    DropdownLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    DropdownLabel.BackgroundTransparency = 1.000
+    DropdownLabel.Position = UDim2.new(0, 8, 0, 0)
+    DropdownLabel.Size = UDim2.new(0, 300, 0, 28)
+    DropdownLabel.Font = Enum.Font.Gotham
+    DropdownLabel.Text = text .. ": " .. selected
+    DropdownLabel.TextColor3 = currentTheme.Text
+    DropdownLabel.TextSize = 13.000
+    DropdownLabel.TextXAlignment = Enum.TextXAlignment.Left
+    DropdownLabel.ZIndex = 7
 
-            DropdownArrow.Parent = DropdownFrame
-            DropdownArrow.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            DropdownArrow.BackgroundTransparency = 1.000
-            DropdownArrow.Position = UDim2.new(0, 340, 0, 6)
-            DropdownArrow.Size = UDim2.new(0, 20, 0, 16)
-            DropdownArrow.Font = Enum.Font.Gotham
+    DropdownArrow.Parent = DropdownFrame
+    DropdownArrow.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    DropdownArrow.BackgroundTransparency = 1.000
+    DropdownArrow.Position = UDim2.new(0, 340, 0, 6)
+    DropdownArrow.Size = UDim2.new(0, 20, 0, 16)
+    DropdownArrow.Font = Enum.Font.Gotham
+    DropdownArrow.Text = "▼"
+    DropdownArrow.TextColor3 = currentTheme.TextMuted
+    DropdownArrow.TextSize = 13.000
+    DropdownArrow.ZIndex = 7
+
+    DropdownList.Parent = DropdownFrame
+    DropdownList.BackgroundColor3 = currentTheme.Secondary
+    DropdownList.BorderSizePixel = 1
+    DropdownList.Position = UDim2.new(0, 0, 0, 28)
+    DropdownList.Size = UDim2.new(0, 370, 0, 0)
+    DropdownList.CanvasSize = UDim2.new(0, 0, 0, 0)
+    DropdownList.Visible = false
+    DropdownList.ScrollBarThickness = 4
+    DropdownList.ZIndex = 8
+    DropdownList.BorderColor3 = currentTheme.Border
+
+    DropdownListCorner.CornerRadius = UDim.new(0, 4)
+    DropdownListCorner.Parent = DropdownList
+
+    DropdownListLayout.Parent = DropdownList
+    DropdownListLayout.Padding = UDim.new(0, 2)
+
+    local function updateListHeight()
+        DropdownList.CanvasSize = UDim2.new(0, 0, 0, DropdownListLayout.AbsoluteContentSize.Y)
+        if expanded then
+            DropdownFrame.Size = UDim2.new(0, 370, 0, 28 + DropdownListLayout.AbsoluteContentSize.Y + 4)
+            DropdownArrow.Text = "▲"
+        else
             DropdownArrow.Text = "▼"
-            DropdownArrow.TextColor3 = currentTheme.TextMuted
-            DropdownArrow.TextSize = 13.000
-            DropdownArrow.ZIndex = 7
-
-            DropdownList.Parent = DropdownFrame
-            DropdownList.BackgroundColor3 = currentTheme.Secondary
-            DropdownList.BorderSizePixel = 1
-            DropdownList.Position = UDim2.new(0, 0, 0, 28)
-            DropdownList.Size = UDim2.new(0, 370, 0, 0)
-            DropdownList.CanvasSize = UDim2.new(0, 0, 0, 0)
-            DropdownList.Visible = false
-            DropdownList.ScrollBarThickness = 4
-            DropdownList.ZIndex = 8
-            DropdownList.BorderColor3 = currentTheme.Border
-
-            DropdownListCorner.CornerRadius = UDim.new(0, 4)
-            DropdownListCorner.Parent = DropdownList
-
-            DropdownListLayout.Parent = DropdownList
-            DropdownListLayout.Padding = UDim.new(0, 2)
-
-            local function updateListHeight()
-                DropdownList.CanvasSize = UDim2.new(0, 0, 0, DropdownListLayout.AbsoluteContentSize.Y)
-                if expanded then
-                    DropdownFrame.Size = UDim2.new(0, 370, 0, 28 + DropdownListLayout.AbsoluteContentSize.Y + 4)
-                    DropdownArrow.Text = "▲"
-                else
-                    DropdownArrow.Text = "▼"
-                end
-            end
-
-            local dropdownObject = {}
-            
-            function dropdownObject:Add(option)
-                table.insert(items, option)
-                local OptionButton = Instance.new("TextButton")
-                OptionButton.Parent = DropdownList
-                OptionButton.BackgroundColor3 = currentTheme.Tertiary
-                OptionButton.BackgroundTransparency = 0.3
-                OptionButton.BorderSizePixel = 0
-                OptionButton.Size = UDim2.new(0, 360, 0, 22)
-                OptionButton.Text = option
-                OptionButton.Font = Enum.Font.Gotham
-                OptionButton.TextColor3 = currentTheme.Text
-                OptionButton.TextSize = 12.000
-                OptionButton.AutoButtonColor = false
-                OptionButton.ZIndex = 9
-
-                local OptionCorner = Instance.new("UICorner")
-                OptionCorner.CornerRadius = UDim.new(0, 3)
-                OptionCorner.Parent = OptionButton
-
-                OptionButton.MouseButton1Click:Connect(function()
-                    selected = option
-                    DropdownLabel.Text = text .. ": " .. selected
-                    if callback then
-                        callback(option)
-                    end
-                    expanded = false
-                    DropdownList.Visible = false
-                    DropdownFrame.Size = UDim2.new(0, 370, 0, 28)
-                    DropdownArrow.Text = "▼"
-                end)
-
-                OptionButton.MouseEnter:Connect(function()
-                    TweenService:Create(OptionButton, TweenInfo.new(0.2), {BackgroundColor3 = currentTheme.Hover}):Play()
-                end)
-
-                OptionButton.MouseLeave:Connect(function()
-                    TweenService:Create(OptionButton, TweenInfo.new(0.2), {BackgroundColor3 = currentTheme.Tertiary}):Play()
-                end)
-
-                updateListHeight()
-            end
-
-            function dropdownObject:Clear()
-                for _, child in ipairs(DropdownList:GetChildren()) do
-                    if child:IsA("TextButton") then
-                        child:Destroy()
-                    end
-                end
-                items = {}
-                selected = text
-                DropdownLabel.Text = text .. ": " .. selected
-                updateListHeight()
-            end
-
-            DropdownFrame.InputBegan:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                    expanded = not expanded
-                    DropdownList.Visible = expanded
-                    if expanded then
-                        DropdownFrame.Size = UDim2.new(0, 370, 0, 28 + DropdownListLayout.AbsoluteContentSize.Y + 4)
-                        DropdownArrow.Text = "▲"
-                    else
-                        DropdownFrame.Size = UDim2.new(0, 370, 0, 28)
-                        DropdownArrow.Text = "▼"
-                    end
-                end
-            end)
-
-            for _, option in ipairs(options) do
-                dropdownObject:Add(option)
-            end
-
-            SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 30)
-            return dropdownObject
         end
+    end
+
+    local dropdownObject = {}
+    
+    function dropdownObject:Add(option)
+        table.insert(items, option)
+        local OptionButton = Instance.new("TextButton")
+        OptionButton.Parent = DropdownList
+        OptionButton.BackgroundColor3 = currentTheme.Tertiary
+        OptionButton.BackgroundTransparency = 0.3
+        OptionButton.BorderSizePixel = 0
+        OptionButton.Size = UDim2.new(0, 360, 0, 22)
+        OptionButton.Text = option
+        OptionButton.Font = Enum.Font.Gotham
+        OptionButton.TextColor3 = currentTheme.Text
+        OptionButton.TextSize = 12.000
+        OptionButton.AutoButtonColor = false
+        OptionButton.ZIndex = 9
+
+        local OptionCorner = Instance.new("UICorner")
+        OptionCorner.CornerRadius = UDim.new(0, 3)
+        OptionCorner.Parent = OptionButton
+
+        OptionButton.MouseButton1Click:Connect(function()
+            selected = option
+            DropdownLabel.Text = text .. ": " .. selected
+            if callback then
+                callback(option)
+            end
+            expanded = false
+            DropdownList.Visible = false
+            DropdownFrame.Size = UDim2.new(0, 370, 0, 28)
+            DropdownArrow.Text = "▼"
+        end)
+
+        OptionButton.MouseEnter:Connect(function()
+            TweenService:Create(OptionButton, TweenInfo.new(0.2), {BackgroundColor3 = currentTheme.Hover}):Play()
+        end)
+
+        OptionButton.MouseLeave:Connect(function()
+            TweenService:Create(OptionButton, TweenInfo.new(0.2), {BackgroundColor3 = currentTheme.Tertiary}):Play()
+        end)
+
+        updateListHeight()
+    end
+
+    function dropdownObject:Clear()
+        for _, child in ipairs(DropdownList:GetChildren()) do
+            if child:IsA("TextButton") then
+                child:Destroy()
+            end
+        end
+        items = {}
+        selected = text
+        DropdownLabel.Text = text .. ": " .. selected
+        updateListHeight()
+    end
+
+    DropdownFrame.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            expanded = not expanded
+            DropdownList.Visible = expanded
+            if expanded then
+                DropdownFrame.Size = UDim2.new(0, 370, 0, 28 + DropdownListLayout.AbsoluteContentSize.Y + 4)
+                DropdownArrow.Text = "▲"
+            else
+                DropdownFrame.Size = UDim2.new(0, 370, 0, 28)
+                DropdownArrow.Text = "▼"
+            end
+        end
+    end)
+
+    for _, option in ipairs(options) do
+        dropdownObject:Add(option)
+    end
+
+    SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 30)
+    return dropdownObject
+end
 
         function Section:Textbox(text, placeholder, numbersOnly, callback)
             local TextboxFrame = Instance.new("Frame")
