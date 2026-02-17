@@ -172,10 +172,10 @@ function GrobalSettingsLibXP:CreateSettingsInChannel(channel, discordLib)
     if not channel then
         return
     end
-    
+
     channel:Label("THEME SETTINGS")
     channel:Seperator()
-    
+
     local themeNames = self:GetThemeNames()
     channel:Dropdown("Select Theme", themeNames, function(selectedTheme)
         self:ApplyTheme(selectedTheme, discordLib)
@@ -185,63 +185,47 @@ function GrobalSettingsLibXP:CreateSettingsInChannel(channel, discordLib)
             time = 2
         })
     end)
-    
+
     channel:Label("QUICK TOPICS")
     channel:Button("Dark Theme", function()
         self:ApplyTheme("DiscordDark", discordLib)
         discordLib:Notification({title = "Dark Theme", desc = "Activado", time = 1.5})
     end)
-    
+
     channel:Button("Clear Theme", function()
         self:ApplyTheme("DiscordLight", discordLib)
         discordLib:Notification({title = "Clear Theme", desc = "Activado", time = 1.5})
     end)
-    
+
     channel:Button("AMOLED Theme", function()
         self:ApplyTheme("Black", discordLib)
         discordLib:Notification({title = "AMOLED Theme", desc = "Activado", time = 1.5})
     end)
-    
+
     channel:Button("Random Theme", function()
         local randomTheme = self:GetRandomTheme()
         self:ApplyTheme(randomTheme, discordLib)
         discordLib:Notification({title = "Random Theme", desc = randomTheme, time = 1.5})
     end)
-    
+
     channel:Seperator()
-    channel:Label("Color Personalizado RGB")
+    channel:Label("CUSTOM COLOR")
     
-    local r, g, b = 32, 34, 37
-    
-    channel:Slider("Rojo", 0, 255, r, function(value)
-        r = value
-        discordLib:SetTheme(Color3.fromRGB(r, g, b))
+    channel:Colorpicker("Pick Color", Color3.fromRGB(32, 34, 37), function(color)
+        discordLib:SetTheme(color)
     end)
-    
-    channel:Slider("Verde", 0, 255, g, function(value)
-        g = value
-        discordLib:SetTheme(Color3.fromRGB(r, g, b))
-    end)
-    
-    channel:Slider("Azul", 0, 255, b, function(value)
-        b = value
-        discordLib:SetTheme(Color3.fromRGB(r, g, b))
-    end)
-    
-    channel:Button("Resetear", function()
-        r, g, b = 32, 34, 37
-        discordLib:SetTheme(Color3.fromRGB(r, g, b))
-    end)
-    
+
     return channel
 end
-    if ventanaExistente then
+
+function GrobalSettingsLibXP:Init(discordLib, existingWindow)
+    if existingWindow then
         local serverName = "ConfigServer"
-        ventanaExistente.Server:Server(serverName, "")
-        local configChannel = ventanaExistente:Channel(serverName, "Ajustes")
+        existingWindow.Server:Server(serverName, "")
+        local configChannel = existingWindow:Channel(serverName, "Ajustes")
         return self:CreateSettingsInChannel(configChannel, discordLib)
     else
-        local ventana = discordLib:Window("Configuración Global")
+        local ventana = discordLib:Window("Global Settings")
         local serverName = "ConfigServer"
         ventana.Server:Server(serverName, "")
         local configChannel = ventana:Channel(serverName, "Ajustes")
