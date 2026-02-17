@@ -902,217 +902,244 @@ function DiscordLib:Window(text)
             return sliderObject
         end
 
-        function Section:Colorpicker(text, default, callback)
-            local ColorPickerFrame = Instance.new("Frame")
-            local ColorPickerLabel = Instance.new("TextLabel")
-            local ColorButton = Instance.new("TextButton")
-            local ColorDisplay = Instance.new("Frame")
-            local ColorDisplayCorner = Instance.new("UICorner")
-            local ColorPickerCorner = Instance.new("UICorner")
+function Section:Colorpicker(text, default, callback)
+    local ColorPickerFrame = Instance.new("Frame")
+    local ColorPickerLabel = Instance.new("TextLabel")
+    local ColorButton = Instance.new("TextButton")
+    local ColorDisplay = Instance.new("Frame")
+    local ColorDisplayCorner = Instance.new("UICorner")
+    local ColorPickerCorner = Instance.new("UICorner")
 
-            local selectedColor = default or Color3.fromRGB(255, 255, 255)
-            local picking = false
+    local selectedColor = default or Color3.fromRGB(255, 255, 255)
+    local picking = false
 
-            ColorPickerFrame.Parent = SectionFrame
-            ColorPickerFrame.BackgroundColor3 = currentTheme.Tertiary
-            ColorPickerFrame.BorderSizePixel = 0
-            ColorPickerFrame.Size = UDim2.new(0, 370, 0, 38)  -- REDUCIDO de 460x42 a 370x38
-            ColorPickerFrame.ZIndex = 6
+    ColorPickerFrame.Parent = SectionFrame
+    ColorPickerFrame.BackgroundColor3 = currentTheme.Tertiary
+    ColorPickerFrame.BorderSizePixel = 0
+    ColorPickerFrame.Size = UDim2.new(0, 370, 0, 38)
+    ColorPickerFrame.ZIndex = 6
 
-            ColorPickerCorner.CornerRadius = UDim.new(0, 4)
-            ColorPickerCorner.Parent = ColorPickerFrame
+    ColorPickerCorner.CornerRadius = UDim.new(0, 4)
+    ColorPickerCorner.Parent = ColorPickerFrame
 
-            ColorPickerLabel.Parent = ColorPickerFrame
-            ColorPickerLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            ColorPickerLabel.BackgroundTransparency = 1.000
-            ColorPickerLabel.Position = UDim2.new(0, 5, 0, 0)
-            ColorPickerLabel.Size = UDim2.new(0, 310, 0, 38)
-            ColorPickerLabel.Font = Enum.Font.Gotham
-            ColorPickerLabel.Text = text
-            ColorPickerLabel.TextColor3 = currentTheme.Text
-            ColorPickerLabel.TextSize = 13.000
-            ColorPickerLabel.TextXAlignment = Enum.TextXAlignment.Left
-            ColorPickerLabel.ZIndex = 7
+    ColorPickerLabel.Parent = ColorPickerFrame
+    ColorPickerLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    ColorPickerLabel.BackgroundTransparency = 1.000
+    ColorPickerLabel.Position = UDim2.new(0, 5, 0, 0)
+    ColorPickerLabel.Size = UDim2.new(0, 310, 0, 38)
+    ColorPickerLabel.Font = Enum.Font.Gotham
+    ColorPickerLabel.Text = text
+    ColorPickerLabel.TextColor3 = currentTheme.Text
+    ColorPickerLabel.TextSize = 13.000
+    ColorPickerLabel.TextXAlignment = Enum.TextXAlignment.Left
+    ColorPickerLabel.ZIndex = 7
 
-            ColorButton.Parent = ColorPickerFrame
-            ColorButton.BackgroundColor3 = currentTheme.Secondary
-            ColorButton.BorderSizePixel = 0
-            ColorButton.Position = UDim2.new(0, 330, 0, 5)  -- Ajustado
-            ColorButton.Size = UDim2.new(0, 26, 0, 26)  -- REDUCIDO de 30x30 a 26x26
-            ColorButton.Text = ""
-            ColorButton.AutoButtonColor = false
-            ColorButton.ZIndex = 7
+    ColorButton.Parent = ColorPickerFrame
+    ColorButton.BackgroundColor3 = currentTheme.Secondary
+    ColorButton.BorderSizePixel = 0
+    ColorButton.Position = UDim2.new(0, 330, 0, 5)
+    ColorButton.Size = UDim2.new(0, 26, 0, 26)
+    ColorButton.Text = ""
+    ColorButton.AutoButtonColor = false
+    ColorButton.ZIndex = 7
 
-            local ColorButtonCorner = Instance.new("UICorner")
-            ColorButtonCorner.CornerRadius = UDim.new(0, 5)  -- REDUCIDO
-            ColorButtonCorner.Parent = ColorButton
+    local ColorButtonCorner = Instance.new("UICorner")
+    ColorButtonCorner.CornerRadius = UDim.new(0, 5)
+    ColorButtonCorner.Parent = ColorButton
 
-            ColorDisplay.Parent = ColorButton
-            ColorDisplay.BackgroundColor3 = selectedColor
-            ColorDisplay.BorderSizePixel = 0
-            ColorDisplay.Position = UDim2.new(0, 2, 0, 2)
-            ColorDisplay.Size = UDim2.new(0, 22, 0, 22)  -- REDUCIDO de 24x24 a 22x22
-            ColorDisplay.ZIndex = 8
+    ColorDisplay.Parent = ColorButton
+    ColorDisplay.BackgroundColor3 = selectedColor
+    ColorDisplay.BorderSizePixel = 0
+    ColorDisplay.Position = UDim2.new(0, 2, 0, 2)
+    ColorDisplay.Size = UDim2.new(0, 22, 0, 22)
+    ColorDisplay.ZIndex = 8
 
-            ColorDisplayCorner.CornerRadius = UDim.new(0, 4)
-            ColorDisplayCorner.Parent = ColorDisplay
+    ColorDisplayCorner.CornerRadius = UDim.new(0, 4)
+    ColorDisplayCorner.Parent = ColorDisplay
 
-            local function createColorPickerPopup()
-                if picking then return end
-                picking = true
+    local function createColorPickerPopup()
+        if picking then return end
+        picking = true
 
-                local popup = Instance.new("Frame")
-                local popupCorner = Instance.new("UICorner")
-                local hueGradient = Instance.new("Frame")
-                local hueCorner = Instance.new("UICorner")
-                local hueSlider = Instance.new("TextButton")
-                local hueSliderCorner = Instance.new("UICorner")
-                local colorDisplay = Instance.new("Frame")
-                local colorDisplayCorner = Instance.new("UICorner")
-                local confirmButton = Instance.new("TextButton")
-                local confirmCorner = Instance.new("UICorner")
-                local cancelButton = Instance.new("TextButton")
-                local cancelCorner = Instance.new("UICorner")
+        -- FONDO OSCURO QUE BLOQUEA CLICS
+        local BackgroundOverlay = Instance.new("Frame")
+        BackgroundOverlay.Name = "ColorPickerOverlay"
+        BackgroundOverlay.Parent = MainFrame
+        BackgroundOverlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        BackgroundOverlay.BackgroundTransparency = 0.5
+        BackgroundOverlay.BorderSizePixel = 0
+        BackgroundOverlay.Size = UDim2.new(1, 0, 1, 0)
+        BackgroundOverlay.Position = UDim2.new(0, 0, 0, 0)
+        BackgroundOverlay.ZIndex = 19
+        BackgroundOverlay.Active = true
+        BackgroundOverlay.Draggable = false
+        
+        -- BOTÓN INVISIBLE QUE CAPTURA CLICS (opcional, pero el frame ya captura)
+        -- El Frame ya captura los clics automáticamente cuando Active=true
 
-                popup.Parent = MainFrame
-                popup.BackgroundColor3 = currentTheme.Main
-                popup.BorderSizePixel = 0
-                popup.Position = UDim2.new(0.5, -150, 0.5, -100)
-                popup.Size = UDim2.new(0, 300, 0, 200)
-                popup.ZIndex = 20
+        local popup = Instance.new("Frame")
+        local popupCorner = Instance.new("UICorner")
+        local hueGradient = Instance.new("Frame")
+        local hueCorner = Instance.new("UICorner")
+        local hueSlider = Instance.new("TextButton")
+        local hueSliderCorner = Instance.new("UICorner")
+        local colorDisplay = Instance.new("Frame")
+        local colorDisplayCorner = Instance.new("UICorner")
+        local confirmButton = Instance.new("TextButton")
+        local confirmCorner = Instance.new("UICorner")
+        local cancelButton = Instance.new("TextButton")
+        local cancelCorner = Instance.new("UICorner")
 
-                popupCorner.CornerRadius = UDim.new(0, 8)
-                popupCorner.Parent = popup
+        popup.Parent = BackgroundOverlay  -- El popup va dentro del overlay
+        popup.BackgroundColor3 = currentTheme.Main
+        popup.BorderSizePixel = 0
+        popup.Position = UDim2.new(0.5, -150, 0.5, -100)
+        popup.Size = UDim2.new(0, 300, 0, 200)
+        popup.ZIndex = 20
+        popup.Active = true
+        popup.Draggable = false
 
-                hueGradient.Parent = popup
-                hueGradient.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-                hueGradient.BorderSizePixel = 0
-                hueGradient.Position = UDim2.new(0, 10, 0, 10)
-                hueGradient.Size = UDim2.new(0, 200, 0, 20)
-                hueGradient.ZIndex = 21
+        popupCorner.CornerRadius = UDim.new(0, 8)
+        popupCorner.Parent = popup
 
-                hueCorner.CornerRadius = UDim.new(0, 10)
-                hueCorner.Parent = hueGradient
+        hueGradient.Parent = popup
+        hueGradient.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        hueGradient.BorderSizePixel = 0
+        hueGradient.Position = UDim2.new(0, 10, 0, 10)
+        hueGradient.Size = UDim2.new(0, 200, 0, 20)
+        hueGradient.ZIndex = 21
 
-                local hueGradientObject = Instance.new("UIGradient")
-                hueGradientObject.Color = ColorSequence.new({
-                    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),
-                    ColorSequenceKeypoint.new(0.17, Color3.fromRGB(255, 255, 0)),
-                    ColorSequenceKeypoint.new(0.33, Color3.fromRGB(0, 255, 0)),
-                    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 255, 255)),
-                    ColorSequenceKeypoint.new(0.67, Color3.fromRGB(0, 0, 255)),
-                    ColorSequenceKeypoint.new(0.83, Color3.fromRGB(255, 0, 255)),
-                    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 0, 0))
-                })
-                hueGradientObject.Parent = hueGradient
+        hueCorner.CornerRadius = UDim.new(0, 10)
+        hueCorner.Parent = hueGradient
 
-                hueSlider.Parent = hueGradient
-                hueSlider.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-                hueSlider.BorderSizePixel = 0
-                hueSlider.Position = UDim2.new(0, -5, 0, -2)
-                hueSlider.Size = UDim2.new(0, 10, 0, 24)
-                hueSlider.Text = ""
-                hueSlider.ZIndex = 22
+        local hueGradientObject = Instance.new("UIGradient")
+        hueGradientObject.Color = ColorSequence.new({
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),
+            ColorSequenceKeypoint.new(0.17, Color3.fromRGB(255, 255, 0)),
+            ColorSequenceKeypoint.new(0.33, Color3.fromRGB(0, 255, 0)),
+            ColorSequenceKeypoint.new(0.5, Color3.fromRGB(0, 255, 255)),
+            ColorSequenceKeypoint.new(0.67, Color3.fromRGB(0, 0, 255)),
+            ColorSequenceKeypoint.new(0.83, Color3.fromRGB(255, 0, 255)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 0, 0))
+        })
+        hueGradientObject.Parent = hueGradient
 
-                hueSliderCorner.CornerRadius = UDim.new(0, 5)
-                hueSliderCorner.Parent = hueSlider
+        hueSlider.Parent = hueGradient
+        hueSlider.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        hueSlider.BorderSizePixel = 0
+        hueSlider.Position = UDim2.new(0, -5, 0, -2)
+        hueSlider.Size = UDim2.new(0, 10, 0, 24)
+        hueSlider.Text = ""
+        hueSlider.ZIndex = 22
 
-                colorDisplay.Parent = popup
-                colorDisplay.BackgroundColor3 = selectedColor
-                colorDisplay.BorderSizePixel = 0
-                colorDisplay.Position = UDim2.new(0, 220, 0, 10)
-                colorDisplay.Size = UDim2.new(0, 70, 0, 70)
-                colorDisplay.ZIndex = 21
+        hueSliderCorner.CornerRadius = UDim.new(0, 5)
+        hueSliderCorner.Parent = hueSlider
 
-                colorDisplayCorner.CornerRadius = UDim.new(0, 6)
-                colorDisplayCorner.Parent = colorDisplay
+        colorDisplay.Parent = popup
+        colorDisplay.BackgroundColor3 = selectedColor
+        colorDisplay.BorderSizePixel = 0
+        colorDisplay.Position = UDim2.new(0, 220, 0, 10)
+        colorDisplay.Size = UDim2.new(0, 70, 0, 70)
+        colorDisplay.ZIndex = 21
 
-                confirmButton.Parent = popup
-                confirmButton.BackgroundColor3 = currentTheme.Accent
-                confirmButton.BorderSizePixel = 0
-                confirmButton.Position = UDim2.new(0, 10, 0, 160)
-                confirmButton.Size = UDim2.new(0, 135, 0, 30)
-                confirmButton.Text = "Confirm"
-                confirmButton.Font = Enum.Font.Gotham
-                confirmButton.TextColor3 = currentTheme.Text
-                confirmButton.TextSize = 14
-                confirmButton.ZIndex = 21
+        colorDisplayCorner.CornerRadius = UDim.new(0, 6)
+        colorDisplayCorner.Parent = colorDisplay
 
-                confirmCorner.CornerRadius = UDim.new(0, 6)
-                confirmCorner.Parent = confirmButton
+        confirmButton.Parent = popup
+        confirmButton.BackgroundColor3 = currentTheme.Accent
+        confirmButton.BorderSizePixel = 0
+        confirmButton.Position = UDim2.new(0, 10, 0, 160)
+        confirmButton.Size = UDim2.new(0, 135, 0, 30)
+        confirmButton.Text = "Confirm"
+        confirmButton.Font = Enum.Font.Gotham
+        confirmButton.TextColor3 = currentTheme.Text
+        confirmButton.TextSize = 14
+        confirmButton.ZIndex = 21
+        confirmButton.AutoButtonColor = false
 
-                cancelButton.Parent = popup
-                cancelButton.BackgroundColor3 = currentTheme.Tertiary
-                cancelButton.BorderSizePixel = 0
-                cancelButton.Position = UDim2.new(0, 155, 0, 160)
-                cancelButton.Size = UDim2.new(0, 135, 0, 30)
-                cancelButton.Text = "Cancel"
-                cancelButton.Font = Enum.Font.Gotham
-                cancelButton.TextColor3 = currentTheme.Text
-                cancelButton.TextSize = 14
-                cancelButton.ZIndex = 21
+        confirmCorner.CornerRadius = UDim.new(0, 6)
+        confirmCorner.Parent = confirmButton
 
-                cancelCorner.CornerRadius = UDim.new(0, 6)
-                cancelCorner.Parent = cancelButton
+        cancelButton.Parent = popup
+        cancelButton.BackgroundColor3 = currentTheme.Tertiary
+        cancelButton.BorderSizePixel = 0
+        cancelButton.Position = UDim2.new(0, 155, 0, 160)
+        cancelButton.Size = UDim2.new(0, 135, 0, 30)
+        cancelButton.Text = "Cancel"
+        cancelButton.Font = Enum.Font.Gotham
+        cancelButton.TextColor3 = currentTheme.Text
+        cancelButton.TextSize = 14
+        cancelButton.ZIndex = 21
+        cancelButton.AutoButtonColor = false
 
-                local hueDragging = false
+        cancelCorner.CornerRadius = UDim.new(0, 6)
+        cancelCorner.Parent = cancelButton
 
-                local function updateHue(input)
-                    local pos = input.Position.X - hueGradient.AbsolutePosition.X
-                    local size = hueGradient.AbsoluteSize.X
-                    local percent = math.clamp(pos / size, 0, 1)
-                    hueSlider.Position = UDim2.new(percent, -5, 0, -2)
-                    colorDisplay.BackgroundColor3 = Color3.fromHSV(percent, 1, 1)
-                end
+        local hueDragging = false
 
-                hueSlider.InputBegan:Connect(function(input)
-                    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                        hueDragging = true
-                        updateHue(input)
-                    end
-                end)
-
-                hueSlider.InputChanged:Connect(function(input)
-                    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-                        if hueDragging then
-                            updateHue(input)
-                        end
-                    end
-                end)
-
-                UserInputService.InputEnded:Connect(function(input)
-                    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                        hueDragging = false
-                    end
-                end)
-
-                hueGradient.InputBegan:Connect(function(input)
-                    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                        updateHue(input)
-                    end
-                end)
-
-                confirmButton.MouseButton1Click:Connect(function()
-                    selectedColor = colorDisplay.BackgroundColor3
-                    ColorDisplay.BackgroundColor3 = selectedColor
-                    if callback then
-                        callback(selectedColor)
-                    end
-                    popup:Destroy()
-                    picking = false
-                end)
-
-                cancelButton.MouseButton1Click:Connect(function()
-                    popup:Destroy()
-                    picking = false
-                end)
-            end
-
-            ColorButton.MouseButton1Click:Connect(createColorPickerPopup)
-
-            SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 30)
-            return ColorPickerFrame
+        local function updateHue(input)
+            local pos = input.Position.X - hueGradient.AbsolutePosition.X
+            local size = hueGradient.AbsoluteSize.X
+            local percent = math.clamp(pos / size, 0, 1)
+            hueSlider.Position = UDim2.new(percent, -5, 0, -2)
+            colorDisplay.BackgroundColor3 = Color3.fromHSV(percent, 1, 1)
         end
+
+        hueSlider.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                hueDragging = true
+                updateHue(input)
+            end
+        end)
+
+        hueSlider.InputChanged:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+                if hueDragging then
+                    updateHue(input)
+                end
+            end
+        end)
+
+        UserInputService.InputEnded:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                hueDragging = false
+            end
+        end)
+
+        hueGradient.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                updateHue(input)
+            end
+        end)
+
+        confirmButton.MouseButton1Click:Connect(function()
+            selectedColor = colorDisplay.BackgroundColor3
+            ColorDisplay.BackgroundColor3 = selectedColor
+            if callback then
+                callback(selectedColor)
+            end
+            BackgroundOverlay:Destroy()  -- Destruir overlay y popup
+            picking = false
+        end)
+
+        cancelButton.MouseButton1Click:Connect(function()
+            BackgroundOverlay:Destroy()
+            picking = false
+        end)
+        
+        -- También cerrar si se hace clic en el fondo (opcional)
+        BackgroundOverlay.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                -- No hacer nada, solo capturar el clic para que no pase
+            end
+        end)
+    end
+
+    ColorButton.MouseButton1Click:Connect(createColorPickerPopup)
+
+    SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 30)
+    return ColorPickerFrame
+end
 
         function Section:Dropdown(text, options, callback)
             local DropdownFrame = Instance.new("Frame")
