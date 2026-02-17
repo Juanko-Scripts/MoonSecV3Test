@@ -168,57 +168,85 @@ function GrobalSettingsLibXP:GetThemesByCategory(category)
     return results
 end
 
-function GrobalSettingsLibXP:CreateSettingsPanel(discordLib, windowName)
-    windowName = windowName or "Configuración Global"
+function GrobalSettingsLibXP:CreateSettingsInChannel(channel, discordLib)
+    if not channel then
+        return
+    end
     
-    local ventana = discordLib:Window(windowName)
-    
-    local serverName = "ConfigServer"
-    ventana.Server:Server(serverName, "")
-    
-    local configChannel = ventana:Channel(serverName, "Ajustes")
-    
-    configChannel:Label("GLOBAL SETTINGS")
-    configChannel:Seperator()
+    channel:Label("THEME SETTINGS")
+    channel:Seperator()
     
     local themeNames = self:GetThemeNames()
-    configChannel:Label("SELECT THEME")
-    configChannel:Dropdown("Change theme", themeNames, function(selectedTheme)
+    channel:Dropdown("Select Theme", themeNames, function(selectedTheme)
         self:ApplyTheme(selectedTheme, discordLib)
         discordLib:Notification({
-            title = "The subject was changed",
+            title = "Theme Changed",
             desc = "Theme: " .. selectedTheme,
             time = 2
         })
     end)
     
-    configChannel:Label("TOPICS INSTANT THEME SWITCHING")
-    configChannel:Button("Dark Discord", function()
+    channel:Label("QUICK TOPICS")
+    channel:Button("Dark Theme", function()
         self:ApplyTheme("DiscordDark", discordLib)
-        discordLib:Notification({title = "Tema Oscuro", desc = "Activado", time = 1.5})
+        discordLib:Notification({title = "Dark Theme", desc = "Activado", time = 1.5})
     end)
     
-    configChannel:Button("Discord light", function()
+    channel:Button("Clear Theme", function()
         self:ApplyTheme("DiscordLight", discordLib)
-        discordLib:Notification({title = "Tema Claro", desc = "Activado", time = 1.5})
+        discordLib:Notification({title = "Clear Theme", desc = "Activado", time = 1.5})
     end)
     
-    configChannel:Button("Theme Amoled", function()
+    channel:Button("AMOLED Theme", function()
         self:ApplyTheme("Black", discordLib)
-        discordLib:Notification({title = "Tema AMOLED", desc = "Activado", time = 1.5})
+        discordLib:Notification({title = "AMOLED Theme", desc = "Activado", time = 1.5})
     end)
     
-    configChannel:Button("Random Theme", function()
+    channel:Button("Random Theme", function()
         local randomTheme = self:GetRandomTheme()
         self:ApplyTheme(randomTheme, discordLib)
         discordLib:Notification({title = "Random Theme", desc = randomTheme, time = 1.5})
     end)
     
-    return ventana, serverName, configChannel
+    channel:Seperator()
+    channel:Label("Color Personalizado RGB")
+    
+    local r, g, b = 32, 34, 37
+    
+    channel:Slider("Rojo", 0, 255, r, function(value)
+        r = value
+        discordLib:SetTheme(Color3.fromRGB(r, g, b))
+    end)
+    
+    channel:Slider("Verde", 0, 255, g, function(value)
+        g = value
+        discordLib:SetTheme(Color3.fromRGB(r, g, b))
+    end)
+    
+    channel:Slider("Azul", 0, 255, b, function(value)
+        b = value
+        discordLib:SetTheme(Color3.fromRGB(r, g, b))
+    end)
+    
+    channel:Button("Resetear", function()
+        r, g, b = 32, 34, 37
+        discordLib:SetTheme(Color3.fromRGB(r, g, b))
+    end)
+    
+    return channel
 end
-
-function GrobalSettingsLibXP:Init(discordLib)
-    return self:CreateSettingsPanel(discordLib, "Grobal Settings")
+    if ventanaExistente then
+        local serverName = "ConfigServer"
+        ventanaExistente.Server:Server(serverName, "")
+        local configChannel = ventanaExistente:Channel(serverName, "Ajustes")
+        return self:CreateSettingsInChannel(configChannel, discordLib)
+    else
+        local ventana = discordLib:Window("Configuración Global")
+        local serverName = "ConfigServer"
+        ventana.Server:Server(serverName, "")
+        local configChannel = ventana:Channel(serverName, "Ajustes")
+        return self:CreateSettingsInChannel(configChannel, discordLib)
+    end
 end
 
 return GrobalSettingsLibXP
