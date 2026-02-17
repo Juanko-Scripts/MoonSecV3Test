@@ -2078,28 +2078,16 @@ end
 end
 
 local activeNotifications = {}
+local nextYPosition = 10
+local spacing = 80
+
 function DiscordLib:Notification(data)
     local title = data.title or "Notification"
     local desc = data.desc or ""
     local time = data.time or 5
-    local baseY = 10
-    local offset = 0
-    local spacing = 80 -- Espacio entre notificaciones (altura + margen)
-    
-    local usedPositions = {}
-    for i, notif in ipairs(activeNotifications) do
-        if notif and notif.Parent then
-            usedPositions[notif.CurrentY] = true
-        else
-            table.remove(activeNotifications, i)
-        end
-    end
-    
-    while usedPositions[baseY + offset] do
-        offset = offset + spacing
-    end
-    
-    local targetY = baseY + offset
+
+    local currentY = nextYPosition
+    nextYPosition = nextYPosition + spacing
 
     local NotifHolder = Instance.new("Frame")
     local NotifTitle = Instance.new("TextLabel")
@@ -2110,13 +2098,11 @@ function DiscordLib:Notification(data)
     NotifHolder.Parent = Discord
     NotifHolder.BackgroundColor3 = currentTheme.Main
     NotifHolder.BorderSizePixel = 0
-    NotifHolder.Position = UDim2.new(1, -310, 0, targetY)
+    NotifHolder.Position = UDim2.new(1, -310, 0, currentY)
     NotifHolder.Size = UDim2.new(0, 280, 0, 65)
     NotifHolder.ClipsDescendants = true
     NotifHolder.BackgroundTransparency = 1
     NotifHolder.ZIndex = 100
-    
-    NotifHolder.CurrentY = targetY
 
     NotifCorner.CornerRadius = UDim.new(0, 6)
     NotifCorner.Parent = NotifHolder
@@ -2149,11 +2135,15 @@ function DiscordLib:Notification(data)
     NotifDesc.TextTransparency = 1
     NotifDesc.ZIndex = 101
 
-    table.insert(activeNotifications, NotifHolder)
+    local notifData = {
+        frame = NotifHolder,
+        yPosition = currentY
+    }
+    table.insert(activeNotifications, notifData)
 
-    NotifHolder.Position = UDim2.new(1, -310, 0, targetY - 80)
+NotifHolder.Position = UDim2.new(1, -310, 0, currentY - 80)
     TweenService:Create(NotifHolder, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
-        Position = UDim2.new(1, -310, 0, targetY),
+        Position = UDim2.new(1, -310, 0, currentY),
         BackgroundTransparency = 0
     }):Play()
     
@@ -2162,15 +2152,16 @@ function DiscordLib:Notification(data)
 
     spawn(function()
         wait(time)
-        for i, notif in ipairs(activeNotifications) do
-            if notif == NotifHolder then
+        
+        for i, data in ipairs(activeNotifications) do
+            if data.frame == NotifHolder then
                 table.remove(activeNotifications, i)
                 break
             end
         end
         
         TweenService:Create(NotifHolder, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
-            Position = UDim2.new(1, -310, 0, targetY - 80),
+        Position = UDim2.new(1, -310, 0, currentY - 80),
             BackgroundTransparency = 1
         }):Play()
         
@@ -2179,6 +2170,18 @@ function DiscordLib:Notification(data)
         
         wait(0.3)
         NotifHolder:Destroy()
+        local newY = 10
+        for _, data in ipairs(activeNotifications) do
+            if data.frame and data.frame.Parent then
+                local targetY = newY
+                TweenService:Create(data.frame, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
+                Position = UDim2.new(1, -310, 0, targetY)
+                }):Play()
+                data.yPosition = targetY
+                newY = newY + spacing
+            end
+        end
+        nextYPosition = newY
     end)
 end
 
