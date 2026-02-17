@@ -2565,24 +2565,29 @@ function DiscordLib:CreateAcrylicBlur()
     local acrylicBlurEnabled = true
     local acrylicNoiseEnabled = true
     local acrylicFrame = nil
-    privateAcrylicConnection = nil
+    local acrylicConnection = nil
+    local moveConnection = nil
     local Lighting = game:GetService("Lighting")
     local RunService = game:GetService("RunService")
 
     local function createAcrylicFrame()
         if acrylicFrame then return end
+        
         local discordGui = game:GetService("CoreGui"):FindFirstChild("Discord")
         if not discordGui then return end
+        
+        local mainFrame = discordGui:FindFirstChild("MainFrame")
+        if not mainFrame then return end
 
         acrylicFrame = Instance.new("Frame")
         acrylicFrame.Name = "AcrylicBlur"
-        acrylicFrame.Parent = discordGui  -- Padre directo del ScreenGui
+        acrylicFrame.Parent = discordGui
         acrylicFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
         acrylicFrame.BackgroundTransparency = 0.85
         acrylicFrame.BorderSizePixel = 0
-        acrylicFrame.Size = UDim2.new(1, 0, 1, 0)
-        acrylicFrame.Position = UDim2.new(0, 0, 0, 0)
-        acrylicFrame.ZIndex = 0 
+        acrylicFrame.Size = mainFrame.Size
+        acrylicFrame.Position = mainFrame.Position
+        acrylicFrame.ZIndex = 0
         acrylicFrame.Active = false
         acrylicFrame.ClipsDescendants = true
 
@@ -2614,6 +2619,30 @@ function DiscordLib:CreateAcrylicBlur()
         blurEffect.Parent = Lighting
         blurEffect.Size = 12
         blurEffect.Enabled = acrylicBlurEnabled
+
+        moveConnection = mainFrame:GetPropertyChangedSignal("Position"):Connect(function()
+            if acrylicFrame and acrylicFrame.Parent then
+                acrylicFrame.Position = mainFrame.Position
+            end
+        end)
+
+        mainFrame:GetPropertyChangedSignal("Size"):Connect(function()
+            if acrylicFrame and acrylicFrame.Parent then
+                acrylicFrame.Size = mainFrame.Size
+            end
+        end)
+
+        mainFrame:GetPropertyChangedSignal("Visible"):Connect(function()
+            if acrylicFrame and acrylicFrame.Parent then
+                acrylicFrame.Visible = mainFrame.Visible
+            end
+        end)
+
+        mainFrame:GetPropertyChangedSignal("AnchorPoint"):Connect(function()
+            if acrylicFrame and acrylicFrame.Parent then
+                acrylicFrame.AnchorPoint = mainFrame.AnchorPoint
+            end
+        end)
     end
 
     local function updateAcrylic()
@@ -2632,6 +2661,7 @@ function DiscordLib:CreateAcrylicBlur()
                 if noise then
                     noise.ImageTransparency = 0.96 * (1 - acrylicIntensity * 0.3)
                 end
+
                 acrylicFrame.BackgroundTransparency = 0.85 + (acrylicIntensity * 0.1)
             end
         end)
@@ -2641,6 +2671,10 @@ function DiscordLib:CreateAcrylicBlur()
         if acrylicConnection then
             acrylicConnection:Disconnect()
             acrylicConnection = nil
+        end
+        if moveConnection then
+            moveConnection:Disconnect()
+            moveConnection = nil
         end
         if acrylicFrame then
             acrylicFrame:Destroy()
