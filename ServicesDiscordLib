@@ -252,13 +252,13 @@ end
 function GrobalSettingsLibXP:Init(discordLib, existingWindow)
     if existingWindow then
         local serverName = "ConfigServer"
-        existingWindow.Server:Server(serverName, "")
+        existingWindow.Server:Server(serverName, "rbxassetid://10734950309")
         local configChannel = existingWindow:Channel(serverName, "Ajustes")
         return self:CreateSettingsInChannel(configChannel, discordLib)
     else
         local ventana = discordLib:Window("Global Settings")
         local serverName = "ConfigServer"
-        ventana.Server:Server(serverName, "")
+        ventana.Server:Server(serverName, "rbxassetid://10734950309")
         local configChannel = ventana:Channel(serverName, "Ajustes")
         return self:CreateSettingsInChannel(configChannel, discordLib)
     end
