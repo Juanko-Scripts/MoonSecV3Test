@@ -961,21 +961,18 @@ function Section:Colorpicker(text, default, callback)
         if picking then return end
         picking = true
 
-        -- FONDO OSCURO QUE BLOQUEA CLICS
+        -- FONDO OSCURO CON FADE IN
         local BackgroundOverlay = Instance.new("Frame")
         BackgroundOverlay.Name = "ColorPickerOverlay"
         BackgroundOverlay.Parent = MainFrame
         BackgroundOverlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-        BackgroundOverlay.BackgroundTransparency = 0.5
+        BackgroundOverlay.BackgroundTransparency = 1  -- Comienza invisible
         BackgroundOverlay.BorderSizePixel = 0
         BackgroundOverlay.Size = UDim2.new(1, 0, 1, 0)
         BackgroundOverlay.Position = UDim2.new(0, 0, 0, 0)
         BackgroundOverlay.ZIndex = 19
         BackgroundOverlay.Active = true
         BackgroundOverlay.Draggable = false
-        
-        -- BOTÓN INVISIBLE QUE CAPTURA CLICS (opcional, pero el frame ya captura)
-        -- El Frame ya captura los clics automáticamente cuando Active=true
 
         local popup = Instance.new("Frame")
         local popupCorner = Instance.new("UICorner")
@@ -990,7 +987,7 @@ function Section:Colorpicker(text, default, callback)
         local cancelButton = Instance.new("TextButton")
         local cancelCorner = Instance.new("UICorner")
 
-        popup.Parent = BackgroundOverlay  -- El popup va dentro del overlay
+        popup.Parent = BackgroundOverlay
         popup.BackgroundColor3 = currentTheme.Main
         popup.BorderSizePixel = 0
         popup.Position = UDim2.new(0.5, -150, 0.5, -100)
@@ -998,6 +995,8 @@ function Section:Colorpicker(text, default, callback)
         popup.ZIndex = 20
         popup.Active = true
         popup.Draggable = false
+        popup.BackgroundTransparency = 1  -- Comienza invisible
+        popup.Scale = 0.8  -- Comienza más pequeño
 
         popupCorner.CornerRadius = UDim.new(0, 8)
         popupCorner.Parent = popup
@@ -1008,6 +1007,7 @@ function Section:Colorpicker(text, default, callback)
         hueGradient.Position = UDim2.new(0, 10, 0, 10)
         hueGradient.Size = UDim2.new(0, 200, 0, 20)
         hueGradient.ZIndex = 21
+        hueGradient.BackgroundTransparency = 1
 
         hueCorner.CornerRadius = UDim.new(0, 10)
         hueCorner.Parent = hueGradient
@@ -1031,6 +1031,7 @@ function Section:Colorpicker(text, default, callback)
         hueSlider.Size = UDim2.new(0, 10, 0, 24)
         hueSlider.Text = ""
         hueSlider.ZIndex = 22
+        hueSlider.BackgroundTransparency = 1
 
         hueSliderCorner.CornerRadius = UDim.new(0, 5)
         hueSliderCorner.Parent = hueSlider
@@ -1041,6 +1042,7 @@ function Section:Colorpicker(text, default, callback)
         colorDisplay.Position = UDim2.new(0, 220, 0, 10)
         colorDisplay.Size = UDim2.new(0, 70, 0, 70)
         colorDisplay.ZIndex = 21
+        colorDisplay.BackgroundTransparency = 1
 
         colorDisplayCorner.CornerRadius = UDim.new(0, 6)
         colorDisplayCorner.Parent = colorDisplay
@@ -1056,6 +1058,8 @@ function Section:Colorpicker(text, default, callback)
         confirmButton.TextSize = 14
         confirmButton.ZIndex = 21
         confirmButton.AutoButtonColor = false
+        confirmButton.BackgroundTransparency = 1
+        confirmButton.TextTransparency = 1
 
         confirmCorner.CornerRadius = UDim.new(0, 6)
         confirmCorner.Parent = confirmButton
@@ -1071,9 +1075,25 @@ function Section:Colorpicker(text, default, callback)
         cancelButton.TextSize = 14
         cancelButton.ZIndex = 21
         cancelButton.AutoButtonColor = false
+        cancelButton.BackgroundTransparency = 1
+        cancelButton.TextTransparency = 1
 
         cancelCorner.CornerRadius = UDim.new(0, 6)
         cancelCorner.Parent = cancelButton
+
+        -- FADE IN - Animación de entrada
+        TweenService:Create(BackgroundOverlay, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {BackgroundTransparency = 0.5}):Play()
+        TweenService:Create(popup, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+            BackgroundTransparency = 0,
+            Scale = 1
+        }):Play()
+        
+        -- Animar todos los elementos internos
+        TweenService:Create(hueGradient, TweenInfo.new(0.3), {BackgroundTransparency = 0}):Play()
+        TweenService:Create(hueSlider, TweenInfo.new(0.3), {BackgroundTransparency = 0}):Play()
+        TweenService:Create(colorDisplay, TweenInfo.new(0.3), {BackgroundTransparency = 0}):Play()
+        TweenService:Create(confirmButton, TweenInfo.new(0.3), {BackgroundTransparency = 0, TextTransparency = 0}):Play()
+        TweenService:Create(cancelButton, TweenInfo.new(0.3), {BackgroundTransparency = 0, TextTransparency = 0}):Play()
 
         local hueDragging = false
 
@@ -1112,25 +1132,42 @@ function Section:Colorpicker(text, default, callback)
             end
         end)
 
+        -- Función para cerrar con fade out
+        local function closeWithFade()
+            -- FADE OUT
+            TweenService:Create(BackgroundOverlay, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {BackgroundTransparency = 1}):Play()
+            TweenService:Create(popup, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+                BackgroundTransparency = 1,
+                Scale = 0.8
+            }):Play()
+            
+            TweenService:Create(hueGradient, TweenInfo.new(0.2), {BackgroundTransparency = 1}):Play()
+            TweenService:Create(hueSlider, TweenInfo.new(0.2), {BackgroundTransparency = 1}):Play()
+            TweenService:Create(colorDisplay, TweenInfo.new(0.2), {BackgroundTransparency = 1}):Play()
+            TweenService:Create(confirmButton, TweenInfo.new(0.2), {BackgroundTransparency = 1, TextTransparency = 1}):Play()
+            TweenService:Create(cancelButton, TweenInfo.new(0.2), {BackgroundTransparency = 1, TextTransparency = 1}):Play()
+            
+            wait(0.2)
+            BackgroundOverlay:Destroy()
+            picking = false
+        end
+
         confirmButton.MouseButton1Click:Connect(function()
             selectedColor = colorDisplay.BackgroundColor3
             ColorDisplay.BackgroundColor3 = selectedColor
             if callback then
                 callback(selectedColor)
             end
-            BackgroundOverlay:Destroy()  -- Destruir overlay y popup
-            picking = false
+            closeWithFade()
         end)
 
         cancelButton.MouseButton1Click:Connect(function()
-            BackgroundOverlay:Destroy()
-            picking = false
+            closeWithFade()
         end)
         
-        -- También cerrar si se hace clic en el fondo (opcional)
         BackgroundOverlay.InputBegan:Connect(function(input)
             if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                -- No hacer nada, solo capturar el clic para que no pase
+                -- Capturar clics sin hacer nada
             end
         end)
     end
