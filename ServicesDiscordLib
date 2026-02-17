@@ -226,7 +226,7 @@ channel:Button("Random Theme", function()
     end)
 
     channel:Seperator()
-local blur = discordLib:CreateBackgroundBlur()
+local blur = discordLib:CreateAcrylicBlur()
     channel:Label("TRANSPARENCY / EFFECTS / BETA")
 channel:Toggle("Blur Effect", false, function(Y)
     if Y then
@@ -234,6 +234,9 @@ channel:Toggle("Blur Effect", false, function(Y)
     else
         blur:Disable()
     end
+end)
+    channel:Toggle("Noise Effect", true, function(state)
+    acrylicBlur:SetNoiseEnabled(state)
 end)
     channel:Slider("Blur Intensity", 0, 100, 10, function(value)
     blur:SetIntensity(value)
