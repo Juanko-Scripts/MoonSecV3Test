@@ -258,7 +258,10 @@ function DiscordLib:Window(text)
     Userpad.Size = UDim2.new(0, 160, 0, 28)
     Userpad.ZIndex = 10
     Userpad.BackgroundTransparency = 0.3
-    Userpad.CornerRadius = UDim.new(0, 4)
+
+    local UserpadCorner = Instance.new("UICorner")
+    UserpadCorner.CornerRadius = UDim.new(0, 4)
+    UserpadCorner.Parent = Userpad
 
     UserIcon.Name = "UserIcon"
     UserIcon.Parent = Userpad
@@ -267,10 +270,8 @@ function DiscordLib:Window(text)
     UserIcon.Position = UDim2.new(0.05, 0, 0.1, 0)
     UserIcon.Size = UDim2.new(0, 22, 0, 22)
     UserIcon.ZIndex = 11
-    UserIcon.CornerRadius = UDim.new(1, 2)
 
     UserIconCorner.CornerRadius = UDim.new(1, 2)
-    UserIconCorner.Name = "UserIconCorner"
     UserIconCorner.Parent = UserIcon
 
     UserImage.Name = "UserImage"
@@ -330,7 +331,6 @@ function DiscordLib:Window(text)
     ServersHoldFrame.Position = UDim2.new(0.01, 0, 0.08, 0)
     ServersHoldFrame.Size = UDim2.new(0, 60, 0, 350)
     ServersHoldFrame.ZIndex = 2
-    ServersHoldFrame.CornerRadius = UDim.new(0, 4)
 
     local ServersHoldFrameCorner = Instance.new("UICorner")
     ServersHoldFrameCorner.CornerRadius = UDim.new(0, 4)
@@ -365,7 +365,6 @@ function DiscordLib:Window(text)
     ChannelsHoldFrame.Position = UDim2.new(0.12, 0, 0.08, 0)
     ChannelsHoldFrame.Size = UDim2.new(0, 130, 0, 350)
     ChannelsHoldFrame.ZIndex = 2
-    ChannelsHoldFrame.CornerRadius = UDim.new(0, 4)
 
     local ChannelsHoldFrameCorner = Instance.new("UICorner")
     ChannelsHoldFrameCorner.CornerRadius = UDim.new(0, 4)
@@ -594,7 +593,6 @@ function DiscordLib:Window(text)
         ServerBtn.Text = ""
         ServerBtn.BackgroundTransparency = 0.5
         ServerBtn.ZIndex = 4
-        ServerBtn.CornerRadius = UDim.new(0, 20)
 
         ServerCorner.CornerRadius = UDim.new(0, 20)
         ServerCorner.Parent = ServerBtn
@@ -608,7 +606,6 @@ function DiscordLib:Window(text)
         ServerIcon.Image = Image
         ServerIcon.ImageColor3 = currentTheme.Text
         ServerIcon.ZIndex = 5
-        ServerIcon.CornerRadius = UDim.new(0, 18)
 
         local ServerIconCorner = Instance.new("UICorner")
         ServerIconCorner.CornerRadius = UDim.new(0, 18)
@@ -679,7 +676,6 @@ function DiscordLib:Window(text)
         ChannelBtn.Text = ""
         ChannelBtn.ZIndex = 4
         ChannelBtn.Visible = false
-        ChannelBtn.CornerRadius = UDim.new(0, 4)
 
         ChannelBtnCorner.CornerRadius = UDim.new(0, 4)
         ChannelBtnCorner.Parent = ChannelBtn
@@ -770,7 +766,10 @@ function DiscordLib:Window(text)
         SectionFrame.ScrollBarThickness = 4
         SectionFrame.Visible = false
         SectionFrame.ZIndex = 5
-        SectionFrame.CornerRadius = UDim.new(0, 4)
+
+        local SectionFrameCorner = Instance.new("UICorner")
+        SectionFrameCorner.CornerRadius = UDim.new(0, 4)
+        SectionFrameCorner.Parent = SectionFrame
 
         SectionTitle.Name = "SectionTitle"
         SectionTitle.Parent = SectionFrame
@@ -811,7 +810,6 @@ function DiscordLib:Window(text)
             Label.TextSize = 11.000
             Label.TextXAlignment = Enum.TextXAlignment.Left
             Label.ZIndex = 6
-
             SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 30)
             return Label
         end
@@ -823,7 +821,10 @@ function DiscordLib:Window(text)
             ParagraphFrame.BorderSizePixel = 0
             ParagraphFrame.Size = UDim2.new(0, 370, 0, 45)
             ParagraphFrame.ZIndex = 6
-            ParagraphFrame.CornerRadius = UDim.new(0, 4)
+
+            local ParagraphCorner = Instance.new("UICorner")
+            ParagraphCorner.CornerRadius = UDim.new(0, 4)
+            ParagraphCorner.Parent = ParagraphFrame
 
             local TitleLabel = Instance.new("TextLabel")
             TitleLabel.Parent = ParagraphFrame
@@ -857,16 +858,14 @@ function DiscordLib:Window(text)
 
         function Section:Seperator()
             local Seperator = Instance.new("Frame")
-            local SeperatorCorner = Instance.new("UICorner")
-            
             Seperator.Parent = SectionFrame
             Seperator.BackgroundColor3 = currentTheme.TextMuted
             Seperator.BackgroundTransparency = 0.7
             Seperator.BorderSizePixel = 0
             Seperator.Size = UDim2.new(0, 370, 0, 1)
             Seperator.ZIndex = 6
-            Seperator.CornerRadius = UDim.new(0, 1)
-            
+
+            local SeperatorCorner = Instance.new("UICorner")
             SeperatorCorner.CornerRadius = UDim.new(0, 1)
             SeperatorCorner.Parent = Seperator
             
@@ -876,8 +875,6 @@ function DiscordLib:Window(text)
 
         function Section:Button(text, callback)
             local Button = Instance.new("TextButton")
-            local ButtonCorner = Instance.new("UICorner")
-
             Button.Parent = SectionFrame
             Button.BackgroundColor3 = currentTheme.Tertiary
             Button.BorderSizePixel = 0
@@ -888,8 +885,8 @@ function DiscordLib:Window(text)
             Button.TextColor3 = currentTheme.Text
             Button.TextSize = 13.000
             Button.ZIndex = 6
-            Button.CornerRadius = UDim.new(0, 4)
 
+            local ButtonCorner = Instance.new("UICorner")
             ButtonCorner.CornerRadius = UDim.new(0, 4)
             ButtonCorner.Parent = Button
 
@@ -924,7 +921,6 @@ function DiscordLib:Window(text)
             Toggle.TextColor3 = currentTheme.Text
             Toggle.TextSize = 13.000
             Toggle.ZIndex = 6
-            Toggle.CornerRadius = UDim.new(0, 4)
 
             ToggleCorner.CornerRadius = UDim.new(0, 4)
             ToggleCorner.Parent = Toggle
@@ -948,7 +944,6 @@ function DiscordLib:Window(text)
             ToggleFrame.Position = UDim2.new(0, 340, 0, 4)
             ToggleFrame.Size = UDim2.new(0, 18, 0, 18)
             ToggleFrame.ZIndex = 7
-            ToggleFrame.CornerRadius = UDim.new(0, 3)
 
             ToggleFrameCorner.CornerRadius = UDim.new(0, 3)
             ToggleFrameCorner.Parent = ToggleFrame
@@ -960,7 +955,6 @@ function DiscordLib:Window(text)
             ToggleFill.Position = UDim2.new(0, 2, 0, 2)
             ToggleFill.ZIndex = 8
             ToggleFill.Visible = toggled
-            ToggleFill.CornerRadius = UDim.new(0, 2)
 
             ToggleFillCorner.CornerRadius = UDim.new(0, 2)
             ToggleFillCorner.Parent = ToggleFill
@@ -992,218 +986,239 @@ function DiscordLib:Window(text)
             return Toggle
         end
 
-function Section:ToggleSlider(text, defaultState, min, max, defaultVal, callback)
-    local MainFrame = Instance.new("Frame")
-    MainFrame.Parent = SectionFrame
-    MainFrame.BackgroundColor3 = currentTheme.Tertiary
-    MainFrame.BorderSizePixel = 0
-    MainFrame.Size = UDim2.new(0, 370, 0, 80)
-    MainFrame.ZIndex = 6
-    MainFrame.CornerRadius = UDim.new(0, 4)
+        function Section:ToggleSlider(text, defaultState, min, max, defaultVal, callback)
+            local MainFrame = Instance.new("Frame")
+            MainFrame.Parent = SectionFrame
+            MainFrame.BackgroundColor3 = currentTheme.Tertiary
+            MainFrame.BorderSizePixel = 0
+            MainFrame.Size = UDim2.new(0, 370, 0, 80)
+            MainFrame.ZIndex = 6
 
-    local ToggleLabel = Instance.new("TextLabel")
-    ToggleLabel.Parent = MainFrame
-    ToggleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    ToggleLabel.BackgroundTransparency = 1.000
-    ToggleLabel.Position = UDim2.new(0, 5, 0, 5)
-    ToggleLabel.Size = UDim2.new(0, 280, 0, 18)
-    ToggleLabel.Font = Enum.Font.Gotham
-    ToggleLabel.Text = text
-    ToggleLabel.TextColor3 = currentTheme.Text
-    ToggleLabel.TextSize = 13.000
-    ToggleLabel.TextXAlignment = Enum.TextXAlignment.Left
-    ToggleLabel.ZIndex = 7
+            local MainCorner = Instance.new("UICorner")
+            MainCorner.CornerRadius = UDim.new(0, 4)
+            MainCorner.Parent = MainFrame
 
-    local ToggleFrame = Instance.new("Frame")
-    ToggleFrame.Parent = MainFrame
-    ToggleFrame.BackgroundColor3 = currentTheme.Secondary
-    ToggleFrame.BorderSizePixel = 1
-    ToggleFrame.BorderColor3 = currentTheme.Border
-    ToggleFrame.Position = UDim2.new(0, 340, 0, 5)
-    ToggleFrame.Size = UDim2.new(0, 18, 0, 18)
-    ToggleFrame.ZIndex = 7
-    ToggleFrame.CornerRadius = UDim.new(0, 3)
+            local ToggleLabel = Instance.new("TextLabel")
+            ToggleLabel.Parent = MainFrame
+            ToggleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            ToggleLabel.BackgroundTransparency = 1.000
+            ToggleLabel.Position = UDim2.new(0, 5, 0, 5)
+            ToggleLabel.Size = UDim2.new(0, 280, 0, 18)
+            ToggleLabel.Font = Enum.Font.Gotham
+            ToggleLabel.Text = text
+            ToggleLabel.TextColor3 = currentTheme.Text
+            ToggleLabel.TextSize = 13.000
+            ToggleLabel.TextXAlignment = Enum.TextXAlignment.Left
+            ToggleLabel.ZIndex = 7
 
-    local ToggleFill = Instance.new("Frame")
-    ToggleFill.Parent = ToggleFrame
-    ToggleFill.BackgroundColor3 = currentTheme.Accent
-    ToggleFill.BorderSizePixel = 0
-    ToggleFill.Size = UDim2.new(0, 0, 0, 0)
-    ToggleFill.Position = UDim2.new(0, 2, 0, 2)
-    ToggleFill.ZIndex = 8
-    ToggleFill.Visible = false
-    ToggleFill.CornerRadius = UDim.new(0, 2)
+            local ToggleFrame = Instance.new("Frame")
+            ToggleFrame.Parent = MainFrame
+            ToggleFrame.BackgroundColor3 = currentTheme.Secondary
+            ToggleFrame.BorderSizePixel = 1
+            ToggleFrame.BorderColor3 = currentTheme.Border
+            ToggleFrame.Position = UDim2.new(0, 340, 0, 5)
+            ToggleFrame.Size = UDim2.new(0, 18, 0, 18)
+            ToggleFrame.ZIndex = 7
 
-    local SliderFrame = Instance.new("Frame")
-    SliderFrame.Parent = MainFrame
-    SliderFrame.BackgroundColor3 = currentTheme.Tertiary
-    SliderFrame.BorderSizePixel = 0
-    SliderFrame.Position = UDim2.new(0, 5, 0, 30)
-    SliderFrame.Size = UDim2.new(0, 360, 0, 40)
-    SliderFrame.ZIndex = 6
-    SliderFrame.CornerRadius = UDim.new(0, 4)
+            local ToggleFrameCorner = Instance.new("UICorner")
+            ToggleFrameCorner.CornerRadius = UDim.new(0, 3)
+            ToggleFrameCorner.Parent = ToggleFrame
 
-    local SliderLabel = Instance.new("TextLabel")
-    SliderLabel.Parent = SliderFrame
-    SliderLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    SliderLabel.BackgroundTransparency = 1.000
-    SliderLabel.Position = UDim2.new(0, 5, 0, 5)
-    SliderLabel.Size = UDim2.new(0, 200, 0, 16)
-    SliderLabel.Font = Enum.Font.Gotham
-    SliderLabel.Text = "Value"
-    SliderLabel.TextColor3 = currentTheme.Text
-    SliderLabel.TextSize = 12.000
-    SliderLabel.TextXAlignment = Enum.TextXAlignment.Left
-    SliderLabel.ZIndex = 7
-
-    local SliderValue = Instance.new("TextLabel")
-    SliderValue.Parent = SliderFrame
-    SliderValue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    SliderValue.BackgroundTransparency = 1.000
-    SliderValue.Position = UDim2.new(0, 320, 0, 5)
-    SliderValue.Size = UDim2.new(0, 35, 0, 16)
-    SliderValue.Font = Enum.Font.Gotham
-    SliderValue.Text = tostring(defaultVal)
-    SliderValue.TextColor3 = currentTheme.Text
-    SliderValue.TextSize = 12.000
-    SliderValue.TextXAlignment = Enum.TextXAlignment.Right
-    SliderValue.ZIndex = 7
-
-    local SliderBar = Instance.new("Frame")
-    SliderBar.Parent = SliderFrame
-    SliderBar.BackgroundColor3 = currentTheme.Secondary
-    SliderBar.BorderSizePixel = 0
-    SliderBar.Position = UDim2.new(0, 10, 0, 24)
-    SliderBar.Size = UDim2.new(0, 340, 0, 8)
-    SliderBar.ZIndex = 7
-    SliderBar.CornerRadius = UDim.new(0, 4)
-
-    local SliderFill = Instance.new("Frame")
-    SliderFill.Parent = SliderBar
-    SliderFill.BackgroundColor3 = currentTheme.Accent
-    SliderFill.BorderSizePixel = 0
-    SliderFill.Size = UDim2.new((defaultVal - min) / (max - min), 0, 1, 0)
-    SliderFill.ZIndex = 8
-    SliderFill.CornerRadius = UDim.new(0, 4)
-
-    local SliderButton = Instance.new("TextButton")
-    SliderButton.Parent = SliderBar
-    SliderButton.BackgroundColor3 = currentTheme.Text
-    SliderButton.BorderSizePixel = 0
-    SliderButton.Position = UDim2.new((defaultVal - min) / (max - min), -5, 0, -2)
-    SliderButton.Size = UDim2.new(0, 10, 0, 12)
-    SliderButton.Text = ""
-    SliderButton.ZIndex = 9
-    SliderButton.AutoButtonColor = false
-    SliderButton.CornerRadius = UDim.new(0, 5)
-
-    local toggled = defaultState or false
-    local value = defaultVal or min
-    local dragging = false
-
-    ToggleFill.Visible = toggled
-    if toggled then
-        ToggleFill.Size = UDim2.new(1, -4, 1, -4)
-    end
-
-    local function updateSlider(input)
-        local pos = input.Position.X - SliderBar.AbsolutePosition.X
-        local size = SliderBar.AbsoluteSize.X
-        local percent = math.clamp(pos / size, 0, 1)
-        value = min + (max - min) * percent
-        SliderValue.Text = tostring(math.floor(value))
-        SliderFill.Size = UDim2.new(percent, 0, 1, 0)
-        SliderButton.Position = UDim2.new(percent, -5, 0, -2)
-        if toggled and callback then
-            callback(true, math.floor(value))  -- Activado y valor cambiado
-        end
-    end
-
-    SliderButton.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            dragging = true
-            updateSlider(input)
-        end
-    end)
-
-    SliderButton.InputChanged:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-            if dragging then
-                updateSlider(input)
-            end
-        end
-    end)
-
-    SliderBar.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            updateSlider(input)
-        end
-    end)
-
-    UserInputService.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            dragging = false
-        end
-    end)
-
-    local function updateToggle()
-        toggled = not toggled
-        
-        if toggled then
-            ToggleFill.Visible = true
-            TweenService:Create(ToggleFill, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-                Size = UDim2.new(1, -4, 1, -4)
-            }):Play()
-            if callback then
-                callback(true, math.floor(value))  -- Activado con valor actual
-            end
-        else
-            TweenService:Create(ToggleFill, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-                Size = UDim2.new(0, 0, 0, 0)
-            }):Play()
-            task.wait(0.2)
+            local ToggleFill = Instance.new("Frame")
+            ToggleFill.Parent = ToggleFrame
+            ToggleFill.BackgroundColor3 = currentTheme.Accent
+            ToggleFill.BorderSizePixel = 0
+            ToggleFill.Size = UDim2.new(0, 0, 0, 0)
+            ToggleFill.Position = UDim2.new(0, 2, 0, 2)
+            ToggleFill.ZIndex = 8
             ToggleFill.Visible = false
-            if callback then
-                callback(false, nil)  -- Desactivado
+
+            local ToggleFillCorner = Instance.new("UICorner")
+            ToggleFillCorner.CornerRadius = UDim.new(0, 2)
+            ToggleFillCorner.Parent = ToggleFill
+
+            local SliderFrame = Instance.new("Frame")
+            SliderFrame.Parent = MainFrame
+            SliderFrame.BackgroundColor3 = currentTheme.Tertiary
+            SliderFrame.BorderSizePixel = 0
+            SliderFrame.Position = UDim2.new(0, 5, 0, 30)
+            SliderFrame.Size = UDim2.new(0, 360, 0, 40)
+            SliderFrame.ZIndex = 6
+
+            local SliderCorner = Instance.new("UICorner")
+            SliderCorner.CornerRadius = UDim.new(0, 4)
+            SliderCorner.Parent = SliderFrame
+
+            local SliderLabel = Instance.new("TextLabel")
+            SliderLabel.Parent = SliderFrame
+            SliderLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            SliderLabel.BackgroundTransparency = 1.000
+            SliderLabel.Position = UDim2.new(0, 5, 0, 5)
+            SliderLabel.Size = UDim2.new(0, 200, 0, 16)
+            SliderLabel.Font = Enum.Font.Gotham
+            SliderLabel.Text = "Value"
+            SliderLabel.TextColor3 = currentTheme.Text
+            SliderLabel.TextSize = 12.000
+            SliderLabel.TextXAlignment = Enum.TextXAlignment.Left
+            SliderLabel.ZIndex = 7
+
+            local SliderValue = Instance.new("TextLabel")
+            SliderValue.Parent = SliderFrame
+            SliderValue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            SliderValue.BackgroundTransparency = 1.000
+            SliderValue.Position = UDim2.new(0, 320, 0, 5)
+            SliderValue.Size = UDim2.new(0, 35, 0, 16)
+            SliderValue.Font = Enum.Font.Gotham
+            SliderValue.Text = tostring(defaultVal)
+            SliderValue.TextColor3 = currentTheme.Text
+            SliderValue.TextSize = 12.000
+            SliderValue.TextXAlignment = Enum.TextXAlignment.Right
+            SliderValue.ZIndex = 7
+
+            local SliderBar = Instance.new("Frame")
+            SliderBar.Parent = SliderFrame
+            SliderBar.BackgroundColor3 = currentTheme.Secondary
+            SliderBar.BorderSizePixel = 0
+            SliderBar.Position = UDim2.new(0, 10, 0, 24)
+            SliderBar.Size = UDim2.new(0, 340, 0, 8)
+            SliderBar.ZIndex = 7
+
+            local SliderBarCorner = Instance.new("UICorner")
+            SliderBarCorner.CornerRadius = UDim.new(0, 4)
+            SliderBarCorner.Parent = SliderBar
+
+            local SliderFill = Instance.new("Frame")
+            SliderFill.Parent = SliderBar
+            SliderFill.BackgroundColor3 = currentTheme.Accent
+            SliderFill.BorderSizePixel = 0
+            SliderFill.Size = UDim2.new((defaultVal - min) / (max - min), 0, 1, 0)
+            SliderFill.ZIndex = 8
+
+            local SliderFillCorner = Instance.new("UICorner")
+            SliderFillCorner.CornerRadius = UDim.new(0, 4)
+            SliderFillCorner.Parent = SliderFill
+
+            local SliderButton = Instance.new("TextButton")
+            SliderButton.Parent = SliderBar
+            SliderButton.BackgroundColor3 = currentTheme.Text
+            SliderButton.BorderSizePixel = 0
+            SliderButton.Position = UDim2.new((defaultVal - min) / (max - min), -5, 0, -2)
+            SliderButton.Size = UDim2.new(0, 10, 0, 12)
+            SliderButton.Text = ""
+            SliderButton.ZIndex = 9
+            SliderButton.AutoButtonColor = false
+
+            local SliderButtonCorner = Instance.new("UICorner")
+            SliderButtonCorner.CornerRadius = UDim.new(0, 5)
+            SliderButtonCorner.Parent = SliderButton
+
+            local toggled = defaultState or false
+            local value = defaultVal or min
+            local dragging = false
+
+            ToggleFill.Visible = toggled
+            if toggled then
+                ToggleFill.Size = UDim2.new(1, -4, 1, -4)
             end
+
+            local function updateSlider(input)
+                local pos = input.Position.X - SliderBar.AbsolutePosition.X
+                local size = SliderBar.AbsoluteSize.X
+                local percent = math.clamp(pos / size, 0, 1)
+                value = min + (max - min) * percent
+                SliderValue.Text = tostring(math.floor(value))
+                SliderFill.Size = UDim2.new(percent, 0, 1, 0)
+                SliderButton.Position = UDim2.new(percent, -5, 0, -2)
+                if toggled and callback then
+                    callback(true, math.floor(value))
+                end
+            end
+
+            SliderButton.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                    dragging = true
+                    updateSlider(input)
+                end
+            end)
+
+            SliderButton.InputChanged:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+                    if dragging then
+                        updateSlider(input)
+                    end
+                end
+            end)
+
+            SliderBar.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                    updateSlider(input)
+                end
+            end)
+
+            UserInputService.InputEnded:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                    dragging = false
+                end
+            end)
+
+            local function updateToggle()
+                toggled = not toggled
+                
+                if toggled then
+                    ToggleFill.Visible = true
+                    TweenService:Create(ToggleFill, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+                        Size = UDim2.new(1, -4, 1, -4)
+                    }):Play()
+                    if callback then
+                        callback(true, math.floor(value))
+                    end
+                else
+                    TweenService:Create(ToggleFill, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+                        Size = UDim2.new(0, 0, 0, 0)
+                    }):Play()
+                    task.wait(0.2)
+                    ToggleFill.Visible = false
+                    if callback then
+                        callback(false, nil)
+                    end
+                end
+            end
+
+            ToggleFrame.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                    updateToggle()
+                end
+            end)
+
+            local toggleObject = {}
+            function toggleObject:SetValue(newValue)
+                value = math.clamp(newValue, min, max)
+                local percent = (value - min) / (max - min)
+                SliderValue.Text = tostring(math.floor(value))
+                SliderFill.Size = UDim2.new(percent, 0, 1, 0)
+                SliderButton.Position = UDim2.new(percent, -5, 0, -2)
+                if toggled and callback then
+                    callback(true, math.floor(value))
+                end
+            end
+
+            function toggleObject:SetState(state)
+                if state ~= toggled then
+                    updateToggle()
+                end
+            end
+
+            function toggleObject:GetState()
+                return toggled
+            end
+
+            function toggleObject:GetValue()
+                return value
+            end
+
+            SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 30)
+            return toggleObject
         end
-    end
-
-    ToggleFrame.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            updateToggle()
-        end
-    end)
-
-    local toggleObject = {}
-    function toggleObject:SetValue(newValue)
-        value = math.clamp(newValue, min, max)
-        local percent = (value - min) / (max - min)
-        SliderValue.Text = tostring(math.floor(value))
-        SliderFill.Size = UDim2.new(percent, 0, 1, 0)
-        SliderButton.Position = UDim2.new(percent, -5, 0, -2)
-        if toggled and callback then
-            callback(true, math.floor(value))
-        end
-    end
-
-    function toggleObject:SetState(state)
-        if state ~= toggled then
-            updateToggle()
-        end
-    end
-
-    function toggleObject:GetState()
-        return toggled
-    end
-
-    function toggleObject:GetValue()
-        return value
-    end
-
-    SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 30)
-    return toggleObject
-end
 
         function Section:Slider(text, min, max, default, callback)
             local SliderFrame = Instance.new("Frame")
@@ -1212,9 +1227,6 @@ end
             local SliderBar = Instance.new("Frame")
             local SliderButton = Instance.new("TextButton")
             local SliderFill = Instance.new("Frame")
-            local SliderCorner = Instance.new("UICorner")
-            local SliderFillCorner = Instance.new("UICorner")
-            local SliderButtonCorner = Instance.new("UICorner")
 
             local value = default or min
             local dragging = false
@@ -1224,8 +1236,8 @@ end
             SliderFrame.BorderSizePixel = 0
             SliderFrame.Size = UDim2.new(0, 370, 0, 45)
             SliderFrame.ZIndex = 6
-            SliderFrame.CornerRadius = UDim.new(0, 4)
 
+            local SliderCorner = Instance.new("UICorner")
             SliderCorner.CornerRadius = UDim.new(0, 4)
             SliderCorner.Parent = SliderFrame
 
@@ -1258,7 +1270,6 @@ end
             SliderBar.Position = UDim2.new(0, 10, 0, 26)
             SliderBar.Size = UDim2.new(0, 350, 0, 10)
             SliderBar.ZIndex = 7
-            SliderBar.CornerRadius = UDim.new(0, 5)
 
             local SliderBarCorner = Instance.new("UICorner")
             SliderBarCorner.CornerRadius = UDim.new(0, 5)
@@ -1269,8 +1280,8 @@ end
             SliderFill.BorderSizePixel = 0
             SliderFill.Size = UDim2.new((value - min) / (max - min), 0, 1, 0)
             SliderFill.ZIndex = 8
-            SliderFill.CornerRadius = UDim.new(0, 5)
 
+            local SliderFillCorner = Instance.new("UICorner")
             SliderFillCorner.CornerRadius = UDim.new(0, 5)
             SliderFillCorner.Parent = SliderFill
 
@@ -1282,8 +1293,8 @@ end
             SliderButton.Text = ""
             SliderButton.AutoButtonColor = false
             SliderButton.ZIndex = 9
-            SliderButton.CornerRadius = UDim.new(0, 5)
 
+            local SliderButtonCorner = Instance.new("UICorner")
             SliderButtonCorner.CornerRadius = UDim.new(0, 5)
             SliderButtonCorner.Parent = SliderButton
 
@@ -1348,8 +1359,6 @@ end
             local ColorPickerLabel = Instance.new("TextLabel")
             local ColorButton = Instance.new("TextButton")
             local ColorDisplay = Instance.new("Frame")
-            local ColorDisplayCorner = Instance.new("UICorner")
-            local ColorPickerCorner = Instance.new("UICorner")
 
             local selectedColor = default or Color3.fromRGB(255, 255, 255)
             local picking = false
@@ -1362,8 +1371,8 @@ end
             ColorPickerFrame.BorderSizePixel = 0
             ColorPickerFrame.Size = UDim2.new(0, 370, 0, 38)
             ColorPickerFrame.ZIndex = 6
-            ColorPickerFrame.CornerRadius = UDim.new(0, 4)
 
+            local ColorPickerCorner = Instance.new("UICorner")
             ColorPickerCorner.CornerRadius = UDim.new(0, 4)
             ColorPickerCorner.Parent = ColorPickerFrame
 
@@ -1387,7 +1396,6 @@ end
             ColorButton.Text = ""
             ColorButton.AutoButtonColor = false
             ColorButton.ZIndex = 7
-            ColorButton.CornerRadius = UDim.new(0, 5)
 
             local ColorButtonCorner = Instance.new("UICorner")
             ColorButtonCorner.CornerRadius = UDim.new(0, 5)
@@ -1399,8 +1407,8 @@ end
             ColorDisplay.Position = UDim2.new(0, 2, 0, 2)
             ColorDisplay.Size = UDim2.new(0, 22, 0, 22)
             ColorDisplay.ZIndex = 8
-            ColorDisplay.CornerRadius = UDim.new(0, 4)
 
+            local ColorDisplayCorner = Instance.new("UICorner")
             ColorDisplayCorner.CornerRadius = UDim.new(0, 4)
             ColorDisplayCorner.Parent = ColorDisplay
 
@@ -1409,18 +1417,11 @@ end
                     for _, element in ipairs(popupElements) do
                         if element and element.Parent then
                             if element:IsA("TextLabel") then
-                                TweenService:Create(element, TweenInfo.new(0.2), {
-                                    TextTransparency = 1
-                                }):Play()
+                                TweenService:Create(element, TweenInfo.new(0.2), {TextTransparency = 1}):Play()
                             elseif element:IsA("TextButton") then
-                                TweenService:Create(element, TweenInfo.new(0.2), {
-                                    BackgroundTransparency = 1,
-                                    TextTransparency = 1
-                                }):Play()
+                                TweenService:Create(element, TweenInfo.new(0.2), {BackgroundTransparency = 1, TextTransparency = 1}):Play()
                             elseif element:IsA("Frame") then
-                                TweenService:Create(element, TweenInfo.new(0.2), {
-                                    BackgroundTransparency = 1
-                                }):Play()
+                                TweenService:Create(element, TweenInfo.new(0.2), {BackgroundTransparency = 1}):Play()
                             end
                         end
                     end
@@ -1431,9 +1432,7 @@ end
                         BackgroundTransparency = 1
                     }):Play()
                     
-                    TweenService:Create(currentOverlay, TweenInfo.new(0.2), {
-                        BackgroundTransparency = 1
-                    }):Play()
+                    TweenService:Create(currentOverlay, TweenInfo.new(0.2), {BackgroundTransparency = 1}):Play()
                     
                     task.wait(0.2)
                     
@@ -1525,13 +1524,11 @@ end
                 hueGradient.Size = UDim2.new(0, 200, 0, 14)
                 hueGradient.ZIndex = 21
                 hueGradient.BackgroundTransparency = 1
-                hueGradient.CornerRadius = UDim.new(0, 7)
-                table.insert(popupElements, hueGradient)
 
-                local hueCorner = Instance.new("UICorner")
-                hueCorner.CornerRadius = UDim.new(0, 7)
-                hueCorner.Parent = hueGradient
-                table.insert(popupElements, hueCorner)
+                local hueGradientCorner = Instance.new("UICorner")
+                hueGradientCorner.CornerRadius = UDim.new(0, 7)
+                hueGradientCorner.Parent = hueGradient
+                table.insert(popupElements, hueGradient)
 
                 local hueGradientObject = Instance.new("UIGradient")
                 hueGradientObject.Color = ColorSequence.new({
@@ -1555,13 +1552,11 @@ end
                 hueSlider.ZIndex = 22
                 hueSlider.AutoButtonColor = false
                 hueSlider.BackgroundTransparency = 1
-                hueSlider.CornerRadius = UDim.new(0, 4)
-                table.insert(popupElements, hueSlider)
 
                 local hueSliderCorner = Instance.new("UICorner")
                 hueSliderCorner.CornerRadius = UDim.new(0, 4)
                 hueSliderCorner.Parent = hueSlider
-                table.insert(popupElements, hueSliderCorner)
+                table.insert(popupElements, hueSlider)
 
                 local rLabel = Instance.new("TextLabel")
                 rLabel.Parent = popup
@@ -1586,13 +1581,11 @@ end
                 rBar.Size = UDim2.new(0, 160, 0, 10)
                 rBar.ZIndex = 21
                 rBar.BackgroundTransparency = 1
-                rBar.CornerRadius = UDim.new(0, 5)
-                table.insert(popupElements, rBar)
 
                 local rBarCorner = Instance.new("UICorner")
                 rBarCorner.CornerRadius = UDim.new(0, 5)
                 rBarCorner.Parent = rBar
-                table.insert(popupElements, rBarCorner)
+                table.insert(popupElements, rBar)
 
                 local rFill = Instance.new("Frame")
                 rFill.Parent = rBar
@@ -1601,13 +1594,11 @@ end
                 rFill.Size = UDim2.new(selectedColor.R, 0, 1, 0)
                 rFill.ZIndex = 22
                 rFill.BackgroundTransparency = 1
-                rFill.CornerRadius = UDim.new(0, 5)
-                table.insert(popupElements, rFill)
 
                 local rFillCorner = Instance.new("UICorner")
                 rFillCorner.CornerRadius = UDim.new(0, 5)
                 rFillCorner.Parent = rFill
-                table.insert(popupElements, rFillCorner)
+                table.insert(popupElements, rFill)
 
                 local rButton = Instance.new("TextButton")
                 rButton.Parent = rBar
@@ -1618,13 +1609,11 @@ end
                 rButton.Text = ""
                 rButton.ZIndex = 23
                 rButton.BackgroundTransparency = 1
-                rButton.CornerRadius = UDim.new(0, 3)
-                table.insert(popupElements, rButton)
 
                 local rButtonCorner = Instance.new("UICorner")
                 rButtonCorner.CornerRadius = UDim.new(0, 3)
                 rButtonCorner.Parent = rButton
-                table.insert(popupElements, rButtonCorner)
+                table.insert(popupElements, rButton)
 
                 local rValue = Instance.new("TextLabel")
                 rValue.Parent = popup
@@ -1664,13 +1653,11 @@ end
                 gBar.Size = UDim2.new(0, 160, 0, 10)
                 gBar.ZIndex = 21
                 gBar.BackgroundTransparency = 1
-                gBar.CornerRadius = UDim.new(0, 5)
-                table.insert(popupElements, gBar)
 
                 local gBarCorner = Instance.new("UICorner")
                 gBarCorner.CornerRadius = UDim.new(0, 5)
                 gBarCorner.Parent = gBar
-                table.insert(popupElements, gBarCorner)
+                table.insert(popupElements, gBar)
 
                 local gFill = Instance.new("Frame")
                 gFill.Parent = gBar
@@ -1679,13 +1666,11 @@ end
                 gFill.Size = UDim2.new(selectedColor.G, 0, 1, 0)
                 gFill.ZIndex = 22
                 gFill.BackgroundTransparency = 1
-                gFill.CornerRadius = UDim.new(0, 5)
-                table.insert(popupElements, gFill)
 
                 local gFillCorner = Instance.new("UICorner")
                 gFillCorner.CornerRadius = UDim.new(0, 5)
                 gFillCorner.Parent = gFill
-                table.insert(popupElements, gFillCorner)
+                table.insert(popupElements, gFill)
 
                 local gButton = Instance.new("TextButton")
                 gButton.Parent = gBar
@@ -1696,13 +1681,11 @@ end
                 gButton.Text = ""
                 gButton.ZIndex = 23
                 gButton.BackgroundTransparency = 1
-                gButton.CornerRadius = UDim.new(0, 3)
-                table.insert(popupElements, gButton)
 
                 local gButtonCorner = Instance.new("UICorner")
                 gButtonCorner.CornerRadius = UDim.new(0, 3)
                 gButtonCorner.Parent = gButton
-                table.insert(popupElements, gButtonCorner)
+                table.insert(popupElements, gButton)
 
                 local gValue = Instance.new("TextLabel")
                 gValue.Parent = popup
@@ -1742,13 +1725,11 @@ end
                 bBar.Size = UDim2.new(0, 160, 0, 10)
                 bBar.ZIndex = 21
                 bBar.BackgroundTransparency = 1
-                bBar.CornerRadius = UDim.new(0, 5)
-                table.insert(popupElements, bBar)
 
                 local bBarCorner = Instance.new("UICorner")
                 bBarCorner.CornerRadius = UDim.new(0, 5)
                 bBarCorner.Parent = bBar
-                table.insert(popupElements, bBarCorner)
+                table.insert(popupElements, bBar)
 
                 local bFill = Instance.new("Frame")
                 bFill.Parent = bBar
@@ -1757,13 +1738,11 @@ end
                 bFill.Size = UDim2.new(selectedColor.B, 0, 1, 0)
                 bFill.ZIndex = 22
                 bFill.BackgroundTransparency = 1
-                bFill.CornerRadius = UDim.new(0, 5)
-                table.insert(popupElements, bFill)
 
                 local bFillCorner = Instance.new("UICorner")
                 bFillCorner.CornerRadius = UDim.new(0, 5)
                 bFillCorner.Parent = bFill
-                table.insert(popupElements, bFillCorner)
+                table.insert(popupElements, bFill)
 
                 local bButton = Instance.new("TextButton")
                 bButton.Parent = bBar
@@ -1774,13 +1753,11 @@ end
                 bButton.Text = ""
                 bButton.ZIndex = 23
                 bButton.BackgroundTransparency = 1
-                bButton.CornerRadius = UDim.new(0, 3)
-                table.insert(popupElements, bButton)
 
                 local bButtonCorner = Instance.new("UICorner")
                 bButtonCorner.CornerRadius = UDim.new(0, 3)
                 bButtonCorner.Parent = bButton
-                table.insert(popupElements, bButtonCorner)
+                table.insert(popupElements, bButton)
 
                 local bValue = Instance.new("TextLabel")
                 bValue.Parent = popup
@@ -1820,13 +1797,11 @@ end
                 previewDisplay.Size = UDim2.new(0, 70, 0, 30)
                 previewDisplay.ZIndex = 21
                 previewDisplay.BackgroundTransparency = 1
-                previewDisplay.CornerRadius = UDim.new(0, 6)
-                table.insert(popupElements, previewDisplay)
 
                 local previewCorner = Instance.new("UICorner")
                 previewCorner.CornerRadius = UDim.new(0, 6)
                 previewCorner.Parent = previewDisplay
-                table.insert(popupElements, previewCorner)
+                table.insert(popupElements, previewDisplay)
 
                 local confirmButton = Instance.new("TextButton")
                 confirmButton.Parent = popup
@@ -1842,13 +1817,11 @@ end
                 confirmButton.AutoButtonColor = false
                 confirmButton.BackgroundTransparency = 1
                 confirmButton.TextTransparency = 1
-                confirmButton.CornerRadius = UDim.new(0, 6)
-                table.insert(popupElements, confirmButton)
 
                 local confirmCorner = Instance.new("UICorner")
                 confirmCorner.CornerRadius = UDim.new(0, 6)
                 confirmCorner.Parent = confirmButton
-                table.insert(popupElements, confirmCorner)
+                table.insert(popupElements, confirmButton)
 
                 local cancelButton = Instance.new("TextButton")
                 cancelButton.Parent = popup
@@ -1864,13 +1837,11 @@ end
                 cancelButton.AutoButtonColor = false
                 cancelButton.BackgroundTransparency = 1
                 cancelButton.TextTransparency = 1
-                cancelButton.CornerRadius = UDim.new(0, 6)
-                table.insert(popupElements, cancelButton)
 
                 local cancelCorner = Instance.new("UICorner")
                 cancelCorner.CornerRadius = UDim.new(0, 6)
                 cancelCorner.Parent = cancelButton
-                table.insert(popupElements, cancelCorner)
+                table.insert(popupElements, cancelButton)
 
                 TweenService:Create(overlay, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
                     BackgroundTransparency = 0.5
@@ -1886,18 +1857,11 @@ end
                 for _, element in ipairs(popupElements) do
                     if element and element ~= overlay and element ~= popup then
                         if element:IsA("TextLabel") then
-                            TweenService:Create(element, TweenInfo.new(fadeTime), {
-                                TextTransparency = 0
-                            }):Play()
+                            TweenService:Create(element, TweenInfo.new(fadeTime), {TextTransparency = 0}):Play()
                         elseif element:IsA("TextButton") then
-                            TweenService:Create(element, TweenInfo.new(fadeTime), {
-                                BackgroundTransparency = 0,
-                                TextTransparency = 0
-                            }):Play()
+                            TweenService:Create(element, TweenInfo.new(fadeTime), {BackgroundTransparency = 0, TextTransparency = 0}):Play()
                         elseif element:IsA("Frame") and element ~= popup and element ~= overlay then
-                            TweenService:Create(element, TweenInfo.new(fadeTime), {
-                                BackgroundTransparency = 0
-                            }):Play()
+                            TweenService:Create(element, TweenInfo.new(fadeTime), {BackgroundTransparency = 0}):Play()
                         end
                     end
                 end
@@ -2126,8 +2090,6 @@ end
             local DropdownArrow = Instance.new("TextLabel")
             local DropdownList = Instance.new("ScrollingFrame")
             local DropdownListLayout = Instance.new("UIListLayout")
-            local DropdownCorner = Instance.new("UICorner")
-            local DropdownListCorner = Instance.new("UICorner")
             local DropdownButton = Instance.new("TextButton")
 
             local expanded = false
@@ -2140,8 +2102,8 @@ end
             DropdownFrame.Size = UDim2.new(0, 370, 0, 32)
             DropdownFrame.ClipsDescendants = true
             DropdownFrame.ZIndex = 6
-            DropdownFrame.CornerRadius = UDim.new(0, 4)
 
+            local DropdownCorner = Instance.new("UICorner")
             DropdownCorner.CornerRadius = UDim.new(0, 4)
             DropdownCorner.Parent = DropdownFrame
 
@@ -2191,8 +2153,8 @@ end
             DropdownList.ZIndex = 9
             DropdownList.ElasticBehavior = Enum.ElasticBehavior.Always
             DropdownList.AutomaticCanvasSize = Enum.AutomaticSize.Y
-            DropdownList.CornerRadius = UDim.new(0, 4)
 
+            local DropdownListCorner = Instance.new("UICorner")
             DropdownListCorner.CornerRadius = UDim.new(0, 4)
             DropdownListCorner.Parent = DropdownList
 
@@ -2219,7 +2181,6 @@ end
                 OptionButton.ZIndex = 10
                 OptionButton.AutoButtonColor = false
                 OptionButton.Visible = true
-                OptionButton.CornerRadius = UDim.new(0, 4)
 
                 local OptionCorner = Instance.new("UICorner")
                 OptionCorner.CornerRadius = UDim.new(0, 4)
@@ -2298,16 +2259,14 @@ end
             local TextboxFrame = Instance.new("Frame")
             local TextboxLabel = Instance.new("TextLabel")
             local Textbox = Instance.new("TextBox")
-            local TextboxCorner = Instance.new("UICorner")
-            local TextboxFrameCorner = Instance.new("UICorner")
 
             TextboxFrame.Parent = SectionFrame
             TextboxFrame.BackgroundColor3 = currentTheme.Tertiary
             TextboxFrame.BorderSizePixel = 0
             TextboxFrame.Size = UDim2.new(0, 370, 0, 45)
             TextboxFrame.ZIndex = 6
-            TextboxFrame.CornerRadius = UDim.new(0, 4)
 
+            local TextboxFrameCorner = Instance.new("UICorner")
             TextboxFrameCorner.CornerRadius = UDim.new(0, 4)
             TextboxFrameCorner.Parent = TextboxFrame
 
@@ -2335,8 +2294,8 @@ end
             Textbox.TextSize = 12.000
             Textbox.ClearTextOnFocus = false
             Textbox.ZIndex = 7
-            Textbox.CornerRadius = UDim.new(0, 3)
 
+            local TextboxCorner = Instance.new("UICorner")
             TextboxCorner.CornerRadius = UDim.new(0, 3)
             TextboxCorner.Parent = Textbox
 
@@ -2368,8 +2327,6 @@ end
             local BindFrame = Instance.new("Frame")
             local BindLabel = Instance.new("TextLabel")
             local BindButton = Instance.new("TextButton")
-            local BindCorner = Instance.new("UICorner")
-            local BindFrameCorner = Instance.new("UICorner")
 
             local binding = false
             local currentKey = defaultKey or Enum.KeyCode.RightShift
@@ -2380,8 +2337,8 @@ end
             BindFrame.BorderSizePixel = 0
             BindFrame.Size = UDim2.new(0, 370, 0, 28)
             BindFrame.ZIndex = 6
-            BindFrame.CornerRadius = UDim.new(0, 4)
 
+            local BindFrameCorner = Instance.new("UICorner")
             BindFrameCorner.CornerRadius = UDim.new(0, 4)
             BindFrameCorner.Parent = BindFrame
 
@@ -2408,10 +2365,10 @@ end
             BindButton.TextSize = 12.000
             BindButton.AutoButtonColor = false
             BindButton.ZIndex = 7
-            BindButton.CornerRadius = UDim.new(0, 3)
 
-            BindCorner.CornerRadius = UDim.new(0, 3)
-            BindCorner.Parent = BindButton
+            local BindButtonCorner = Instance.new("UICorner")
+            BindButtonCorner.CornerRadius = UDim.new(0, 3)
+            BindButtonCorner.Parent = BindButton
 
             BindButton.MouseButton1Click:Connect(function()
                 binding = true
@@ -2520,7 +2477,6 @@ local function processNextNotification()
     local NotifHolder = Instance.new("Frame")
     local NotifTitle = Instance.new("TextLabel")
     local NotifDesc = Instance.new("TextLabel")
-    local NotifCorner = Instance.new("UICorner")
 
     NotifHolder.Name = "Notification"
     NotifHolder.Parent = Discord
@@ -2531,8 +2487,8 @@ local function processNextNotification()
     NotifHolder.ClipsDescendants = true
     NotifHolder.BackgroundTransparency = 1
     NotifHolder.ZIndex = 100
-    NotifHolder.CornerRadius = UDim.new(0, 6)
 
+    local NotifCorner = Instance.new("UICorner")
     NotifCorner.CornerRadius = UDim.new(0, 6)
     NotifCorner.Parent = NotifHolder
 
