@@ -1175,6 +1175,7 @@ function Section:Colorpicker(text, default, callback)
 
     local function closeColorPicker()
         if currentPopup and currentOverlay then
+            -- Animar TODOS los elementos
             for _, element in ipairs(popupElements) do
                 if element and element.Parent then
                     if element:IsA("TextLabel") then
@@ -1186,7 +1187,11 @@ function Section:Colorpicker(text, default, callback)
                             BackgroundTransparency = 1,
                             TextTransparency = 1
                         }):Play()
-                    elseif element:IsA("Frame") and element ~= currentPopup and element ~= currentOverlay then
+                    elseif element:IsA("Frame") then
+                        TweenService:Create(element, TweenInfo.new(0.2), {
+                            BackgroundTransparency = 1
+                        }):Play()
+                    elseif element:IsA("ScrollingFrame") then
                         TweenService:Create(element, TweenInfo.new(0.2), {
                             BackgroundTransparency = 1
                         }):Play()
@@ -1195,8 +1200,8 @@ function Section:Colorpicker(text, default, callback)
             end
             
             TweenService:Create(currentPopup, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-                Size = UDim2.new(0, 280, 0, 340),
-                Position = UDim2.new(0.5, -140, 0.5, -170),
+                Size = UDim2.new(0, 280, 0, 320),
+                Position = UDim2.new(0.5, -140, 0.5, -160),
                 BackgroundTransparency = 1
             }):Play()
             
@@ -1238,14 +1243,14 @@ function Section:Colorpicker(text, default, callback)
         currentOverlay = overlay
         table.insert(popupElements, overlay)
 
-        -- Popup
+        -- Popup (más grande para los sliders RGB)
         local popup = Instance.new("Frame")
         popup.Name = "ColorPickerPopup"
         popup.Parent = overlay
         popup.BackgroundColor3 = currentTheme.Main
         popup.BorderSizePixel = 0
-        popup.Position = UDim2.new(0.5, -140, 0.5, -170)
-        popup.Size = UDim2.new(0, 280, 0, 340)
+        popup.Position = UDim2.new(0.5, -140, 0.5, -160)
+        popup.Size = UDim2.new(0, 280, 0, 320)
         popup.ZIndex = 20
         popup.Active = true
         popup.Draggable = false
@@ -1274,13 +1279,13 @@ function Section:Colorpicker(text, default, callback)
         titleLabel.TextTransparency = 1
         table.insert(popupElements, titleLabel)
 
-        -- === SELECTOR DE HUE ===
+        -- Selector de Hue
         local hueLabel = Instance.new("TextLabel")
         hueLabel.Parent = popup
         hueLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         hueLabel.BackgroundTransparency = 1.000
         hueLabel.Position = UDim2.new(0, 10, 0, 40)
-        hueLabel.Size = UDim2.new(0, 20, 0, 20)
+        hueLabel.Size = UDim2.new(0, 30, 0, 20)
         hueLabel.Font = Enum.Font.Gotham
         hueLabel.Text = "H:"
         hueLabel.TextColor3 = currentTheme.Text
@@ -1294,8 +1299,8 @@ function Section:Colorpicker(text, default, callback)
         hueGradient.Parent = popup
         hueGradient.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         hueGradient.BorderSizePixel = 0
-        hueGradient.Position = UDim2.new(0, 35, 0, 42)
-        hueGradient.Size = UDim2.new(0, 200, 0, 16)
+        hueGradient.Position = UDim2.new(0, 45, 0, 42)
+        hueGradient.Size = UDim2.new(0, 180, 0, 16)
         hueGradient.ZIndex = 21
         hueGradient.BackgroundTransparency = 1
         table.insert(popupElements, hueGradient)
@@ -1334,12 +1339,12 @@ function Section:Colorpicker(text, default, callback)
         hueSliderCorner.Parent = hueSlider
         table.insert(popupElements, hueSliderCorner)
 
-        -- === SELECTOR ROJO ===
+        -- SELECTOR ROJO (R)
         local rLabel = Instance.new("TextLabel")
         rLabel.Parent = popup
         rLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         rLabel.BackgroundTransparency = 1.000
-        rLabel.Position = UDim2.new(0, 10, 0, 80)
+        rLabel.Position = UDim2.new(0, 10, 0, 75)
         rLabel.Size = UDim2.new(0, 20, 0, 20)
         rLabel.Font = Enum.Font.Gotham
         rLabel.Text = "R:"
@@ -1354,7 +1359,7 @@ function Section:Colorpicker(text, default, callback)
         rBar.Parent = popup
         rBar.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
         rBar.BorderSizePixel = 0
-        rBar.Position = UDim2.new(0, 35, 0, 82)
+        rBar.Position = UDim2.new(0, 35, 0, 77)
         rBar.Size = UDim2.new(0, 160, 0, 12)
         rBar.ZIndex = 21
         rBar.BackgroundTransparency = 1
@@ -1395,27 +1400,27 @@ function Section:Colorpicker(text, default, callback)
         rButtonCorner.Parent = rButton
         table.insert(popupElements, rButtonCorner)
 
-        local rValueLabel = Instance.new("TextLabel")
-        rValueLabel.Parent = popup
-        rValueLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        rValueLabel.BackgroundTransparency = 1.000
-        rValueLabel.Position = UDim2.new(0, 210, 0, 80)
-        rValueLabel.Size = UDim2.new(0, 40, 0, 20)
-        rValueLabel.Font = Enum.Font.Gotham
-        rValueLabel.Text = tostring(math.floor(selectedColor.R * 255))
-        rValueLabel.TextColor3 = currentTheme.Text
-        rValueLabel.TextSize = 12.000
-        rValueLabel.TextXAlignment = Enum.TextXAlignment.Right
-        rValueLabel.ZIndex = 21
-        rValueLabel.TextTransparency = 1
-        table.insert(popupElements, rValueLabel)
+        local rValue = Instance.new("TextLabel")
+        rValue.Parent = popup
+        rValue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        rValue.BackgroundTransparency = 1.000
+        rValue.Position = UDim2.new(0, 205, 0, 75)
+        rValue.Size = UDim2.new(0, 35, 0, 20)
+        rValue.Font = Enum.Font.Gotham
+        rValue.Text = tostring(math.floor(selectedColor.R * 255))
+        rValue.TextColor3 = currentTheme.Text
+        rValue.TextSize = 12.000
+        rValue.TextXAlignment = Enum.TextXAlignment.Left
+        rValue.ZIndex = 21
+        rValue.TextTransparency = 1
+        table.insert(popupElements, rValue)
 
-        -- === SELECTOR VERDE ===
+        -- SELECTOR VERDE (G)
         local gLabel = Instance.new("TextLabel")
         gLabel.Parent = popup
         gLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         gLabel.BackgroundTransparency = 1.000
-        gLabel.Position = UDim2.new(0, 10, 0, 110)
+        gLabel.Position = UDim2.new(0, 10, 0, 105)
         gLabel.Size = UDim2.new(0, 20, 0, 20)
         gLabel.Font = Enum.Font.Gotham
         gLabel.Text = "G:"
@@ -1430,7 +1435,7 @@ function Section:Colorpicker(text, default, callback)
         gBar.Parent = popup
         gBar.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
         gBar.BorderSizePixel = 0
-        gBar.Position = UDim2.new(0, 35, 0, 112)
+        gBar.Position = UDim2.new(0, 35, 0, 107)
         gBar.Size = UDim2.new(0, 160, 0, 12)
         gBar.ZIndex = 21
         gBar.BackgroundTransparency = 1
@@ -1471,27 +1476,27 @@ function Section:Colorpicker(text, default, callback)
         gButtonCorner.Parent = gButton
         table.insert(popupElements, gButtonCorner)
 
-        local gValueLabel = Instance.new("TextLabel")
-        gValueLabel.Parent = popup
-        gValueLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        gValueLabel.BackgroundTransparency = 1.000
-        gValueLabel.Position = UDim2.new(0, 210, 0, 110)
-        gValueLabel.Size = UDim2.new(0, 40, 0, 20)
-        gValueLabel.Font = Enum.Font.Gotham
-        gValueLabel.Text = tostring(math.floor(selectedColor.G * 255))
-        gValueLabel.TextColor3 = currentTheme.Text
-        gValueLabel.TextSize = 12.000
-        gValueLabel.TextXAlignment = Enum.TextXAlignment.Right
-        gValueLabel.ZIndex = 21
-        gValueLabel.TextTransparency = 1
-        table.insert(popupElements, gValueLabel)
+        local gValue = Instance.new("TextLabel")
+        gValue.Parent = popup
+        gValue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        gValue.BackgroundTransparency = 1.000
+        gValue.Position = UDim2.new(0, 205, 0, 105)
+        gValue.Size = UDim2.new(0, 35, 0, 20)
+        gValue.Font = Enum.Font.Gotham
+        gValue.Text = tostring(math.floor(selectedColor.G * 255))
+        gValue.TextColor3 = currentTheme.Text
+        gValue.TextSize = 12.000
+        gValue.TextXAlignment = Enum.TextXAlignment.Left
+        gValue.ZIndex = 21
+        gValue.TextTransparency = 1
+        table.insert(popupElements, gValue)
 
-        -- === SELECTOR AZUL ===
+        -- SELECTOR AZUL (B)
         local bLabel = Instance.new("TextLabel")
         bLabel.Parent = popup
         bLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         bLabel.BackgroundTransparency = 1.000
-        bLabel.Position = UDim2.new(0, 10, 0, 140)
+        bLabel.Position = UDim2.new(0, 10, 0, 135)
         bLabel.Size = UDim2.new(0, 20, 0, 20)
         bLabel.Font = Enum.Font.Gotham
         bLabel.Text = "B:"
@@ -1506,7 +1511,7 @@ function Section:Colorpicker(text, default, callback)
         bBar.Parent = popup
         bBar.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
         bBar.BorderSizePixel = 0
-        bBar.Position = UDim2.new(0, 35, 0, 142)
+        bBar.Position = UDim2.new(0, 35, 0, 137)
         bBar.Size = UDim2.new(0, 160, 0, 12)
         bBar.ZIndex = 21
         bBar.BackgroundTransparency = 1
@@ -1547,27 +1552,27 @@ function Section:Colorpicker(text, default, callback)
         bButtonCorner.Parent = bButton
         table.insert(popupElements, bButtonCorner)
 
-        local bValueLabel = Instance.new("TextLabel")
-        bValueLabel.Parent = popup
-        bValueLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        bValueLabel.BackgroundTransparency = 1.000
-        bValueLabel.Position = UDim2.new(0, 210, 0, 140)
-        bValueLabel.Size = UDim2.new(0, 40, 0, 20)
-        bValueLabel.Font = Enum.Font.Gotham
-        bValueLabel.Text = tostring(math.floor(selectedColor.B * 255))
-        bValueLabel.TextColor3 = currentTheme.Text
-        bValueLabel.TextSize = 12.000
-        bValueLabel.TextXAlignment = Enum.TextXAlignment.Right
-        bValueLabel.ZIndex = 21
-        bValueLabel.TextTransparency = 1
-        table.insert(popupElements, bValueLabel)
+        local bValue = Instance.new("TextLabel")
+        bValue.Parent = popup
+        bValue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        bValue.BackgroundTransparency = 1.000
+        bValue.Position = UDim2.new(0, 205, 0, 135)
+        bValue.Size = UDim2.new(0, 35, 0, 20)
+        bValue.Font = Enum.Font.Gotham
+        bValue.Text = tostring(math.floor(selectedColor.B * 255))
+        bValue.TextColor3 = currentTheme.Text
+        bValue.TextSize = 12.000
+        bValue.TextXAlignment = Enum.TextXAlignment.Left
+        bValue.ZIndex = 21
+        bValue.TextTransparency = 1
+        table.insert(popupElements, bValue)
 
-        -- === VISTA PREVIA ===
+        -- Vista previa
         local previewLabel = Instance.new("TextLabel")
         previewLabel.Parent = popup
         previewLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         previewLabel.BackgroundTransparency = 1.000
-        previewLabel.Position = UDim2.new(0, 10, 0, 180)
+        previewLabel.Position = UDim2.new(0, 10, 0, 170)
         previewLabel.Size = UDim2.new(0, 60, 0, 20)
         previewLabel.Font = Enum.Font.Gotham
         previewLabel.Text = "Preview:"
@@ -1582,8 +1587,8 @@ function Section:Colorpicker(text, default, callback)
         previewDisplay.Parent = popup
         previewDisplay.BackgroundColor3 = selectedColor
         previewDisplay.BorderSizePixel = 0
-        previewDisplay.Position = UDim2.new(0, 80, 0, 175)
-        previewDisplay.Size = UDim2.new(0, 80, 0, 30)
+        previewDisplay.Position = UDim2.new(0, 80, 0, 165)
+        previewDisplay.Size = UDim2.new(0, 60, 0, 30)
         previewDisplay.ZIndex = 21
         previewDisplay.BackgroundTransparency = 1
         table.insert(popupElements, previewDisplay)
@@ -1593,13 +1598,13 @@ function Section:Colorpicker(text, default, callback)
         previewCorner.Parent = previewDisplay
         table.insert(popupElements, previewCorner)
 
-        -- === BOTONES ===
+        -- Botones
         local confirmButton = Instance.new("TextButton")
         confirmButton.Parent = popup
         confirmButton.BackgroundColor3 = currentTheme.Accent
         confirmButton.BorderSizePixel = 0
-        confirmButton.Position = UDim2.new(0, 10, 0, 225)
-        confirmButton.Size = UDim2.new(0, 120, 0, 35)
+        confirmButton.Position = UDim2.new(0, 10, 0, 215)
+        confirmButton.Size = UDim2.new(0, 120, 0, 30)
         confirmButton.Text = "Confirm"
         confirmButton.Font = Enum.Font.Gotham
         confirmButton.TextColor3 = currentTheme.Text
@@ -1619,8 +1624,8 @@ function Section:Colorpicker(text, default, callback)
         cancelButton.Parent = popup
         cancelButton.BackgroundColor3 = currentTheme.Tertiary
         cancelButton.BorderSizePixel = 0
-        cancelButton.Position = UDim2.new(0, 150, 0, 225)
-        cancelButton.Size = UDim2.new(0, 120, 0, 35)
+        cancelButton.Position = UDim2.new(0, 150, 0, 215)
+        cancelButton.Size = UDim2.new(0, 120, 0, 30)
         cancelButton.Text = "Cancel"
         cancelButton.Font = Enum.Font.Gotham
         cancelButton.TextColor3 = currentTheme.Text
@@ -1642,8 +1647,8 @@ function Section:Colorpicker(text, default, callback)
         }):Play()
         
         TweenService:Create(popup, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-            Size = UDim2.new(0, 300, 0, 360),
-            Position = UDim2.new(0.5, -150, 0.5, -180),
+            Size = UDim2.new(0, 300, 0, 340),
+            Position = UDim2.new(0.5, -150, 0.5, -170),
             BackgroundTransparency = 0
         }):Play()
         
@@ -1666,6 +1671,222 @@ function Section:Colorpicker(text, default, callback)
                 end
             end
         end
+
+        -- FUNCIONALIDAD DE LOS SELECTORES
+        local hueDragging = false
+        local rDragging, gDragging, bDragging = false, false, false
+        local h, s, v = Color3.toHSV(selectedColor)
+        s = 1
+        v = 1
+
+        local function updateColorFromRGB()
+            selectedColor = Color3.new(
+                tonumber(rValue.Text) / 255,
+                tonumber(gValue.Text) / 255,
+                tonumber(bValue.Text) / 255
+            )
+            previewDisplay.BackgroundColor3 = selectedColor
+            h, s, v = Color3.toHSV(selectedColor)
+            
+            local huePercent = h
+            hueSlider.Position = UDim2.new(huePercent, -4, 0, -2)
+            
+            rFill.Size = UDim2.new(selectedColor.R, 0, 1, 0)
+            rButton.Position = UDim2.new(selectedColor.R, -5, 0, -2)
+            gFill.Size = UDim2.new(selectedColor.G, 0, 1, 0)
+            gButton.Position = UDim2.new(selectedColor.G, -5, 0, -2)
+            bFill.Size = UDim2.new(selectedColor.B, 0, 1, 0)
+            bButton.Position = UDim2.new(selectedColor.B, -5, 0, -2)
+        end
+
+        local function updateColorFromHue(percent)
+            h = percent
+            selectedColor = Color3.fromHSV(h, 1, 1)
+            previewDisplay.BackgroundColor3 = selectedColor
+            
+            rValue.Text = tostring(math.floor(selectedColor.R * 255))
+            gValue.Text = tostring(math.floor(selectedColor.G * 255))
+            bValue.Text = tostring(math.floor(selectedColor.B * 255))
+            
+            rFill.Size = UDim2.new(selectedColor.R, 0, 1, 0)
+            rButton.Position = UDim2.new(selectedColor.R, -5, 0, -2)
+            gFill.Size = UDim2.new(selectedColor.G, 0, 1, 0)
+            gButton.Position = UDim2.new(selectedColor.G, -5, 0, -2)
+            bFill.Size = UDim2.new(selectedColor.B, 0, 1, 0)
+            bButton.Position = UDim2.new(selectedColor.B, -5, 0, -2)
+        end
+
+        -- Eventos Hue
+        local function updateHue(input)
+            local pos = input.Position.X - hueGradient.AbsolutePosition.X
+            local size = hueGradient.AbsoluteSize.X
+            local percent = math.clamp(pos / size, 0, 1)
+            hueSlider.Position = UDim2.new(percent, -4, 0, -2)
+            updateColorFromHue(percent)
+        end
+
+        hueSlider.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                hueDragging = true
+                updateHue(input)
+            end
+        end)
+
+        hueSlider.InputChanged:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+                if hueDragging then
+                    updateHue(input)
+                end
+            end
+        end)
+
+        hueGradient.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                updateHue(input)
+            end
+        end)
+
+        -- Eventos Rojo
+        local function updateR(input)
+            local pos = input.Position.X - rBar.AbsolutePosition.X
+            local size = rBar.AbsoluteSize.X
+            local percent = math.clamp(pos / size, 0, 1)
+            rButton.Position = UDim2.new(percent, -5, 0, -2)
+            rFill.Size = UDim2.new(percent, 0, 1, 0)
+            rValue.Text = tostring(math.floor(percent * 255))
+            
+            selectedColor = Color3.new(percent, selectedColor.G, selectedColor.B)
+            previewDisplay.BackgroundColor3 = selectedColor
+            h, s, v = Color3.toHSV(selectedColor)
+            hueSlider.Position = UDim2.new(h, -4, 0, -2)
+            gValue.Text = tostring(math.floor(selectedColor.G * 255))
+            bValue.Text = tostring(math.floor(selectedColor.B * 255))
+        end
+
+        rButton.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                rDragging = true
+                updateR(input)
+            end
+        end)
+
+        rButton.InputChanged:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+                if rDragging then
+                    updateR(input)
+                end
+            end
+        end)
+
+        rBar.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                updateR(input)
+            end
+        end)
+
+        -- Eventos Verde
+        local function updateG(input)
+            local pos = input.Position.X - gBar.AbsolutePosition.X
+            local size = gBar.AbsoluteSize.X
+            local percent = math.clamp(pos / size, 0, 1)
+            gButton.Position = UDim2.new(percent, -5, 0, -2)
+            gFill.Size = UDim2.new(percent, 0, 1, 0)
+            gValue.Text = tostring(math.floor(percent * 255))
+            
+            selectedColor = Color3.new(selectedColor.R, percent, selectedColor.B)
+            previewDisplay.BackgroundColor3 = selectedColor
+            h, s, v = Color3.toHSV(selectedColor)
+            hueSlider.Position = UDim2.new(h, -4, 0, -2)
+            rValue.Text = tostring(math.floor(selectedColor.R * 255))
+            bValue.Text = tostring(math.floor(selectedColor.B * 255))
+        end
+
+        gButton.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                gDragging = true
+                updateG(input)
+            end
+        end)
+
+        gButton.InputChanged:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+                if gDragging then
+                    updateG(input)
+                end
+            end
+        end)
+
+        gBar.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                updateG(input)
+            end
+        end)
+
+        -- Eventos Azul
+        local function updateB(input)
+            local pos = input.Position.X - bBar.AbsolutePosition.X
+            local size = bBar.AbsoluteSize.X
+            local percent = math.clamp(pos / size, 0, 1)
+            bButton.Position = UDim2.new(percent, -5, 0, -2)
+            bFill.Size = UDim2.new(percent, 0, 1, 0)
+            bValue.Text = tostring(math.floor(percent * 255))
+            
+            selectedColor = Color3.new(selectedColor.R, selectedColor.G, percent)
+            previewDisplay.BackgroundColor3 = selectedColor
+            h, s, v = Color3.toHSV(selectedColor)
+            hueSlider.Position = UDim2.new(h, -4, 0, -2)
+            rValue.Text = tostring(math.floor(selectedColor.R * 255))
+            gValue.Text = tostring(math.floor(selectedColor.G * 255))
+        end
+
+        bButton.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                bDragging = true
+                updateB(input)
+            end
+        end)
+
+        bButton.InputChanged:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+                if bDragging then
+                    updateB(input)
+                end
+            end
+        end)
+
+        bBar.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                updateB(input)
+            end
+        end)
+
+        UserInputService.InputEnded:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                hueDragging = false
+                rDragging = false
+                gDragging = false
+                bDragging = false
+            end
+        end)
+
+        confirmButton.MouseButton1Click:Connect(function()
+            selectedColor = previewDisplay.BackgroundColor3
+            ColorDisplay.BackgroundColor3 = selectedColor
+            if callback then
+                callback(selectedColor)
+            end
+            closeColorPicker()
+        end)
+
+        cancelButton.MouseButton1Click:Connect(function()
+            closeColorPicker()
+        end)
+
+        overlay.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                closeColorPicker()
+            end
+        end)
     end
 
     ColorButton.MouseButton1Click:Connect(createColorPickerPopup)
