@@ -2558,37 +2558,79 @@ function DiscordLib:Notification(data)
         processNextNotification()
     end
 end
-function DiscordLib:CreateBlur()
+
+function DiscordLib:CreateBackgroundBlur()
     local blurEnabled = false
     local blurIntensity = 10
-    local blurInstance = nil
+    local blurFrame = nil
+    local blurOverlay = nil
     
-    local function applyBlur(intensity)
-        if not blurInstance then
-            blurInstance = Instance.new("BlurEffect")
-            blurInstance.Name = "DiscordLibBlur"
-            blurInstance.Parent = game:GetService("Lighting")
-        end
-        blurInstance.Size = intensity
-        blurEnabled = intensity > 0
+    local function createBlurFrame()
+        if blurFrame then return end
+        
+        local mainFrame = Discord:FindFirstChild("MainFrame")
+        if not mainFrame then return end
+        
+        blurOverlay = Instance.new("Frame")
+        blurOverlay.Name = "BlurOverlay"
+        blurOverlay.Parent = Discord
+        blurOverlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        blurOverlay.BackgroundTransparency = 0.5
+        blurOverlay.BorderSizePixel = 0
+        blurOverlay.Size = UDim2.new(1, 0, 1, 0)
+        blurOverlay.Position = UDim2.new(0, 0, 0, 0)
+        blurOverlay.ZIndex = 0
+        blurOverlay.Active = false
+        blurOverlay.Visible = true
+        
+        blurFrame = Instance.new("Frame")
+        blurFrame.Name = "BackgroundBlur"
+        blurFrame.Parent = blurOverlay
+        blurFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        blurFrame.BackgroundTransparency = 0
+        blurFrame.BorderSizePixel = 0
+        blurFrame.Size = UDim2.new(1, 0, 1, 0)
+        blurFrame.Position = UDim2.new(0, 0, 0, 0)
+        blurFrame.ZIndex = 0
+        blurFrame.Visible = true
+        
+        local blurEffect = Instance.new("BlurEffect")
+        blurEffect.Name = "BlurEffect"
+        blurEffect.Parent = blurFrame
+        blurEffect.Size = blurIntensity
     end
     
-    local function removeBlur()
-        if blurInstance then
-            blurInstance:Destroy()
-            blurInstance = nil
+    local function removeBlurFrame()
+        if blurOverlay then
+            blurOverlay:Destroy()
+            blurOverlay = nil
+            blurFrame = nil
         end
-        blurEnabled = false
+    end
+    
+    local function updateBlurIntensity()
+        if blurFrame then
+            local blur = blurFrame:FindFirstChild("BlurEffect")
+            if blur then
+                blur.Size = blurIntensity
+            end
+        end
     end
     
     local blurObject = {}
     
     function blurObject:Enable()
-        applyBlur(blurIntensity)
+        if not blurEnabled then
+            createBlurFrame()
+            blurEnabled = true
+        end
     end
     
     function blurObject:Disable()
-        removeBlur()
+        if blurEnabled then
+            removeBlurFrame()
+            blurEnabled = false
+        end
     end
     
     function blurObject:Toggle()
@@ -2600,10 +2642,10 @@ function DiscordLib:CreateBlur()
     end
     
     function blurObject:SetIntensity(intensity)
-        intensity = math.clamp(intensity, 0, 100)
+        intensity = math.clamp(intensity, 1, 100)
         blurIntensity = intensity
         if blurEnabled then
-            applyBlur(intensity)
+            updateBlurIntensity()
         end
     end
     
