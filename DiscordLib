@@ -971,7 +971,6 @@ function Section:Button(text, desc, callback)
         callback = desc
         desc = nil
     end
-
     local baseHeight = 32
     local finalHeight = baseHeight
     
@@ -1019,12 +1018,13 @@ function Section:Button(text, desc, callback)
         TitleLabel.Parent = ButtonFrame
         TitleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         TitleLabel.BackgroundTransparency = 1.000
-        TitleLabel.Size = UDim2.new(1, 0, 1, 0)
+        TitleLabel.Size = UDim2.new(1, -20, 1, 0)
+        TitleLabel.Position = UDim2.new(0, 10, 0, 0)
         TitleLabel.Font = Enum.Font.GothamBold
         TitleLabel.Text = text
         TitleLabel.TextColor3 = currentTheme.Text
         TitleLabel.TextSize = 14.000
-        TitleLabel.TextXAlignment = Enum.TextXAlignment.Center
+        TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
         TitleLabel.TextYAlignment = Enum.TextYAlignment.Center
         TitleLabel.ZIndex = 8
     else
@@ -1063,40 +1063,37 @@ function Section:Button(text, desc, callback)
     end
 
     local isAnimating = false
-    local animationQueue = 0
+    local originalColor = currentTheme.Tertiary
+    local hoverColor = currentTheme.Hover
+
+    local function updateColors()
+        originalColor = currentTheme.Tertiary
+        hoverColor = currentTheme.Hover
+        ButtonFrame.BackgroundColor3 = originalColor
+    end
 
     local function playClickAnimation()
-        if isAnimating then
-            animationQueue = animationQueue + 1
-            return
-        end
-        
+        if isAnimating then return end
         isAnimating = true
-        
+
         TweenService:Create(ButtonFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
-            BackgroundColor3 = currentTheme.Hover
+            BackgroundColor3 = hoverColor
         }):Play()
         
         task.wait(0.1)
         
         TweenService:Create(ButtonFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
-            BackgroundColor3 = currentTheme.Tertiary
+            BackgroundColor3 = originalColor
         }):Play()
         
         task.wait(0.1)
-        
         isAnimating = false
-        
-        if animationQueue > 0 then
-            animationQueue = animationQueue - 1
-            playClickAnimation()
-        end
     end
 
     Button.MouseEnter:Connect(function()
         if not isAnimating then
             TweenService:Create(ButtonFrame, TweenInfo.new(0.2), {
-                BackgroundColor3 = currentTheme.Hover
+                BackgroundColor3 = hoverColor
             }):Play()
         end
     end)
@@ -1104,12 +1101,13 @@ function Section:Button(text, desc, callback)
     Button.MouseLeave:Connect(function()
         if not isAnimating then
             TweenService:Create(ButtonFrame, TweenInfo.new(0.2), {
-                BackgroundColor3 = currentTheme.Tertiary
+                BackgroundColor3 = originalColor
             }):Play()
         end
     end)
 
     Button.MouseButton1Click:Connect(function()
+        if isAnimating then return end
         playClickAnimation()
         if callback then
             task.spawn(callback)
@@ -1117,7 +1115,12 @@ function Section:Button(text, desc, callback)
     end)
 
     SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
-    return ButtonFrame
+    local buttonObject = {}
+    function buttonObject:UpdateColors()
+        updateColors()
+    end
+    
+    return ButtonFrame, buttonObject
 end
 
 function Section:Toggle(text, desc, default, callback)
