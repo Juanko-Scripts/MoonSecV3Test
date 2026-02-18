@@ -1072,6 +1072,7 @@ function Section:Button(text, desc, callback)
         end
         
         isAnimating = true
+        
         TweenService:Create(ButtonFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
             BackgroundColor3 = currentTheme.Hover
         }):Play()
@@ -1093,15 +1094,19 @@ function Section:Button(text, desc, callback)
     end
 
     Button.MouseEnter:Connect(function()
-        TweenService:Create(ButtonFrame, TweenInfo.new(0.2), {
-            BackgroundColor3 = currentTheme.Hover
-        }):Play()
+        if not isAnimating then
+            TweenService:Create(ButtonFrame, TweenInfo.new(0.2), {
+                BackgroundColor3 = currentTheme.Hover
+            }):Play()
+        end
     end)
 
     Button.MouseLeave:Connect(function()
-        TweenService:Create(ButtonFrame, TweenInfo.new(0.2), {
-            BackgroundColor3 = currentTheme.Tertiary
-        }):Play()
+        if not isAnimating then
+            TweenService:Create(ButtonFrame, TweenInfo.new(0.2), {
+                BackgroundColor3 = currentTheme.Tertiary
+            }):Play()
+        end
     end)
 
     Button.MouseButton1Click:Connect(function()
