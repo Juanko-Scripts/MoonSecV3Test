@@ -1446,7 +1446,7 @@ function DiscordLib:Window(text)
             local descY = 30
             local toggleY = 5
             local valueX = 270
-            local sliderY = 15
+            local sliderY = 0
 
             if desc then
                 local tempLabel = Instance.new("TextLabel")
