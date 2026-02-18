@@ -1366,10 +1366,16 @@ function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, ca
         tempLabel.TextWrapped = true
         tempLabel.RichText = true
         tempLabel.LineHeight = 1.2
+        tempLabel.Parent = SectionFrame
+        tempLabel.Visible = false
         
         local textHeight = tempLabel.TextBounds.Y
-        baseHeight = 80 + textHeight + 12
-        sliderY = 45 + textHeight + 12
+        if textHeight and type(textHeight) == "number" then
+            baseHeight = 80 + textHeight + 12
+            sliderY = 45 + textHeight + 12
+        end
+        
+        tempLabel:Destroy()
     end
 
     local MainFrame = Instance.new("Frame")
