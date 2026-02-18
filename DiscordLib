@@ -126,7 +126,6 @@ Discord.Name = "Discord"
 Discord.Parent = game.CoreGui
 Discord.ZIndexBehavior = Enum.ZIndexBehavior.Global
 
--- Variables para la función Minimize
 local isMinimized = false
 local originalSize = UDim2.new(0, 650, 0, 400)
 local minimizedSize = UDim2.new(0, 250, 0, 60)
@@ -134,7 +133,6 @@ local originalPosition = UDim2.new(0.5, 0, 0.5, 0)
 local minimizedPosition = UDim2.new(1, -260, 1, -70)
 local minimizeAnimating = false
 
--- Función MinimizeUI
 function DiscordLib:MinimizeUI()
     if minimizeAnimating then return end
     minimizeAnimating = true
@@ -150,86 +148,56 @@ function DiscordLib:MinimizeUI()
     local targetSize = isMinimized and minimizedSize or originalSize
     local targetPosition = isMinimized and minimizedPosition or originalPosition
     
-    -- Animar elementos internos
-    local serversFrame = mainFrame:FindFirstChild("ServersHoldFrame")
-    local channelsFrame = mainFrame:FindFirstChild("ChannelsHoldFrame")
-    local userpad = mainFrame:FindFirstChild("Userpad", true)
-    
     if isMinimized then
-        -- Ocultar elementos con animación
+        local serversFrame = mainFrame:FindFirstChild("ServersHoldFrame")
         if serversFrame then
-            TweenService:Create(serversFrame, TweenInfo.new(0.3), {
-                BackgroundTransparency = 1,
-                Size = UDim2.new(0, 0, 0, 0)
-            }):Play()
+            serversFrame.Visible = false
         end
+        local channelsFrame = mainFrame:FindFirstChild("ChannelsHoldFrame")
         if channelsFrame then
-            TweenService:Create(channelsFrame, TweenInfo.new(0.3), {
-                BackgroundTransparency = 1,
-                Size = UDim2.new(0, 0, 0, 0)
-            }):Play()
+            channelsFrame.Visible = false
         end
+        local userpad = mainFrame:FindFirstChild("Userpad", true)
         if userpad then
-            TweenService:Create(userpad, TweenInfo.new(0.3), {
-                BackgroundTransparency = 1
-            }):Play()
+            userpad.Visible = false
         end
         
-        -- Animar todas las secciones
         for _, section in pairs(Sections) do
             if section and section.Parent then
-                TweenService:Create(section, TweenInfo.new(0.3), {
-                    BackgroundTransparency = 1,
-                    Size = UDim2.new(0, 0, 0, 0)
-                }):Play()
+                section.Visible = false
             end
         end
         
-        -- Cambiar título
         local title = mainFrame:FindFirstChild("Title", true)
         if title then
-            TweenService:Create(title, TweenInfo.new(0.3), {
-                Text = "[Minimized]"
-            }):Play()
+            title.Text = "[Minimized]"
         end
     else
-        -- Mostrar elementos
+        local serversFrame = mainFrame:FindFirstChild("ServersHoldFrame")
         if serversFrame then
-            TweenService:Create(serversFrame, TweenInfo.new(0.3), {
-                BackgroundTransparency = 0,
-                Size = UDim2.new(0, 60, 0, 350)
-            }):Play()
+            serversFrame.Visible = true
         end
+        local channelsFrame = mainFrame:FindFirstChild("ChannelsHoldFrame")
         if channelsFrame then
-            TweenService:Create(channelsFrame, TweenInfo.new(0.3), {
-                BackgroundTransparency = 0,
-                Size = UDim2.new(0, 130, 0, 350)
-            }):Play()
+            channelsFrame.Visible = true
         end
+        local userpad = mainFrame:FindFirstChild("Userpad", true)
         if userpad then
-            TweenService:Create(userpad, TweenInfo.new(0.3), {
-                BackgroundTransparency = 0.3
-            }):Play()
+            userpad.Visible = true
         end
         
         for _, section in pairs(Sections) do
             if section and section.Parent then
-                TweenService:Create(section, TweenInfo.new(0.3), {
-                    BackgroundTransparency = 0,
-                    Size = UDim2.new(0, 390, 0, 350)
-                }):Play()
+                section.Visible = true
             end
         end
         
         local title = mainFrame:FindFirstChild("Title", true)
         if title then
-            TweenService:Create(title, TweenInfo.new(0.3), {
-                Text = "Discord UI"
-            }):Play()
+            title.Text = "Discord UI"
         end
     end
     
-    -- Animar el frame principal
     local tween = TweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
         Size = targetSize,
         Position = targetPosition
@@ -240,7 +208,6 @@ function DiscordLib:MinimizeUI()
     minimizeAnimating = false
 end
 
--- Crear botón de minimizar (integrado con el original)
 local function createMinimizeButton()
     local P,TS = game:GetService("Players"), game:GetService("TweenService")
     local plr, CG = P.LocalPlayer, game:GetService("CoreGui")
@@ -1538,9 +1505,9 @@ function DiscordLib:Window(text)
         end
 
 function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, callback)
-    local baseHeight = 80
+    local baseHeight = 70
     local titleY = 8
-    local descY = 28
+    local descY = 26
     local toggleY = 5
     local sliderY = 45
 
@@ -1555,8 +1522,8 @@ function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, ca
         tempLabel.LineHeight = 1.2
 
         local textHeight = tempLabel.TextBounds.Y
-        baseHeight = 80 + textHeight + 12
-        sliderY = 45 + textHeight + 12
+        baseHeight = 70 + textHeight + 8
+        sliderY = 45 + textHeight + 8
 
         tempLabel:Destroy()
     end
@@ -1635,7 +1602,7 @@ function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, ca
         DescLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         DescLabel.BackgroundTransparency = 1.000
         DescLabel.Position = UDim2.new(0, 10, 0, descY)
-        DescLabel.Size = UDim2.new(0, 340, 0, baseHeight - 52)
+        DescLabel.Size = UDim2.new(0, 340, 0, baseHeight - 58)
         DescLabel.Font = Enum.Font.Gotham
         DescLabel.Text = desc
         DescLabel.TextColor3 = currentTheme.TextMuted
@@ -1646,6 +1613,7 @@ function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, ca
         DescLabel.TextWrapped = true
         DescLabel.RichText = true
         DescLabel.LineHeight = 1.2
+        DescLabel.AutomaticSize = Enum.AutomaticSize.Y
     end
 
     local SliderFrame = Instance.new("Frame")
@@ -1656,6 +1624,7 @@ function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, ca
     SliderFrame.Position = UDim2.new(0, 5, 0, sliderY)
     SliderFrame.Size = UDim2.new(0, 360, 0, 45)
     SliderFrame.ZIndex = 6
+    SliderFrame.ClipsDescendants = true
 
     local SliderCorner = Instance.new("UICorner")
     SliderCorner.CornerRadius = UDim.new(0, 4)
@@ -1666,7 +1635,7 @@ function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, ca
     SliderLabel.Parent = SliderFrame
     SliderLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     SliderLabel.BackgroundTransparency = 1.000
-    SliderLabel.Position = UDim2.new(0, 5, 0, 5)
+    SliderLabel.Position = UDim2.new(0, 10, 0, 5)
     SliderLabel.Size = UDim2.new(0, 220, 0, 18)
     SliderLabel.Font = Enum.Font.Gotham
     SliderLabel.Text = "Value"
@@ -1954,6 +1923,7 @@ end
                 DescLabel.TextWrapped = true
                 DescLabel.RichText = true
                 DescLabel.LineHeight = 1.2
+                DescLabel.AutomaticSize = Enum.AutomaticSize.Y
             end
 
             local SliderBar = Instance.new("Frame")
@@ -2073,7 +2043,34 @@ end
             return sliderObject
         end
 
-        function Section:Colorpicker(text, default, callback)
+        function Section:Colorpicker(text, desc, default, callback)
+            if type(desc) == "userdata" and typeof(desc) == "Color3" then
+                callback = default
+                default = desc
+                desc = nil
+            end
+
+            local baseHeight = 38
+            local titleY = 0
+            local descY = 20
+
+            if desc then
+                local tempLabel = Instance.new("TextLabel")
+                tempLabel.Font = Enum.Font.Gotham
+                tempLabel.TextSize = 12.000
+                tempLabel.Text = desc
+                tempLabel.Size = UDim2.new(0, 340, 0, 1000)
+                tempLabel.TextWrapped = true
+                tempLabel.RichText = true
+                tempLabel.LineHeight = 1.2
+
+                local textHeight = tempLabel.TextBounds.Y
+                baseHeight = 38 + textHeight + 8
+                descY = 18
+
+                tempLabel:Destroy()
+            end
+
             local ColorPickerFrame = Instance.new("Frame")
             local ColorPickerLabel = Instance.new("TextLabel")
             local ColorButton = Instance.new("TextButton")
@@ -2088,8 +2085,9 @@ end
             ColorPickerFrame.Parent = SectionFrame
             ColorPickerFrame.BackgroundColor3 = currentTheme.Tertiary
             ColorPickerFrame.BorderSizePixel = 0
-            ColorPickerFrame.Size = UDim2.new(0, 370, 0, 38)
+            ColorPickerFrame.Size = UDim2.new(0, 370, 0, baseHeight)
             ColorPickerFrame.ZIndex = 6
+            ColorPickerFrame.ClipsDescendants = true
 
             local ColorPickerCorner = Instance.new("UICorner")
             ColorPickerCorner.CornerRadius = UDim.new(0, 4)
@@ -2098,7 +2096,7 @@ end
             ColorPickerLabel.Parent = ColorPickerFrame
             ColorPickerLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             ColorPickerLabel.BackgroundTransparency = 1.000
-            ColorPickerLabel.Position = UDim2.new(0, 5, 0, 0)
+            ColorPickerLabel.Position = UDim2.new(0, 10, 0, titleY)
             ColorPickerLabel.Size = UDim2.new(0, 310, 0, 38)
             ColorPickerLabel.Font = Enum.Font.Gotham
             ColorPickerLabel.Text = text
@@ -2107,10 +2105,33 @@ end
             ColorPickerLabel.TextXAlignment = Enum.TextXAlignment.Left
             ColorPickerLabel.ZIndex = 7
 
+            if desc then
+                ColorPickerLabel.Size = UDim2.new(0, 310, 0, 20)
+                
+                local DescLabel = Instance.new("TextLabel")
+                DescLabel.Name = "ColorpickerDesc"
+                DescLabel.Parent = ColorPickerFrame
+                DescLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                DescLabel.BackgroundTransparency = 1.000
+                DescLabel.Position = UDim2.new(0, 10, 0, descY)
+                DescLabel.Size = UDim2.new(0, 340, 0, baseHeight - 28)
+                DescLabel.Font = Enum.Font.Gotham
+                DescLabel.Text = desc
+                DescLabel.TextColor3 = currentTheme.TextMuted
+                DescLabel.TextSize = 12.000
+                DescLabel.TextXAlignment = Enum.TextXAlignment.Left
+                DescLabel.TextYAlignment = Enum.TextYAlignment.Top
+                DescLabel.ZIndex = 7
+                DescLabel.TextWrapped = true
+                DescLabel.RichText = true
+                DescLabel.LineHeight = 1.2
+                DescLabel.AutomaticSize = Enum.AutomaticSize.Y
+            end
+
             ColorButton.Parent = ColorPickerFrame
             ColorButton.BackgroundColor3 = currentTheme.Secondary
             ColorButton.BorderSizePixel = 0
-            ColorButton.Position = UDim2.new(0, 330, 0, 5)
+            ColorButton.Position = UDim2.new(0, 330, 0, (baseHeight/2) - 13)
             ColorButton.Size = UDim2.new(0, 26, 0, 26)
             ColorButton.Text = ""
             ColorButton.AutoButtonColor = false
@@ -2799,7 +2820,7 @@ end
 
             ColorButton.MouseButton1Click:Connect(createColorPickerPopup)
 
-            SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 30)
+            SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
             return ColorPickerFrame
         end
 
@@ -2970,7 +2991,7 @@ end
                 dropdownObject:Add(option)
             end
 
-            SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 30)
+            SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
             return dropdownObject
         end
 
@@ -3038,7 +3059,7 @@ end
                 end
             end)
 
-            SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 30)
+            SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
             return Textbox
         end
 
@@ -3116,7 +3137,7 @@ end
                 end
             end)
 
-            SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 30)
+            SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
             return BindFrame
         end
 
