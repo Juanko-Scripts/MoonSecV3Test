@@ -13,6 +13,8 @@ local user
 local tag
 local userinfo = {}
 local Sections = {}
+local Lighting = game:GetService("Lighting")
+
 
 local Themes = {
     Dark = {
