@@ -3525,10 +3525,10 @@ function DiscordLib:CreateAcrylicBlur()
     return acrylicObject
 end
 
-function DiscordLib:Notification(title, desc, time)
-    local title = title or "Notification"
-    local desc = desc or ""
-    local time = time or 5
+function DiscordLib:Notification(data)
+    local title = data.title or "Notification"
+    local desc = data.desc or ""
+    local time = data.time or 5
     local newYPos = baseY
     for _, notifData in ipairs(activeNotifications) do
         if notifData.frame and notifData.frame.Parent then
