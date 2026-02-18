@@ -12,6 +12,7 @@ local pfp
 local user
 local tag
 local userinfo = {}
+local Sections = {}
 
 local Themes = {
     Dark = {
@@ -3259,7 +3260,6 @@ function DiscordLib:CreateAcrylicBlur()
 
     return acrylicObject
 end
-
 
 local currentTransparency = 0
 function DiscordLib:SetTransparency(transparency)
