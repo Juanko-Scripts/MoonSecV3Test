@@ -586,7 +586,6 @@ function DiscordLib:SetTheme(themeName)
     
     local discordGui = game:GetService("CoreGui"):FindFirstChild("Discord")
     if not discordGui then return end
-    
     local mainFrame = discordGui:FindFirstChild("MainFrame")
     if not mainFrame then return end
     
@@ -620,8 +619,10 @@ function DiscordLib:SetTheme(themeName)
                 if channelBtn:IsA("TextButton") then
                     if channelBtn.BackgroundTransparency < 0.5 then
                         channelBtn.BackgroundColor3 = newTheme.Accent
+                        channelBtn.BackgroundTransparency = 0
                     else
                         channelBtn.BackgroundColor3 = newTheme.Tertiary
+                        channelBtn.BackgroundTransparency = 0.7
                     end
                     
                     local icon = channelBtn:FindFirstChild("ChannelIcon")
@@ -653,16 +654,6 @@ function DiscordLib:SetTheme(themeName)
                 label.TextColor3 = newTheme.Text
             end
         end
-        
-        local userCircle = userpad:FindFirstChild("UserCircleImage", true)
-        if userCircle then
-            userCircle.ImageColor3 = newTheme.Userpad
-        end
-    end
-    
-    local title = mainFrame:FindFirstChild("Title", true)
-    if title then
-        title.TextColor3 = newTheme.TextMuted
     end
     
     for _, sectionFrame in pairs(Sections) do
@@ -682,20 +673,14 @@ function DiscordLib:SetTheme(themeName)
                 end
             end
             
-            if sectionFrame.__buttons then
-                for _, buttonData in ipairs(sectionFrame.__buttons) do
-                    if buttonData.update then
-                        buttonData.update()
-                    end
-                end
-            end
-            
             for _, element in ipairs(sectionFrame:GetChildren()) do
                 if element:IsA("TextLabel") and element ~= sectionTitle then
                     element.TextColor3 = newTheme.Text
                 
-                elseif element:IsA("TextButton") and not element.Name:match("^Toggle_") then
-                    element.BackgroundColor3 = newTheme.Tertiary
+                elseif element:IsA("TextButton") then
+                    if not element.Name:match("^Toggle_") then
+                        element.BackgroundColor3 = newTheme.Tertiary
+                    end
                     element.TextColor3 = newTheme.Text
                     
                     local toggleFrame = element:FindFirstChild("ToggleFrame")
@@ -726,6 +711,7 @@ function DiscordLib:SetTheme(themeName)
                     for _, child in ipairs(element:GetChildren()) do
                         if child:IsA("TextLabel") then
                             child.TextColor3 = newTheme.Text
+                        
                         elseif child:IsA("Frame") then
                             if child.Name == "ToggleFrame" then
                                 child.BackgroundColor3 = newTheme.Secondary
@@ -748,6 +734,7 @@ function DiscordLib:SetTheme(themeName)
                                     button.BackgroundColor3 = newTheme.Text
                                 end
                             end
+                        
                         elseif child:IsA("ScrollingFrame") then
                             child.BackgroundColor3 = newTheme.Secondary
                             child.BorderColor3 = newTheme.Border
@@ -759,8 +746,10 @@ function DiscordLib:SetTheme(themeName)
                                     optionBtn.TextColor3 = newTheme.Text
                                 end
                             end
+                        
                         elseif child:IsA("TextButton") then
                             child.BackgroundColor3 = newTheme.Secondary
+                        
                         elseif child:IsA("TextBox") then
                             child.BackgroundColor3 = newTheme.Secondary
                             child.TextColor3 = newTheme.Text
@@ -780,12 +769,12 @@ function DiscordLib:SetTheme(themeName)
     for _, notif in ipairs(activeNotifications) do
         if notif and notif.Parent then
             notif.BackgroundColor3 = newTheme.Main
-            local notifTitle = notif:FindFirstChildOfClass("TextLabel")
-            if notifTitle then
-                notifTitle.TextColor3 = newTheme.Text
-                local notifDesc = notif:FindFirstChild("TextLabel", true)
-                if notifDesc and notifDesc ~= notifTitle then
-                    notifDesc.TextColor3 = newTheme.TextMuted
+            local title = notif:FindFirstChildOfClass("TextLabel")
+            if title then
+                title.TextColor3 = newTheme.Text
+                local desc = notif:FindFirstChild("TextLabel", true)
+                if desc and desc ~= title then
+                    desc.TextColor3 = newTheme.TextMuted
                 end
             end
         end
