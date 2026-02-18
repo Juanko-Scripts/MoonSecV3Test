@@ -1373,270 +1373,250 @@ function Section:ToggleSlider(text, desc, defaultState, minVal, maxVal, defaultV
         sliderY = 48 + textHeight + 12
     end
 
-    local MainFrame = Instance.new("Frame")
-    MainFrame.Name = "ToggleSlider_" .. text:gsub("%s+", "")
-    MainFrame.Parent = SectionFrame
-    MainFrame.BackgroundColor3 = currentTheme.Tertiary
-    MainFrame.BorderSizePixel = 0
-    MainFrame.Size = UDim2.new(0, 370, 0, baseHeight)
-    MainFrame.ZIndex = 6
-    MainFrame.ClipsDescendants = true
+    local mainContainer = Instance.new("Frame")
+    mainContainer.Name = "ToggleSlider_" .. text:gsub("%s+", "")
+    mainContainer.Parent = SectionFrame
+    mainContainer.BackgroundColor3 = currentTheme.Tertiary
+    mainContainer.BorderSizePixel = 0
+    mainContainer.Size = UDim2.new(0, 370, 0, baseHeight)
+    mainContainer.ZIndex = 6
+    mainContainer.ClipsDescendants = true
 
-    local MainCorner = Instance.new("UICorner")
-    MainCorner.CornerRadius = UDim.new(0, 4)
-    MainCorner.Parent = MainFrame
+    local containerCorner = Instance.new("UICorner")
+    containerCorner.CornerRadius = UDim.new(0, 4)
+    containerCorner.Parent = mainContainer
 
-    local TitleLabel = Instance.new("TextLabel")
-    TitleLabel.Name = "ToggleSliderTitle"
-    TitleLabel.Parent = MainFrame
-    TitleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    TitleLabel.BackgroundTransparency = 1.000
-    TitleLabel.Position = UDim2.new(0, 10, 0, titleY)
-    TitleLabel.Size = UDim2.new(0, 250, 0, 18)
-    TitleLabel.Font = Enum.Font.Gotham
-    TitleLabel.Text = text
-    TitleLabel.TextColor3 = currentTheme.Text
-    TitleLabel.TextSize = 14.000
-    TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
-    TitleLabel.TextYAlignment = Enum.TextYAlignment.Center
-    TitleLabel.ZIndex = 7
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Name = "ToggleSliderTitle"
+    titleLabel.Parent = mainContainer
+    titleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    titleLabel.BackgroundTransparency = 1.000
+    titleLabel.Position = UDim2.new(0, 10, 0, titleY)
+    titleLabel.Size = UDim2.new(0, 250, 0, 18)
+    titleLabel.Font = Enum.Font.Gotham
+    titleLabel.Text = text
+    titleLabel.TextColor3 = currentTheme.Text
+    titleLabel.TextSize = 14.000
+    titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    titleLabel.TextYAlignment = Enum.TextYAlignment.Center
+    titleLabel.ZIndex = 7
 
     if desc then
-        local DescLabel = Instance.new("TextLabel")
-        DescLabel.Name = "ToggleSliderDesc"
-        DescLabel.Parent = MainFrame
-        DescLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        DescLabel.BackgroundTransparency = 1.000
-        DescLabel.Position = UDim2.new(0, 10, 0, descY)
-        DescLabel.Size = UDim2.new(0, 340, 0, baseHeight - 80)
-        DescLabel.Font = Enum.Font.Gotham
-        DescLabel.Text = desc
-        DescLabel.TextColor3 = currentTheme.TextMuted
-        DescLabel.TextSize = 12.000
-        DescLabel.TextXAlignment = Enum.TextXAlignment.Left
-        DescLabel.TextYAlignment = Enum.TextYAlignment.Top
-        DescLabel.ZIndex = 7
-        DescLabel.TextWrapped = true
-        DescLabel.RichText = true
-        DescLabel.LineHeight = 1.2
+        local descLabel = Instance.new("TextLabel")
+        descLabel.Name = "ToggleSliderDesc"
+        descLabel.Parent = mainContainer
+        descLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        descLabel.BackgroundTransparency = 1.000
+        descLabel.Position = UDim2.new(0, 10, 0, descY)
+        descLabel.Size = UDim2.new(0, 340, 0, baseHeight - 80)
+        descLabel.Font = Enum.Font.Gotham
+        descLabel.Text = desc
+        descLabel.TextColor3 = currentTheme.TextMuted
+        descLabel.TextSize = 12.000
+        descLabel.TextXAlignment = Enum.TextXAlignment.Left
+        descLabel.TextYAlignment = Enum.TextYAlignment.Top
+        descLabel.ZIndex = 7
+        descLabel.TextWrapped = true
+        descLabel.RichText = true
+        descLabel.LineHeight = 1.2
     end
 
-    local ToggleFrame = Instance.new("Frame")
-    ToggleFrame.Name = "ToggleSliderToggle"
-    ToggleFrame.Parent = MainFrame
-    ToggleFrame.BackgroundColor3 = currentTheme.Secondary
-    ToggleFrame.BorderSizePixel = 1
-    ToggleFrame.BorderColor3 = currentTheme.Border
-    ToggleFrame.Position = UDim2.new(0, 335, 0, toggleY)
-    ToggleFrame.Size = UDim2.new(0, 20, 0, 20)
-    ToggleFrame.ZIndex = 7
+    local toggleOuter = Instance.new("Frame")
+    toggleOuter.Name = "ToggleSliderOuter"
+    toggleOuter.Parent = mainContainer
+    toggleOuter.BackgroundColor3 = currentTheme.Secondary
+    toggleOuter.BorderSizePixel = 1
+    toggleOuter.BorderColor3 = currentTheme.Border
+    toggleOuter.Position = UDim2.new(0, 335, 0, toggleY)
+    toggleOuter.Size = UDim2.new(0, 20, 0, 20)
+    toggleOuter.ZIndex = 7
 
-    local ToggleFrameCorner = Instance.new("UICorner")
-    ToggleFrameCorner.CornerRadius = UDim.new(0, 4)
-    ToggleFrameCorner.Parent = ToggleFrame
+    local toggleOuterCorner = Instance.new("UICorner")
+    toggleOuterCorner.CornerRadius = UDim.new(0, 4)
+    toggleOuterCorner.Parent = toggleOuter
 
-    local ToggleFill = Instance.new("Frame")
-    ToggleFill.Name = "ToggleSliderFill"
-    ToggleFill.Parent = ToggleFrame
-    ToggleFill.BackgroundColor3 = currentTheme.Accent
-    ToggleFill.BorderSizePixel = 0
-    ToggleFill.Size = UDim2.new(0, 0, 0, 0)
-    ToggleFill.Position = UDim2.new(0, 2, 0, 2)
-    ToggleFill.ZIndex = 8
-    ToggleFill.Visible = false
+    local toggleInner = Instance.new("Frame")
+    toggleInner.Name = "ToggleSliderInner"
+    toggleInner.Parent = toggleOuter
+    toggleInner.BackgroundColor3 = currentTheme.Accent
+    toggleInner.BorderSizePixel = 0
+    toggleInner.Size = UDim2.new(0, 0, 0, 0)
+    toggleInner.Position = UDim2.new(0, 2, 0, 2)
+    toggleInner.ZIndex = 8
+    toggleInner.Visible = false
 
-    local ToggleFillCorner = Instance.new("UICorner")
-    ToggleFillCorner.CornerRadius = UDim.new(0, 3)
-    ToggleFillCorner.Parent = ToggleFill
+    local toggleInnerCorner = Instance.new("UICorner")
+    toggleInnerCorner.CornerRadius = UDim.new(0, 3)
+    toggleInnerCorner.Parent = toggleInner
 
-    local ToggleButton = Instance.new("TextButton")
-    ToggleButton.Name = "ToggleSliderToggleButton"
-    ToggleButton.Parent = ToggleFrame
-    ToggleButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    ToggleButton.BackgroundTransparency = 1
-    ToggleButton.BorderSizePixel = 0
-    ToggleButton.Size = UDim2.new(1, 0, 1, 0)
-    ToggleButton.Text = ""
-    ToggleButton.ZIndex = 9
-    ToggleButton.AutoButtonColor = false
+    local toggleClickArea = Instance.new("TextButton")
+    toggleClickArea.Name = "ToggleSliderClickArea"
+    toggleClickArea.Parent = toggleOuter
+    toggleClickArea.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    toggleClickArea.BackgroundTransparency = 1
+    toggleClickArea.BorderSizePixel = 0
+    toggleClickArea.Size = UDim2.new(1, 0, 1, 0)
+    toggleClickArea.Text = ""
+    toggleClickArea.ZIndex = 9
+    toggleClickArea.AutoButtonColor = false
 
-    local SliderContainer = Instance.new("Frame")
-    SliderContainer.Name = "ToggleSliderContainer"
-    SliderContainer.Parent = MainFrame
-    SliderContainer.BackgroundColor3 = currentTheme.Tertiary
-    SliderContainer.BorderSizePixel = 0
-    SliderContainer.Position = UDim2.new(0, 5, 0, sliderY)
-    SliderContainer.Size = UDim2.new(0, 360, 0, 28)
-    SliderContainer.ZIndex = 6
+    local sliderArea = Instance.new("Frame")
+    sliderArea.Name = "ToggleSliderArea"
+    sliderArea.Parent = mainContainer
+    sliderArea.BackgroundColor3 = currentTheme.Tertiary
+    sliderArea.BorderSizePixel = 0
+    sliderArea.Position = UDim2.new(0, 5, 0, sliderY)
+    sliderArea.Size = UDim2.new(0, 360, 0, 28)
+    sliderArea.ZIndex = 6
 
-    local SliderLabel = Instance.new("TextLabel")
-    SliderLabel.Name = "ToggleSliderLabel"
-    SliderLabel.Parent = SliderContainer
-    SliderLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    SliderLabel.BackgroundTransparency = 1.000
-    SliderLabel.Position = UDim2.new(0, 5, 0, 0)
-    SliderLabel.Size = UDim2.new(0, 200, 1, 0)
-    SliderLabel.Font = Enum.Font.Gotham
-    SliderLabel.Text = "Value"
-    SliderLabel.TextColor3 = currentTheme.Text
-    SliderLabel.TextSize = 12.000
-    SliderLabel.TextXAlignment = Enum.TextXAlignment.Left
-    SliderLabel.TextYAlignment = Enum.TextYAlignment.Center
-    SliderLabel.ZIndex = 7
+    local valueLabel = Instance.new("TextLabel")
+    valueLabel.Name = "ToggleSliderValueLabel"
+    valueLabel.Parent = sliderArea
+    valueLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    valueLabel.BackgroundTransparency = 1.000
+    valueLabel.Position = UDim2.new(0, 5, 0, 0)
+    valueLabel.Size = UDim2.new(0, 200, 1, 0)
+    valueLabel.Font = Enum.Font.Gotham
+    valueLabel.Text = "Value"
+    valueLabel.TextColor3 = currentTheme.Text
+    valueLabel.TextSize = 12.000
+    valueLabel.TextXAlignment = Enum.TextXAlignment.Left
+    valueLabel.TextYAlignment = Enum.TextYAlignment.Center
+    valueLabel.ZIndex = 7
 
-    local SliderValue = Instance.new("TextLabel")
-    SliderValue.Name = "ToggleSliderValue"
-    SliderValue.Parent = SliderContainer
-    SliderValue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    SliderValue.BackgroundTransparency = 1.000
-    SliderValue.Position = UDim2.new(0, 315, 0, 0)
-    SliderValue.Size = UDim2.new(0, 40, 1, 0)
-    SliderValue.Font = Enum.Font.GothamBold
-    SliderValue.Text = tostring(defaultVal)
-    SliderValue.TextColor3 = currentTheme.Accent
-    SliderValue.TextSize = 12.000
-    SliderValue.TextXAlignment = Enum.TextXAlignment.Right
-    SliderValue.TextYAlignment = Enum.TextYAlignment.Center
-    SliderValue.ZIndex = 7
+    local numberDisplay = Instance.new("TextLabel")
+    numberDisplay.Name = "ToggleSliderNumber"
+    numberDisplay.Parent = sliderArea
+    numberDisplay.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    numberDisplay.BackgroundTransparency = 1.000
+    numberDisplay.Position = UDim2.new(0, 315, 0, 0)
+    numberDisplay.Size = UDim2.new(0, 40, 1, 0)
+    numberDisplay.Font = Enum.Font.GothamBold
+    numberDisplay.Text = tostring(defaultVal)
+    numberDisplay.TextColor3 = currentTheme.Accent
+    numberDisplay.TextSize = 12.000
+    numberDisplay.TextXAlignment = Enum.TextXAlignment.Right
+    numberDisplay.TextYAlignment = Enum.TextYAlignment.Center
+    numberDisplay.ZIndex = 7
 
-    local SliderBar = Instance.new("Frame")
-    SliderBar.Name = "ToggleSliderBar"
-    SliderBar.Parent = SliderContainer
-    SliderBar.BackgroundColor3 = currentTheme.Secondary
-    SliderBar.BorderSizePixel = 0
-    SliderBar.Position = UDim2.new(0, 5, 0, 16)
-    SliderBar.Size = UDim2.new(0, 350, 0, 8)
-    SliderBar.ZIndex = 7
+    local sliderTrack = Instance.new("Frame")
+    sliderTrack.Name = "ToggleSliderTrack"
+    sliderTrack.Parent = sliderArea
+    sliderTrack.BackgroundColor3 = currentTheme.Secondary
+    sliderTrack.BorderSizePixel = 0
+    sliderTrack.Position = UDim2.new(0, 5, 0, 16)
+    sliderTrack.Size = UDim2.new(0, 350, 0, 8)
+    sliderTrack.ZIndex = 7
 
-    local SliderBarCorner = Instance.new("UICorner")
-    SliderBarCorner.CornerRadius = UDim.new(0, 4)
-    SliderBarCorner.Parent = SliderBar
+    local sliderTrackCorner = Instance.new("UICorner")
+    sliderTrackCorner.CornerRadius = UDim.new(0, 4)
+    sliderTrackCorner.Parent = sliderTrack
 
-    local SliderFill = Instance.new("Frame")
-    SliderFill.Name = "ToggleSliderFill"
-    SliderFill.Parent = SliderBar
-    SliderFill.BackgroundColor3 = currentTheme.Accent
-    SliderFill.BorderSizePixel = 0
-    SliderFill.Size = UDim2.new((defaultVal - minVal) / (maxVal - minVal), 0, 1, 0)
-    SliderFill.ZIndex = 8
+    local sliderFill = Instance.new("Frame")
+    sliderFill.Name = "ToggleSliderFill"
+    sliderFill.Parent = sliderTrack
+    sliderFill.BackgroundColor3 = currentTheme.Accent
+    sliderFill.BorderSizePixel = 0
+    sliderFill.Size = UDim2.new((defaultVal - minVal) / (maxVal - minVal), 0, 1, 0)
+    sliderFill.ZIndex = 8
 
-    local SliderFillCorner = Instance.new("UICorner")
-    SliderFillCorner.CornerRadius = UDim.new(0, 4)
-    SliderFillCorner.Parent = SliderFill
+    local sliderFillCorner = Instance.new("UICorner")
+    sliderFillCorner.CornerRadius = UDim.new(0, 4)
+    sliderFillCorner.Parent = sliderFill
 
-    local SliderButton = Instance.new("TextButton")
-    SliderButton.Name = "ToggleSliderButton"
-    SliderButton.Parent = SliderBar
-    SliderButton.BackgroundColor3 = currentTheme.Text
-    SliderButton.BorderSizePixel = 0
-    SliderButton.Position = UDim2.new((defaultVal - minVal) / (maxVal - minVal), -6, 0, -3)
-    SliderButton.Size = UDim2.new(0, 14, 0, 14)
-    SliderButton.Text = ""
-    SliderButton.ZIndex = 9
-    SliderButton.AutoButtonColor = false
+    local sliderThumb = Instance.new("TextButton")
+    sliderThumb.Name = "ToggleSliderThumb"
+    sliderThumb.Parent = sliderTrack
+    sliderThumb.BackgroundColor3 = currentTheme.Text
+    sliderThumb.BorderSizePixel = 0
+    sliderThumb.Position = UDim2.new((defaultVal - minVal) / (maxVal - minVal), -6, 0, -3)
+    sliderThumb.Size = UDim2.new(0, 14, 0, 14)
+    sliderThumb.Text = ""
+    sliderThumb.ZIndex = 9
+    sliderThumb.AutoButtonColor = false
 
-    local SliderButtonCorner = Instance.new("UICorner")
-    SliderButtonCorner.CornerRadius = UDim.new(0, 7)
-    SliderButtonCorner.Parent = SliderButton
+    local sliderThumbCorner = Instance.new("UICorner")
+    sliderThumbCorner.CornerRadius = UDim.new(0, 7)
+    sliderThumbCorner.Parent = sliderThumb
 
-    local toggleState = defaultState or false
-    local currentVal = defaultVal or minVal
+    local isActive = defaultState or false
+    local currentNumber = defaultVal or minVal
     local isDragging = false
-    local isTweening = false
+    local isAnimating = false
 
-    ToggleFill.Visible = toggleState
-    if toggleState then
-        ToggleFill.Size = UDim2.new(1, -4, 1, -4)
+    toggleInner.Visible = isActive
+    if isActive then
+        toggleInner.Size = UDim2.new(1, -4, 1, -4)
     end
 
-    local function updateSliderFromInput(input)
-        local pos = input.Position.X - SliderBar.AbsolutePosition.X
-        local size = SliderBar.AbsoluteSize.X
-        local percent = math.clamp(pos / size, 0, 1)
-        currentVal = minVal + (maxVal - minVal) * percent
-        local rounded = math.floor(currentVal * 100) / 100
-        SliderValue.Text = tostring(rounded)
-        SliderFill.Size = UDim2.new(percent, 0, 1, 0)
-        SliderButton.Position = UDim2.new(percent, -6, 0, -3)
-        if toggleState and callback then
+    local function handleSliderMove(input)
+        local pos = input.Position.X - sliderTrack.AbsolutePosition.X
+        local trackSize = sliderTrack.AbsoluteSize.X
+        local percent = math.clamp(pos / trackSize, 0, 1)
+        currentNumber = minVal + (maxVal - minVal) * percent
+        local rounded = math.floor(currentNumber * 100) / 100
+        numberDisplay.Text = tostring(rounded)
+        sliderFill.Size = UDim2.new(percent, 0, 1, 0)
+        sliderThumb.Position = UDim2.new(percent, -6, 0, -3)
+        if isActive and callback then
             callback(true, rounded)
         end
     end
 
-    local function animateNumber()
-        if isTweening then return end
-        isTweening = true
-        TweenService:Create(SliderValue, TweenInfo.new(0.15, Enum.EasingStyle.Quad), {
-            TextColor3 = currentTheme.Text,
-            TextSize = 14
-        }):Play()
-        task.wait(0.15)
-        TweenService:Create(SliderValue, TweenInfo.new(0.15, Enum.EasingStyle.Quad), {
-            TextColor3 = currentTheme.Accent,
-            TextSize = 12
-        }):Play()
-        task.wait(0.15)
-        isTweening = false
-    end
-
-    local function animateToggle()
-        if toggleState then
-            TweenService:Create(ToggleFill, TweenInfo.new(0.2, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+    local function playToggleAnimation()
+        if isAnimating then return end
+        isAnimating = true
+        
+        if isActive then
+            TweenService:Create(toggleInner, TweenInfo.new(0.2, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
                 Size = UDim2.new(1, -4, 1, -4)
             }):Play()
-            TweenService:Create(ToggleFrame, TweenInfo.new(0.2), {
+            TweenService:Create(toggleOuter, TweenInfo.new(0.2), {
                 BackgroundColor3 = currentTheme.Accent
             }):Play()
         else
-            TweenService:Create(ToggleFill, TweenInfo.new(0.15, Enum.EasingStyle.Quad), {
+            TweenService:Create(toggleInner, TweenInfo.new(0.15, Enum.EasingStyle.Quad), {
                 Size = UDim2.new(0, 0, 0, 0)
             }):Play()
-            TweenService:Create(ToggleFrame, TweenInfo.new(0.2), {
+            TweenService:Create(toggleOuter, TweenInfo.new(0.2), {
                 BackgroundColor3 = currentTheme.Secondary
             }):Play()
         end
+        
+        task.wait(0.2)
+        isAnimating = false
     end
 
-    local function toggleSwitch()
-        toggleState = not toggleState
-        animateToggle()
-        if toggleState and callback then
-            callback(true, currentVal)
-            animateNumber()
-        elseif not toggleState and callback then
+    local function toggleState()
+        isActive = not isActive
+        playToggleAnimation()
+        if isActive and callback then
+            callback(true, currentNumber)
+        elseif not isActive and callback then
             callback(false, nil)
         end
     end
 
-    ToggleButton.MouseButton1Click:Connect(toggleSwitch)
+    toggleClickArea.MouseButton1Click:Connect(toggleState)
 
-    SliderButton.InputBegan:Connect(function(input)
+    sliderThumb.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
             isDragging = true
-            updateSliderFromInput(input)
-            if toggleState then
-                animateNumber()
-            end
+            handleSliderMove(input)
         end
     end)
 
-    SliderButton.InputChanged:Connect(function(input)
+    sliderThumb.InputChanged:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
             if isDragging then
-                updateSliderFromInput(input)
-                if toggleState then
-                    animateNumber()
-                end
+                handleSliderMove(input)
             end
         end
     end)
 
-    SliderBar.InputBegan:Connect(function(input)
+    sliderTrack.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            updateSliderFromInput(input)
-            if toggleState then
-                animateNumber()
-            end
+            handleSliderMove(input)
         end
     end)
 
@@ -1646,52 +1626,51 @@ function Section:ToggleSlider(text, desc, defaultState, minVal, maxVal, defaultV
         end
     end)
 
-    SliderButton.MouseEnter:Connect(function()
-        TweenService:Create(SliderButton, TweenInfo.new(0.2), {
+    sliderThumb.MouseEnter:Connect(function()
+        TweenService:Create(sliderThumb, TweenInfo.new(0.2), {
             Size = UDim2.new(0, 16, 0, 16),
-            Position = UDim2.new((currentVal - minVal) / (maxVal - minVal), -7, 0, -4)
+            Position = UDim2.new((currentNumber - minVal) / (maxVal - minVal), -7, 0, -4)
         }):Play()
     end)
 
-    SliderButton.MouseLeave:Connect(function()
-        TweenService:Create(SliderButton, TweenInfo.new(0.2), {
+    sliderThumb.MouseLeave:Connect(function()
+        TweenService:Create(sliderThumb, TweenInfo.new(0.2), {
             Size = UDim2.new(0, 14, 0, 14),
-            Position = UDim2.new((currentVal - minVal) / (maxVal - minVal), -6, 0, -3)
+            Position = UDim2.new((currentNumber - minVal) / (maxVal - minVal), -6, 0, -3)
         }):Play()
     end)
 
-    local controlObject = {}
+    local controlInterface = {}
     
-    function controlObject:SetValue(newValue)
+    function controlInterface:SetValue(newValue)
         newValue = math.clamp(newValue, minVal, maxVal)
-        currentVal = newValue
-        local rounded = math.floor(currentVal * 100) / 100
-        local percent = (currentVal - minVal) / (maxVal - minVal)
-        SliderValue.Text = tostring(rounded)
-        SliderFill.Size = UDim2.new(percent, 0, 1, 0)
-        SliderButton.Position = UDim2.new(percent, -6, 0, -3)
-        if toggleState and callback then
+        currentNumber = newValue
+        local rounded = math.floor(currentNumber * 100) / 100
+        local percent = (currentNumber - minVal) / (maxVal - minVal)
+        numberDisplay.Text = tostring(rounded)
+        sliderFill.Size = UDim2.new(percent, 0, 1, 0)
+        sliderThumb.Position = UDim2.new(percent, -6, 0, -3)
+        if isActive and callback then
             callback(true, rounded)
-            animateNumber()
         end
     end
 
-    function controlObject:SetState(state)
-        if state ~= toggleState then
-            toggleSwitch()
+    function controlInterface:SetState(state)
+        if state ~= isActive then
+            toggleState()
         end
     end
 
-    function controlObject:GetState()
-        return toggleState
+    function controlInterface:GetState()
+        return isActive
     end
 
-    function controlObject:GetValue()
-        return currentVal
+    function controlInterface:GetValue()
+        return currentNumber
     end
 
     SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
-    return controlObject
+    return controlInterface
 end
 
 function Section:Slider(text, desc, min, max, default, callback)
