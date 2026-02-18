@@ -131,9 +131,9 @@ Discord.ZIndexBehavior = Enum.ZIndexBehavior.Global
 
 local isMinimized = false
 local originalSize = UDim2.new(0, 650, 0, 400)
-local minimizedSize = UDim2.new(0, 250, 0, 60)
+local minimizedSize = UDim2.new(0, 0, 0, 0)
 local originalPosition = UDim2.new(0.5, 0, 0.5, 0)
-local minimizedPosition = UDim2.new(1, -260, 1, -70)
+local minimizedPosition = UDim2.new(1, 0, 1, 0)
 local minimizeAnimating = false
 local minimizeButton = nil
 local currentSize = originalSize
@@ -560,139 +560,148 @@ function DiscordLib:Window(text)
     local Servers = {}
     local ServerChannels = {}
     
-    function DiscordLib:SetTheme(themeName)
-        local newTheme
-        if type(themeName) == "string" then
-            newTheme = Themes[themeName] or Themes.Dark
-        else
-            newTheme = {
-                Main = themeName,
-                Secondary = themeName:lerp(Color3.new(0, 0, 0), 0.2),
-                Tertiary = themeName:lerp(Color3.new(0, 0, 0), 0.3),
-                Accent = themeName:lerp(Color3.new(1, 1, 1), 0.3),
-                Text = themeName:lerp(Color3.new(1, 1, 1), 0.8),
-                TextMuted = themeName:lerp(Color3.new(1, 1, 1), 0.5),
-                Userpad = themeName:lerp(Color3.new(0, 0, 0), 0.4),
-                UserIcon = themeName:lerp(Color3.new(0, 0, 0), 0.5),
-                Hover = themeName:lerp(Color3.new(1, 1, 1), 0.2),
-                Border = themeName:lerp(Color3.new(0, 0, 0), 0.8)
-            }
+function DiscordLib:SetTheme(themeName)
+    local newTheme
+    if type(themeName) == "string" then
+        newTheme = Themes[themeName] or Themes.Dark
+    else
+        newTheme = {
+            Main = themeName,
+            Secondary = themeName:lerp(Color3.new(0, 0, 0), 0.2),
+            Tertiary = themeName:lerp(Color3.new(0, 0, 0), 0.3),
+            Accent = themeName:lerp(Color3.new(1, 1, 1), 0.3),
+            Text = themeName:lerp(Color3.new(1, 1, 1), 0.8),
+            TextMuted = themeName:lerp(Color3.new(1, 1, 1), 0.5),
+            Userpad = themeName:lerp(Color3.new(0, 0, 0), 0.4),
+            UserIcon = themeName:lerp(Color3.new(0, 0, 0), 0.5),
+            Hover = themeName:lerp(Color3.new(1, 1, 1), 0.2),
+            Border = themeName:lerp(Color3.new(0, 0, 0), 0.8)
+        }
+    end
+    
+    currentTheme = newTheme
+    
+    local discordGui = game:GetService("CoreGui"):FindFirstChild("Discord")
+    if not discordGui then return end
+    
+    local mainFrame = discordGui:FindFirstChild("MainFrame")
+    if not mainFrame then return end
+    mainFrame.BackgroundColor3 = newTheme.Main
+    local serversHoldFrame = mainFrame:FindFirstChild("ServersHoldFrame")
+    if serversHoldFrame then
+        serversHoldFrame.BackgroundColor3 = newTheme.Secondary
+        
+        local serversHold = serversHoldFrame:FindFirstChild("ServersHold")
+        if serversHold then
+            for _, serverBtn in ipairs(serversHold:GetChildren()) do
+                if serverBtn:IsA("TextButton") then
+                    serverBtn.BackgroundColor3 = newTheme.Tertiary
+                    local icon = serverBtn:FindFirstChild("ServerIcon")
+                    if icon and icon:IsA("ImageLabel") then
+                        icon.ImageColor3 = newTheme.Text
+                    end
+                end
+            end
         end
+    end
+    
+    local channelsHoldFrame = mainFrame:FindFirstChild("ChannelsHoldFrame")
+    if channelsHoldFrame then
+        channelsHoldFrame.BackgroundColor3 = newTheme.Secondary
         
-        currentTheme = newTheme
-        
-        local discordGui = game:GetService("CoreGui"):FindFirstChild("Discord")
-        if not discordGui then return end
-        local mainFrame = discordGui:FindFirstChild("MainFrame")
-        if not mainFrame then return end
-        mainFrame.BackgroundColor3 = newTheme.Main
-        
-        local serversHoldFrame = mainFrame:FindFirstChild("ServersHoldFrame")
-        if serversHoldFrame then
-            serversHoldFrame.BackgroundColor3 = newTheme.Secondary
-            
-            local serversHold = serversHoldFrame:FindFirstChild("ServersHold")
-            if serversHold then
-                for _, serverBtn in ipairs(serversHold:GetChildren()) do
-                    if serverBtn:IsA("TextButton") then
-                        serverBtn.BackgroundColor3 = newTheme.Tertiary
-                        local icon = serverBtn:FindFirstChild("ServerIcon")
-                        if icon and icon:IsA("ImageLabel") then
-                            icon.ImageColor3 = newTheme.Text
+        local channelsHold = channelsHoldFrame:FindFirstChild("ChannelsHold")
+        if channelsHold then
+            for _, channelBtn in ipairs(channelsHold:GetChildren()) do
+                if channelBtn:IsA("TextButton") then
+                    if channelBtn.BackgroundTransparency < 0.5 then
+                        channelBtn.BackgroundColor3 = newTheme.Accent
+                    else
+                        channelBtn.BackgroundColor3 = newTheme.Tertiary
+                    end
+                    
+                    local icon = channelBtn:FindFirstChild("ChannelIcon")
+                    if icon and icon:IsA("TextLabel") then
+                        icon.TextColor3 = newTheme.TextMuted
+                    end
+                    
+                    for _, child in ipairs(channelBtn:GetChildren()) do
+                        if child:IsA("TextLabel") and child ~= icon then
+                            child.TextColor3 = newTheme.Text
                         end
                     end
                 end
             end
         end
+    end
+    
+    local userpad = mainFrame:FindFirstChild("Userpad", true)
+    if userpad then
+        userpad.BackgroundColor3 = newTheme.Userpad
         
-        local channelsHoldFrame = mainFrame:FindFirstChild("ChannelsHoldFrame")
-        if channelsHoldFrame then
-            channelsHoldFrame.BackgroundColor3 = newTheme.Secondary
+        local userIcon = userpad:FindFirstChild("UserIcon")
+        if userIcon then
+            userIcon.BackgroundColor3 = newTheme.UserIcon
+        end
+        
+        for _, label in ipairs(userpad:GetChildren()) do
+            if label:IsA("TextLabel") then
+                label.TextColor3 = newTheme.Text
+            end
+        end
+        
+        local userCircle = userpad:FindFirstChild("UserCircleImage", true)
+        if userCircle then
+            userCircle.ImageColor3 = newTheme.Userpad
+        end
+    end
+    
+    local title = mainFrame:FindFirstChild("Title", true)
+    if title then
+        title.TextColor3 = newTheme.TextMuted
+    end
+    
+    for _, sectionFrame in pairs(Sections) do
+        if sectionFrame and sectionFrame.Parent then
+            sectionFrame.BackgroundColor3 = newTheme.Secondary
             
-            local channelsHold = channelsHoldFrame:FindFirstChild("ChannelsHold")
-            if channelsHold then
-                for _, channelBtn in ipairs(channelsHold:GetChildren()) do
-                    if channelBtn:IsA("TextButton") then
-                        if channelBtn.BackgroundTransparency < 0.5 then
-                            channelBtn.BackgroundColor3 = newTheme.Accent
-                            channelBtn.BackgroundTransparency = 0
-                        else
-                            channelBtn.BackgroundColor3 = newTheme.Tertiary
-                            channelBtn.BackgroundTransparency = 0.7
-                        end
+            local sectionTitle = sectionFrame:FindFirstChild("SectionTitle")
+            if sectionTitle and sectionTitle:IsA("TextLabel") then
+                sectionTitle.TextColor3 = newTheme.Text
+            end
+            
+            for _, element in ipairs(sectionFrame:GetChildren()) do
+                if element:IsA("TextLabel") and element ~= sectionTitle then
+                    element.TextColor3 = newTheme.Text
+                
+                elseif element:IsA("TextButton") then
+                    element.BackgroundColor3 = newTheme.Tertiary
+                    element.TextColor3 = newTheme.Text
+                    
+                    local toggleFrame = element:FindFirstChild("ToggleFrame")
+                    if toggleFrame then
+                        toggleFrame.BackgroundColor3 = newTheme.Secondary
+                        toggleFrame.BorderColor3 = newTheme.Border
                         
-                        local icon = channelBtn:FindFirstChild("ChannelIcon")
-                        if icon and icon:IsA("TextLabel") then
-                            icon.TextColor3 = newTheme.TextMuted
-                        end
-                        
-                        for _, child in ipairs(channelBtn:GetChildren()) do
-                            if child:IsA("TextLabel") and child ~= icon then
-                                child.TextColor3 = newTheme.Text
-                            end
+                        local toggleFill = toggleFrame:FindFirstChild("ToggleFill")
+                        if toggleFill then
+                            toggleFill.BackgroundColor3 = newTheme.Accent
                         end
                     end
-                end
-            end
-        end
-        
-        local userpad = mainFrame:FindFirstChild("Userpad", true)
-        if userpad then
-            userpad.BackgroundColor3 = newTheme.Userpad
-            
-            local userIcon = userpad:FindFirstChild("UserIcon")
-            if userIcon then
-                userIcon.BackgroundColor3 = newTheme.UserIcon
-            end
-            
-            for _, label in ipairs(userpad:GetChildren()) do
-                if label:IsA("TextLabel") then
-                    label.TextColor3 = newTheme.Text
-                end
-            end
-        end
-        
-        for _, sectionFrame in pairs(Sections) do
-            if sectionFrame and sectionFrame.Parent then
-                sectionFrame.BackgroundColor3 = newTheme.Secondary
                 
-                local sectionTitle = sectionFrame:FindFirstChild("SectionTitle")
-                if sectionTitle and sectionTitle:IsA("TextLabel") then
-                    sectionTitle.TextColor3 = newTheme.Text
-                end
+                elseif element.Name and element.Name:match("^Paragraph_") then
+                    element.BackgroundColor3 = newTheme.Tertiary
+                    
+                    for _, child in ipairs(element:GetChildren()) do
+                        if child.Name == "ParagraphTitle" then
+                            child.TextColor3 = newTheme.Text
+                        elseif child.Name == "ParagraphContent" then
+                            child.TextColor3 = newTheme.TextMuted
+                        end
+                    end
                 
-                for _, element in ipairs(sectionFrame:GetChildren()) do
-                    if element:IsA("TextLabel") and element ~= sectionTitle then
-                        element.TextColor3 = newTheme.Text
-                    
-                    elseif element:IsA("TextButton") then
-                        element.BackgroundColor3 = newTheme.Tertiary
-                        element.TextColor3 = newTheme.Text
-                        
-                        local toggleFrame = element:FindFirstChildOfClass("Frame")
-                        if toggleFrame then
-                            toggleFrame.BackgroundColor3 = newTheme.Secondary
-                            toggleFrame.BorderColor3 = newTheme.Border
-                            
-                            for _, child in ipairs(toggleFrame:GetChildren()) do
-                                if child:IsA("Frame") then
-                                    child.BackgroundColor3 = newTheme.Accent
-                                end
-                            end
-                        end
-                    
-                    elseif element.Name and element.Name:match("^Paragraph_") then
-                        element.BackgroundColor3 = newTheme.Tertiary
-                        
-                        for _, child in ipairs(element:GetChildren()) do
-                            if child.Name == "ParagraphTitle" then
-                                child.TextColor3 = newTheme.Text
-                            elseif child.Name == "ParagraphContent" then
-                                child.TextColor3 = newTheme.TextMuted
-                            end
-                        end
-                    
-                    elseif element:IsA("Frame") then
+                elseif element:IsA("Frame") then
+                    if element.Name == "ToggleSlider_" then
+                    else
                         element.BackgroundColor3 = newTheme.Tertiary
                         
                         for _, child in ipairs(element:GetChildren()) do
@@ -700,18 +709,28 @@ function DiscordLib:Window(text)
                                 child.TextColor3 = newTheme.Text
                             
                             elseif child:IsA("Frame") then
-                                if child.Position.Y.Offset > 20 and child.Size.Y.Offset < 20 then
+                                if child.Name == "ToggleFrame" then
+                                    child.BackgroundColor3 = newTheme.Secondary
+                                    child.BorderColor3 = newTheme.Border
+                                    
+                                    local fill = child:FindFirstChild("ToggleFill")
+                                    if fill then
+                                        fill.BackgroundColor3 = newTheme.Accent
+                                    end
+                                elseif child.Name == "SliderBar" then
                                     child.BackgroundColor3 = newTheme.Secondary
                                     
-                                    local fill = child:FindFirstChildOfClass("Frame")
+                                    local fill = child:FindFirstChild("SliderFill")
                                     if fill then
                                         fill.BackgroundColor3 = newTheme.Accent
                                     end
                                     
-                                    local button = child:FindFirstChildOfClass("TextButton")
+                                    local button = child:FindFirstChild("SliderButton")
                                     if button then
                                         button.BackgroundColor3 = newTheme.Text
                                     end
+                                else
+                                    child.BackgroundColor3 = newTheme.Tertiary
                                 end
                             
                             elseif child:IsA("ScrollingFrame") then
@@ -742,31 +761,40 @@ function DiscordLib:Window(text)
                         end
                     end
                 end
-                
-                if sectionFrame.__toggleSliders then
-                    for _, sliderData in ipairs(sectionFrame.__toggleSliders) do
-                        if sliderData.update then
-                            sliderData.update()
-                        end
+            end
+            
+            if sectionFrame.__toggleSliders then
+                for _, sliderData in ipairs(sectionFrame.__toggleSliders) do
+                    if sliderData.update then
+                        sliderData.update()
                     end
                 end
             end
-        end
-        
-        for _, notif in ipairs(activeNotifications) do
-            if notif and notif.Parent then
-                notif.BackgroundColor3 = newTheme.Main
-                local title = notif:FindFirstChildOfClass("TextLabel")
-                if title then
-                    title.TextColor3 = newTheme.Text
-                    local desc = notif:FindFirstChild("TextLabel", true)
-                    if desc and desc ~= title then
-                        desc.TextColor3 = newTheme.TextMuted
+            
+            if sectionFrame.__buttons then
+                for _, buttonData in ipairs(sectionFrame.__buttons) do
+                    if buttonData.update then
+                        buttonData.update()
                     end
                 end
             end
         end
     end
+    
+    for _, notif in ipairs(activeNotifications) do
+        if notif and notif.Parent then
+            notif.BackgroundColor3 = newTheme.Main
+            local title = notif:FindFirstChildOfClass("TextLabel")
+            if title then
+                title.TextColor3 = newTheme.Text
+                local desc = notif:FindFirstChild("TextLabel", true)
+                if desc and desc ~= title then
+                    desc.TextColor3 = newTheme.TextMuted
+                end
+            end
+        end
+    end
+end
 
     function Servers:Server(Name, Image)
         ServerChannels[Name] = ServerChannels[Name] or {}
@@ -1788,25 +1816,40 @@ function DiscordLib:Window(text)
 
             ToggleButton.MouseButton1Click:Connect(updateToggle)
 
-            local function updateThemeColors()
-                MainFrame.BackgroundColor3 = currentTheme.Tertiary
-                TitleLabel.TextColor3 = currentTheme.Text
-                SliderValue.TextColor3 = currentTheme.Accent
-                ToggleContainer.BackgroundColor3 = toggled and currentTheme.Accent or currentTheme.Secondary
-                ToggleContainer.BorderColor3 = currentTheme.Border
-                ToggleFill.BackgroundColor3 = currentTheme.Accent
-                SliderFrame.BackgroundColor3 = currentTheme.Tertiary
-                SliderBar.BackgroundColor3 = currentTheme.Secondary
-                SliderFill.BackgroundColor3 = currentTheme.Accent
-                SliderButton.BackgroundColor3 = currentTheme.Text
-                
-                if desc then
-                    local DescLabel = MainFrame:FindFirstChild("ToggleSliderDesc")
-                    if DescLabel then
-                        DescLabel.TextColor3 = currentTheme.TextMuted
-                    end
-                end
-            end
+local function updateThemeColors()
+    MainFrame.BackgroundColor3 = currentTheme.Tertiary
+    TitleLabel.TextColor3 = currentTheme.Text
+    SliderValue.TextColor3 = currentTheme.Accent
+    
+    if toggled then
+        ToggleContainer.BackgroundColor3 = currentTheme.Accent
+    else
+        ToggleContainer.BackgroundColor3 = currentTheme.Secondary
+    end
+    ToggleContainer.BorderColor3 = currentTheme.Border
+    ToggleFill.BackgroundColor3 = currentTheme.Accent
+    
+    SliderFrame.BackgroundColor3 = currentTheme.Tertiary
+    SliderBar.BackgroundColor3 = currentTheme.Secondary
+    SliderFill.BackgroundColor3 = currentTheme.Accent
+    SliderButton.BackgroundColor3 = currentTheme.Text
+    
+    if desc then
+        local DescLabel = MainFrame:FindFirstChild("ToggleSliderDesc")
+        if DescLabel then
+            DescLabel.TextColor3 = currentTheme.TextMuted
+        end
+    end
+end
+
+if not Section.__toggleSliders then
+    Section.__toggleSliders = {}
+end
+table.insert(Section.__toggleSliders, {
+    update = updateThemeColors
+})
+
+updateThemeColors()
 
             if not Section.__toggleSliders then
                 Section.__toggleSliders = {}
