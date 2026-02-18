@@ -972,28 +972,12 @@ function Section:Button(text, desc, callback)
         desc = nil
     end
 
-    local baseHeight = 32 
-    local finalHeight = baseHeight
-    
-    if desc then
-        local tempLabel = Instance.new("TextLabel")
-        tempLabel.Font = Enum.Font.Gotham
-        tempLabel.TextSize = 12.000
-        tempLabel.Text = desc
-        tempLabel.Size = UDim2.new(0, 340, 0, 1000)
-        tempLabel.TextWrapped = true
-        tempLabel.RichText = true
-        
-        local textHeight = tempLabel.TextBounds.Y
-        finalHeight = baseHeight + textHeight + 10
-    end
-
     local ButtonFrame = Instance.new("Frame")
     ButtonFrame.Name = "Button_" .. text:gsub("%s+", "")
     ButtonFrame.Parent = SectionFrame
     ButtonFrame.BackgroundColor3 = currentTheme.Tertiary
     ButtonFrame.BorderSizePixel = 0
-    ButtonFrame.Size = UDim2.new(0, 370, 0, finalHeight)
+    ButtonFrame.Size = UDim2.new(0, 370, 0, 32)
     ButtonFrame.ZIndex = 6
     ButtonFrame.ClipsDescendants = true
 
@@ -1012,65 +996,87 @@ function Section:Button(text, desc, callback)
     Button.ZIndex = 7
     Button.AutoButtonColor = false
 
-    if not desc then
-        local TitleLabel = Instance.new("TextLabel")
-        TitleLabel.Name = "ButtonTitle"
-        TitleLabel.Parent = ButtonFrame
-        TitleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        TitleLabel.BackgroundTransparency = 1.000
-        TitleLabel.Size = UDim2.new(1, 0, 1, 0)
-        TitleLabel.Font = Enum.Font.GothamBold
-        TitleLabel.Text = text
-        TitleLabel.TextColor3 = currentTheme.Text
-        TitleLabel.TextSize = 14.000
-        TitleLabel.TextXAlignment = Enum.TextXAlignment.Center
-        TitleLabel.TextYAlignment = Enum.TextYAlignment.Center
-        TitleLabel.ZIndex = 8
-    else
-        local TitleLabel = Instance.new("TextLabel")
-        TitleLabel.Name = "ButtonTitle"
-        TitleLabel.Parent = ButtonFrame
-        TitleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        TitleLabel.BackgroundTransparency = 1.000
-        TitleLabel.Size = UDim2.new(1, 0, 0, 18)
-        TitleLabel.Position = UDim2.new(0, 0, 0, 6)
-        TitleLabel.Font = Enum.Font.GothamBold
-        TitleLabel.Text = text
-        TitleLabel.TextColor3 = currentTheme.Text
-        TitleLabel.TextSize = 14.000
-        TitleLabel.TextXAlignment = Enum.TextXAlignment.Center
-        TitleLabel.TextYAlignment = Enum.TextYAlignment.Center
-        TitleLabel.ZIndex = 8
+    local TitleLabel = Instance.new("TextLabel")
+    TitleLabel.Name = "ButtonTitle"
+    TitleLabel.Parent = ButtonFrame
+    TitleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    TitleLabel.BackgroundTransparency = 1.000
+    TitleLabel.Size = UDim2.new(0, desc and 150 or 360, 1, 0)
+    TitleLabel.Position = UDim2.new(0, 10, 0, 0)
+    TitleLabel.Font = Enum.Font.GothamBold
+    TitleLabel.Text = text
+    TitleLabel.TextColor3 = currentTheme.Text
+    TitleLabel.TextSize = 14.000
+    TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    TitleLabel.TextYAlignment = Enum.TextYAlignment.Center
+    TitleLabel.ZIndex = 8
+    TitleLabel.ClipsDescendants = false
 
+    if desc then
         local DescLabel = Instance.new("TextLabel")
         DescLabel.Name = "ButtonDesc"
         DescLabel.Parent = ButtonFrame
         DescLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         DescLabel.BackgroundTransparency = 1.000
-        DescLabel.Size = UDim2.new(1, -20, 0, finalHeight - 28)
-        DescLabel.Position = UDim2.new(0, 10, 0, 22)
+        DescLabel.Size = UDim2.new(0, 200, 1, 0)
+        DescLabel.Position = UDim2.new(0, 160, 0, 0)
         DescLabel.Font = Enum.Font.Gotham
         DescLabel.Text = desc
         DescLabel.TextColor3 = currentTheme.TextMuted
         DescLabel.TextSize = 12.000
-        DescLabel.TextXAlignment = Enum.TextXAlignment.Center
-        DescLabel.TextYAlignment = Enum.TextYAlignment.Top
+        DescLabel.TextXAlignment = Enum.TextXAlignment.Right
+        DescLabel.TextYAlignment = Enum.TextYAlignment.Center
         DescLabel.ZIndex = 8
-        DescLabel.TextWrapped = true
-        DescLabel.RichText = true
-        DescLabel.LineHeight = 1.2
+        DescLabel.TextTruncate = Enum.TextTruncate.AtEnd
     end
 
+    local isAnimating = false
+    local animationQueue = 0
+
     local function playClickAnimation()
-        TweenService:Create(ButtonFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
-            BackgroundColor3 = currentTheme.Hover
+        if isAnimating then
+            animationQueue = animationQueue + 1
+            return
+        end
+        
+        isAnimating = true
+
+        local tweenInfo = TweenInfo.new(0.1, Enum.EasingStyle.Quad)
+        
+        TweenService:Create(TitleLabel, tweenInfo, {
+            TextSize = 12
         }):Play()
         
+        if desc then
+            local descLabel = ButtonFrame:FindFirstChild("ButtonDesc")
+            if descLabel then
+                TweenService:Create(descLabel, tweenInfo, {
+                    TextSize = 10
+                }):Play()
+            end
+        end
+        
         task.wait(0.1)
- 
-        TweenService:Create(ButtonFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
-            BackgroundColor3 = currentTheme.Tertiary
+        TweenService:Create(TitleLabel, tweenInfo, {
+            TextSize = 14
         }):Play()
+        
+        if desc then
+            local descLabel = ButtonFrame:FindFirstChild("ButtonDesc")
+            if descLabel then
+                TweenService:Create(descLabel, tweenInfo, {
+                    TextSize = 12
+                }):Play()
+            end
+        end
+        
+        task.wait(0.1)
+        
+        isAnimating = false
+        if animationQueue > 0 then
+            animationQueue = animationQueue - 1
+            playClickAnimation()
+        end
     end
 
     Button.MouseEnter:Connect(function()
