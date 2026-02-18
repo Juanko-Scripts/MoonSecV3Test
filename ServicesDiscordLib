@@ -241,14 +241,14 @@ end)
     channel:Slider("Blur Intensity", 0, 100, 10, function(value)
     blur:SetIntensity(value / 100)
 end)
-    channel:Slider("Background Opacity", 0, 100, 100, function(value)
+    channel:Slider("Background Opacity", "Transparency of the background, recommended to use in 70", 0, 100, 100, function(value)
         local transparency = 1 - (value / 100)
         self:SetTransparency(transparency, discordLib)
     end)
 
 channel:Seperator()
 channel:Label("INFORMACION PLAYERS OR SERVER") 
-local UpdateAbc123 = channel:Paragraph("INFORMATION", "No Informacion Detect")
+local UpdateAbc123
 channel:Toggle("Auto Update Information", false, function(Y)
       ABC2717171727727271772ABC = Y
 while ABC2717171727727271772ABC do
@@ -286,6 +286,7 @@ end
 end)
 end
 end)
+UpdateAbc123 = channel:Paragraph("INFORMATION", "No Informacion Detect")
     return channel
 end
 
