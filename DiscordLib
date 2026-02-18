@@ -985,7 +985,7 @@ function Section:Button(text, desc, callback)
         tempLabel.RichText = true
         
         local textHeight = tempLabel.TextBounds.Y
-        finalHeight = baseHeight + textHeight + 8
+        finalHeight = baseHeight + textHeight + 10
     end
 
     local ButtonFrame = Instance.new("Frame")
@@ -1012,29 +1012,43 @@ function Section:Button(text, desc, callback)
     Button.ZIndex = 7
     Button.AutoButtonColor = false
 
-    local TitleLabel = Instance.new("TextLabel")
-    TitleLabel.Name = "ButtonTitle"
-    TitleLabel.Parent = ButtonFrame
-    TitleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    TitleLabel.BackgroundTransparency = 1.000
-    TitleLabel.Size = UDim2.new(1, 0, 0, 20)
-    TitleLabel.Position = UDim2.new(0, 0, 0, desc and 6 or (finalHeight/2 - 10))
-    TitleLabel.Font = Enum.Font.GothamBold
-    TitleLabel.Text = text
-    TitleLabel.TextColor3 = currentTheme.Text
-    TitleLabel.TextSize = 14.000
-    TitleLabel.TextXAlignment = Enum.TextXAlignment.Center
-    TitleLabel.TextYAlignment = Enum.TextYAlignment.Center
-    TitleLabel.ZIndex = 8
+    if not desc then
+        local TitleLabel = Instance.new("TextLabel")
+        TitleLabel.Name = "ButtonTitle"
+        TitleLabel.Parent = ButtonFrame
+        TitleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        TitleLabel.BackgroundTransparency = 1.000
+        TitleLabel.Size = UDim2.new(1, 0, 1, 0)
+        TitleLabel.Font = Enum.Font.GothamBold
+        TitleLabel.Text = text
+        TitleLabel.TextColor3 = currentTheme.Text
+        TitleLabel.TextSize = 14.000
+        TitleLabel.TextXAlignment = Enum.TextXAlignment.Center
+        TitleLabel.TextYAlignment = Enum.TextYAlignment.Center
+        TitleLabel.ZIndex = 8
+    else
+        local TitleLabel = Instance.new("TextLabel")
+        TitleLabel.Name = "ButtonTitle"
+        TitleLabel.Parent = ButtonFrame
+        TitleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        TitleLabel.BackgroundTransparency = 1.000
+        TitleLabel.Size = UDim2.new(1, 0, 0, 18)
+        TitleLabel.Position = UDim2.new(0, 0, 0, 6)
+        TitleLabel.Font = Enum.Font.GothamBold
+        TitleLabel.Text = text
+        TitleLabel.TextColor3 = currentTheme.Text
+        TitleLabel.TextSize = 14.000
+        TitleLabel.TextXAlignment = Enum.TextXAlignment.Center
+        TitleLabel.TextYAlignment = Enum.TextYAlignment.Center
+        TitleLabel.ZIndex = 8
 
-    if desc then
         local DescLabel = Instance.new("TextLabel")
         DescLabel.Name = "ButtonDesc"
         DescLabel.Parent = ButtonFrame
         DescLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         DescLabel.BackgroundTransparency = 1.000
-        DescLabel.Size = UDim2.new(1, -20, 0, finalHeight - 30)
-        DescLabel.Position = UDim2.new(0, 10, 0, 26)
+        DescLabel.Size = UDim2.new(1, -20, 0, finalHeight - 28)
+        DescLabel.Position = UDim2.new(0, 10, 0, 22)
         DescLabel.Font = Enum.Font.Gotham
         DescLabel.Text = desc
         DescLabel.TextColor3 = currentTheme.TextMuted
@@ -1049,32 +1063,15 @@ function Section:Button(text, desc, callback)
 
     local function playClickAnimation()
         TweenService:Create(ButtonFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
-            BackgroundColor3 = currentTheme.Hover,
-            Size = UDim2.new(0, 366, 0, finalHeight - 4)
-        }):Play()
-        
-        TweenService:Create(ButtonFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
-            Position = UDim2.new(0, 2, 0, 2)
+            BackgroundColor3 = currentTheme.Hover
         }):Play()
         
         task.wait(0.1)
-        
+ 
         TweenService:Create(ButtonFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
-            BackgroundColor3 = currentTheme.Tertiary,
-            Size = UDim2.new(0, 370, 0, finalHeight)
-        }):Play()
-        
-        TweenService:Create(ButtonFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
-            Position = UDim2.new(0, 0, 0, 0)
+            BackgroundColor3 = currentTheme.Tertiary
         }):Play()
     end
-
-    Button.MouseButton1Click:Connect(function()
-        playClickAnimation()
-        if callback then
-            task.spawn(callback)
-        end
-    end)
 
     Button.MouseEnter:Connect(function()
         TweenService:Create(ButtonFrame, TweenInfo.new(0.2), {
@@ -1086,6 +1083,13 @@ function Section:Button(text, desc, callback)
         TweenService:Create(ButtonFrame, TweenInfo.new(0.2), {
             BackgroundColor3 = currentTheme.Tertiary
         }):Play()
+    end)
+
+    Button.MouseButton1Click:Connect(function()
+        playClickAnimation()
+        if callback then
+            task.spawn(callback)
+        end
     end)
 
     SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
