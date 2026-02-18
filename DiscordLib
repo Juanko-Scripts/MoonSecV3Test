@@ -977,9 +977,10 @@ function Section:Button(text, desc, callback)
     ButtonFrame.Parent = SectionFrame
     ButtonFrame.BackgroundColor3 = currentTheme.Tertiary
     ButtonFrame.BorderSizePixel = 0
-ButtonFrame.Size = UDim2.new(0, 370, 0, desc and 52 or 36)
+    ButtonFrame.Size = UDim2.new(0, 370, 0, 36) -- Tamaño inicial
     ButtonFrame.ZIndex = 6
-    ButtonFrame.ClipsDescendants = true
+    ButtonFrame.AutomaticSize = Enum.AutomaticSize.Y -- Autoajuste vertical
+    ButtonFrame.ClipsDescendants = false
 
     local ButtonCorner = Instance.new("UICorner")
     ButtonCorner.CornerRadius = UDim.new(0, 4)
@@ -1001,37 +1002,69 @@ ButtonFrame.Size = UDim2.new(0, 370, 0, desc and 52 or 36)
     TitleLabel.Parent = ButtonFrame
     TitleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     TitleLabel.BackgroundTransparency = 1.000
-    TitleLabel.Size = UDim2.new(1, 0, desc and 0.5 or 1, 0)
-    TitleLabel.Position = desc and UDim2.new(0, 0, 0, 5) or UDim2.new(0, 0, 0, 0)
+    TitleLabel.Size = UDim2.new(1, -10, 0, 0)
+    TitleLabel.Position = UDim2.new(0, 5, 0, 5)
     TitleLabel.Font = Enum.Font.GothamBold
     TitleLabel.Text = text
     TitleLabel.TextColor3 = currentTheme.Text
     TitleLabel.TextSize = 14.000
+    TitleLabel.TextWrapped = true
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Center
-    TitleLabel.TextYAlignment = desc and Enum.TextYAlignment.Bottom or Enum.TextYAlignment.Center
     TitleLabel.ZIndex = 8
+    TitleLabel.AutomaticSize = Enum.AutomaticSize.Y
+    TitleLabel.RichText = true
 
+    local DescLabel
     if desc then
-        local DescLabel = Instance.new("TextLabel")
+        DescLabel = Instance.new("TextLabel")
         DescLabel.Name = "ButtonDesc"
         DescLabel.Parent = ButtonFrame
-DescLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        DescLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         DescLabel.BackgroundTransparency = 1.000
-        DescLabel.Size = UDim2.new(1, 0, 0.5, -5)
-        DescLabel.Position = UDim2.new(0, 0, 0.5, 0)
+        DescLabel.Size = UDim2.new(1, -10, 0, 0)
+        DescLabel.Position = UDim2.new(0, 5, 0, 5)
         DescLabel.Font = Enum.Font.Gotham
         DescLabel.Text = desc
         DescLabel.TextColor3 = currentTheme.TextMuted
         DescLabel.TextSize = 12.000
-    DescLabel.TextXAlignment = Enum.TextXAlignment.Center
-        DescLabel.TextYAlignment = Enum.TextYAlignment.Top
+        DescLabel.TextWrapped = true
+        DescLabel.TextXAlignment = Enum.TextXAlignment.Center
         DescLabel.ZIndex = 8
+        DescLabel.AutomaticSize = Enum.AutomaticSize.Y
+        DescLabel.RichText = true
+    end
+
+    local function updateLayout()
+        local titleHeight = TitleLabel.TextBounds.Y + 10
+        
+        if desc and DescLabel then
+            local descHeight = DescLabel.TextBounds.Y + 10
+            
+            TitleLabel.Position = UDim2.new(0, 5, 0, 5)
+            TitleLabel.Size = UDim2.new(1, -10, 0, titleHeight)
+            
+            DescLabel.Position = UDim2.new(0, 5, 0, 5 + titleHeight)
+            DescLabel.Size = UDim2.new(1, -10, 0, descHeight)
+            ButtonFrame.Size = UDim2.new(0, 370, 0, titleHeight + descHeight + 15)
+        else
+            TitleLabel.Position = UDim2.new(0, 5, 0.5, -titleHeight/2)
+            TitleLabel.Size = UDim2.new(1, -10, 0, titleHeight)
+            
+            ButtonFrame.Size = UDim2.new(0, 370, 0, math.max(36, titleHeight + 10))
+        end
+        
+        SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
+    end
+
+    TitleLabel:GetPropertyChangedSignal("TextBounds"):Connect(updateLayout)
+    if desc and DescLabel then
+        DescLabel:GetPropertyChangedSignal("TextBounds"):Connect(updateLayout)
     end
 
     local function playClickAnimation()
         TweenService:Create(ButtonFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
             BackgroundColor3 = currentTheme.Hover,
-            Size = UDim2.new(0, 366, 0, (desc and 48 or 32))
+            Size = UDim2.new(0, 366, ButtonFrame.Size.Y.Offset - 4, 0)
         }):Play()
         
         TweenService:Create(ButtonFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
@@ -1042,7 +1075,7 @@ DescLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         
         TweenService:Create(ButtonFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
             BackgroundColor3 = currentTheme.Tertiary,
-            Size = UDim2.new(0, 370, 0, desc and 52 or 36)
+            Size = UDim2.new(0, 370, ButtonFrame.Size.Y.Offset + 4, 0)
         }):Play()
         
         TweenService:Create(ButtonFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
@@ -1068,8 +1101,9 @@ DescLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             BackgroundColor3 = currentTheme.Tertiary
         }):Play()
     end)
+    task.wait()
+    updateLayout()
 
-    SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
     return ButtonFrame
 end
 
