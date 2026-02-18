@@ -1620,13 +1620,12 @@ function Section:Slider(text, desc, min, max, default, callback)
 
     local baseHeight = 52
     local titleY = 8
-    local descY = 28
     local barY = 40
     
     if desc then
         local tempLabel = Instance.new("TextLabel")
         tempLabel.Font = Enum.Font.Gotham
-        tempLabel.TextSize = 12.000
+        tempLabel.TextSize = 12
         tempLabel.Text = desc
         tempLabel.Size = UDim2.new(0, 340, 0, 1000)
         tempLabel.TextWrapped = true
@@ -1655,13 +1654,13 @@ function Section:Slider(text, desc, min, max, default, callback)
     TitleLabel.Name = "SliderTitle"
     TitleLabel.Parent = SliderFrame
     TitleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    TitleLabel.BackgroundTransparency = 1.000
+    TitleLabel.BackgroundTransparency = 1
     TitleLabel.Position = UDim2.new(0, 10, 0, titleY)
     TitleLabel.Size = UDim2.new(0, 250, 0, 18)
     TitleLabel.Font = Enum.Font.Gotham
     TitleLabel.Text = text
     TitleLabel.TextColor3 = currentTheme.Text
-    TitleLabel.TextSize = 14.000
+    TitleLabel.TextSize = 14
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
     TitleLabel.TextYAlignment = Enum.TextYAlignment.Center
     TitleLabel.ZIndex = 7
@@ -1670,13 +1669,13 @@ function Section:Slider(text, desc, min, max, default, callback)
     ValueLabel.Name = "SliderValue"
     ValueLabel.Parent = SliderFrame
     ValueLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    ValueLabel.BackgroundTransparency = 1.000
+    ValueLabel.BackgroundTransparency = 1
     ValueLabel.Position = UDim2.new(0, 310, 0, titleY)
     ValueLabel.Size = UDim2.new(0, 50, 0, 18)
     ValueLabel.Font = Enum.Font.GothamBold
     ValueLabel.Text = tostring(default)
     ValueLabel.TextColor3 = currentTheme.Accent
-    ValueLabel.TextSize = 14.000
+    ValueLabel.TextSize = 14
     ValueLabel.TextXAlignment = Enum.TextXAlignment.Right
     ValueLabel.TextYAlignment = Enum.TextYAlignment.Center
     ValueLabel.ZIndex = 7
@@ -1686,13 +1685,13 @@ function Section:Slider(text, desc, min, max, default, callback)
         DescLabel.Name = "SliderDesc"
         DescLabel.Parent = SliderFrame
         DescLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        DescLabel.BackgroundTransparency = 1.000
-        DescLabel.Position = UDim2.new(0, 10, 0, descY)
+        DescLabel.BackgroundTransparency = 1
+        DescLabel.Position = UDim2.new(0, 10, 0, 28)
         DescLabel.Size = UDim2.new(0, 340, 0, baseHeight - 52)
         DescLabel.Font = Enum.Font.Gotham
         DescLabel.Text = desc
         DescLabel.TextColor3 = currentTheme.TextMuted
-        DescLabel.TextSize = 12.000
+        DescLabel.TextSize = 12
         DescLabel.TextXAlignment = Enum.TextXAlignment.Left
         DescLabel.TextYAlignment = Enum.TextYAlignment.Top
         DescLabel.ZIndex = 7
@@ -1743,7 +1742,6 @@ function Section:Slider(text, desc, min, max, default, callback)
 
     local value = default
     local dragging = false
-    local isAnimating = false
 
     local function updateSlider(input)
         local pos = input.Position.X - SliderBar.AbsolutePosition.X
@@ -1753,43 +1751,7 @@ function Section:Slider(text, desc, min, max, default, callback)
         ValueLabel.Text = tostring(math.floor(value))
         SliderFill.Size = UDim2.new(percent, 0, 1, 0)
         SliderButton.Position = UDim2.new(percent, -6, 0, -3)
-        if callback then
-            callback(math.floor(value))
-        end
-    end
-
-    local function animateToTarget(targetValue)
-        if isAnimating then return end
-        isAnimating = true
-        
-        local startValue = value
-        local targetPercent = (targetValue - min) / (max - min)
-        local startPercent = (startValue - min) / (max - min)
-        local steps = 20
-        local stepTime = 0.01
-        
-        for i = 1, steps do
-            local progress = i / steps
-            local currentPercent = startPercent + (targetPercent - startPercent) * progress
-            local currentValue = min + (max - min) * currentPercent
-            
-            ValueLabel.Text = tostring(math.floor(currentValue))
-            SliderFill.Size = UDim2.new(currentPercent, 0, 1, 0)
-            SliderButton.Position = UDim2.new(currentPercent, -6, 0, -3)
-            
-            wait(stepTime)
-        end
-        
-        value = targetValue
-        ValueLabel.Text = tostring(math.floor(value))
-        SliderFill.Size = UDim2.new(targetPercent, 0, 1, 0)
-        SliderButton.Position = UDim2.new(targetPercent, -6, 0, -3)
-        
-        if callback then
-            callback(math.floor(value))
-        end
-        
-        isAnimating = false
+        callback(value)
     end
 
     SliderButton.InputBegan:Connect(function(input)
@@ -1823,27 +1785,26 @@ function Section:Slider(text, desc, min, max, default, callback)
         TweenService:Create(SliderButton, TweenInfo.new(0.2), {
             Size = UDim2.new(0, 16, 0, 16),
             Position = UDim2.new((value - min) / (max - min), -7, 0, -4)
-        }):Play()
+        })
     end)
 
     SliderButton.MouseLeave:Connect(function()
         TweenService:Create(SliderButton, TweenInfo.new(0.2), {
             Size = UDim2.new(0, 14, 0, 14),
             Position = UDim2.new((value - min) / (max - min), -6, 0, -3)
-        }):Play()
+        })
     end)
 
     local sliderObject = {}
     
     function sliderObject:Change(newValue)
         newValue = math.clamp(newValue, min, max)
-        if newValue ~= value then
-            animateToTarget(newValue)
-        end
-    end
-
-    function sliderObject:SetValue(newValue) 
-        self:Change(newValue)
+        local percent = (newValue - min) / (max - min)
+        ValueLabel.Text = tostring(math.floor(newValue))
+        SliderFill.Size = UDim2.new(percent, 0, 1, 0)
+        SliderButton.Position = UDim2.new(percent, -6, 0, -3)
+        value = newValue
+        callback(newValue)
     end
 
     function sliderObject:GetValue()
@@ -1858,13 +1819,6 @@ function Section:Slider(text, desc, min, max, default, callback)
         ValueLabel.Text = tostring(math.floor(value))
         SliderFill.Size = UDim2.new(percent, 0, 1, 0)
         SliderButton.Position = UDim2.new(percent, -6, 0, -3)
-    end
-
-    function sliderObject:GetMin()
-        return min
-    end
-    function sliderObject:GetMax()
-        return max
     end
 
     SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
