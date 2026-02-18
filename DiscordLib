@@ -1350,7 +1350,7 @@ function Section:Toggle(text, desc, default, callback)
     return Toggle
 end
 
-function Section:ToggleSlider(text, desc, defaultState, minValue, maxValue, defaultValue, callback)
+function Section:ToggleSlider(text, desc, defaultState, minimumValue, maximumValue, initialValue, callback)
     local baseHeight = 80
     local titleY = 8
     local descY = 28
@@ -1492,7 +1492,7 @@ function Section:ToggleSlider(text, desc, defaultState, minValue, maxValue, defa
     SliderValue.Position = UDim2.new(0, 315, 0, 0)
     SliderValue.Size = UDim2.new(0, 40, 1, 0)
     SliderValue.Font = Enum.Font.GothamBold
-    SliderValue.Text = tostring(defaultValue)
+    SliderValue.Text = tostring(initialValue)
     SliderValue.TextColor3 = currentTheme.Accent
     SliderValue.TextSize = 12.000
     SliderValue.TextXAlignment = Enum.TextXAlignment.Right
@@ -1517,7 +1517,7 @@ function Section:ToggleSlider(text, desc, defaultState, minValue, maxValue, defa
     SliderFill.Parent = SliderBar
     SliderFill.BackgroundColor3 = currentTheme.Accent
     SliderFill.BorderSizePixel = 0
-    SliderFill.Size = UDim2.new((defaultValue - minValue) / (maxValue - minValue), 0, 1, 0)
+    SliderFill.Size = UDim2.new((initialValue - minimumValue) / (maximumValue - minimumValue), 0, 1, 0)
     SliderFill.ZIndex = 8
 
     local SliderFillCorner = Instance.new("UICorner")
@@ -1529,7 +1529,7 @@ function Section:ToggleSlider(text, desc, defaultState, minValue, maxValue, defa
     SliderButton.Parent = SliderBar
     SliderButton.BackgroundColor3 = currentTheme.Text
     SliderButton.BorderSizePixel = 0
-    SliderButton.Position = UDim2.new((defaultValue - minValue) / (maxValue - minValue), -6, 0, -3)
+    SliderButton.Position = UDim2.new((initialValue - minimumValue) / (maximumValue - minimumValue), -6, 0, -3)
     SliderButton.Size = UDim2.new(0, 14, 0, 14)
     SliderButton.Text = ""
     SliderButton.ZIndex = 9
@@ -1539,35 +1539,35 @@ function Section:ToggleSlider(text, desc, defaultState, minValue, maxValue, defa
     SliderButtonCorner.CornerRadius = UDim.new(0, 7)
     SliderButtonCorner.Parent = SliderButton
 
-    local toggled = defaultState or false
-    local currentValue = defaultValue or minValue
+    local toggleState = defaultState or false
+    local sliderValue = initialValue or minimumValue
     local dragging = false
-    local isAnimating = false
+    local animating = false
 
-    ToggleFill.Visible = toggled
-    if toggled then
+    ToggleFill.Visible = toggleState
+    if toggleState then
         ToggleFill.Size = UDim2.new(1, -4, 1, -4)
     end
 
-    local function updateSlider(input)
-        local pos = input.Position.X - SliderBar.AbsolutePosition.X
-        local size = SliderBar.AbsoluteSize.X
-        local percent = math.clamp(pos / size, 0, 1)
-        currentValue = minValue + (maxValue - minValue) * percent
-        local roundedValue = math.floor(currentValue * 100) / 100
-        SliderValue.Text = tostring(roundedValue)
-        SliderFill.Size = UDim2.new(percent, 0, 1, 0)
-        SliderButton.Position = UDim2.new(percent, -6, 0, -3)
-        if toggled and callback then
-            callback(true, roundedValue)
+    local function updateSliderFromInput(input)
+        local position = input.Position.X - SliderBar.AbsolutePosition.X
+        local barSize = SliderBar.AbsoluteSize.X
+        local percentage = math.clamp(position / barSize, 0, 1)
+        sliderValue = minimumValue + (maximumValue - minimumValue) * percentage
+        local rounded = math.floor(sliderValue * 100) / 100
+        SliderValue.Text = tostring(rounded)
+        SliderFill.Size = UDim2.new(percentage, 0, 1, 0)
+        SliderButton.Position = UDim2.new(percentage, -6, 0, -3)
+        if toggleState and callback then
+            callback(true, rounded)
         end
     end
 
-    local function animateToggle()
-        if isAnimating then return end
-        isAnimating = true
+    local function animateToggleSwitch()
+        if animating then return end
+        animating = true
         
-        if toggled then
+        if toggleState then
             TweenService:Create(ToggleFill, TweenInfo.new(0.2, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
                 Size = UDim2.new(1, -4, 1, -4)
             }):Play()
@@ -1584,39 +1584,39 @@ function Section:ToggleSlider(text, desc, defaultState, minValue, maxValue, defa
         end
         
         task.wait(0.2)
-        isAnimating = false
+        animating = false
     end
 
-    local function updateToggle()
-        toggled = not toggled
-        animateToggle()
-        if toggled and callback then
-            callback(true, currentValue)
-        elseif not toggled and callback then
+    local function toggleSwitch()
+        toggleState = not toggleState
+        animateToggleSwitch()
+        if toggleState and callback then
+            callback(true, sliderValue)
+        elseif not toggleState and callback then
             callback(false, nil)
         end
     end
 
-    ToggleButton.MouseButton1Click:Connect(updateToggle)
+    ToggleButton.MouseButton1Click:Connect(toggleSwitch)
 
     SliderButton.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
             dragging = true
-            updateSlider(input)
+            updateSliderFromInput(input)
         end
     end)
 
     SliderButton.InputChanged:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
             if dragging then
-                updateSlider(input)
+                updateSliderFromInput(input)
             end
         end
     end)
 
     SliderBar.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            updateSlider(input)
+            updateSliderFromInput(input)
         end
     end)
 
@@ -1629,48 +1629,48 @@ function Section:ToggleSlider(text, desc, defaultState, minValue, maxValue, defa
     SliderButton.MouseEnter:Connect(function()
         TweenService:Create(SliderButton, TweenInfo.new(0.2), {
             Size = UDim2.new(0, 16, 0, 16),
-            Position = UDim2.new((currentValue - minValue) / (maxValue - minValue), -7, 0, -4)
+            Position = UDim2.new((sliderValue - minimumValue) / (maximumValue - minimumValue), -7, 0, -4)
         }):Play()
     end)
 
     SliderButton.MouseLeave:Connect(function()
         TweenService:Create(SliderButton, TweenInfo.new(0.2), {
             Size = UDim2.new(0, 14, 0, 14),
-            Position = UDim2.new((currentValue - minValue) / (maxValue - minValue), -6, 0, -3)
+            Position = UDim2.new((sliderValue - minimumValue) / (maximumValue - minimumValue), -6, 0, -3)
         }):Play()
     end)
 
-    local toggleObject = {}
+    local controlObject = {}
     
-    function toggleObject:SetValue(newValue)
-        newValue = math.clamp(newValue, minValue, maxValue)
-        currentValue = newValue
-        local roundedValue = math.floor(currentValue * 100) / 100
-        local percent = (currentValue - minValue) / (maxValue - minValue)
-        SliderValue.Text = tostring(roundedValue)
+    function controlObject:SetValue(newValue)
+        newValue = math.clamp(newValue, minimumValue, maximumValue)
+        sliderValue = newValue
+        local rounded = math.floor(sliderValue * 100) / 100
+        local percent = (sliderValue - minimumValue) / (maximumValue - minimumValue)
+        SliderValue.Text = tostring(rounded)
         SliderFill.Size = UDim2.new(percent, 0, 1, 0)
         SliderButton.Position = UDim2.new(percent, -6, 0, -3)
-        if toggled and callback then
-            callback(true, roundedValue)
+        if toggleState and callback then
+            callback(true, rounded)
         end
     end
 
-    function toggleObject:SetState(state)
-        if state ~= toggled then
-            updateToggle()
+    function controlObject:SetState(state)
+        if state ~= toggleState then
+            toggleSwitch()
         end
     end
 
-    function toggleObject:GetState()
-        return toggled
+    function controlObject:GetState()
+        return toggleState
     end
 
-    function toggleObject:GetValue()
-        return currentValue
+    function controlObject:GetValue()
+        return sliderValue
     end
 
     SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
-    return toggleObject
+    return controlObject
 end
 
 function Section:Slider(text, desc, min, max, default, callback)
