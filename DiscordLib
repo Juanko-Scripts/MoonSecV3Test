@@ -3525,6 +3525,112 @@ function DiscordLib:CreateAcrylicBlur()
     return acrylicObject
 end
 
+function DiscordLib:Notification(data)
+    local title = data.title or "Notification"
+    local desc = data.desc or ""
+    local time = data.time or 5
+    local newYPos = baseY
+    for _, notifData in ipairs(activeNotifications) do
+        if notifData.frame and notifData.frame.Parent then
+            newYPos = math.max(newYPos, notifData.yPosition + notifData.frame.AbsoluteSize.Y + 10)
+        end
+    end
+
+    local NotifHolder = Instance.new("Frame")
+    NotifHolder.Name = "Notification"
+    NotifHolder.Parent = Discord
+    NotifHolder.BackgroundColor3 = currentTheme.Main
+    NotifHolder.BorderSizePixel = 0
+    NotifHolder.Position = UDim2.new(1, -310, 0, newYPos)
+    NotifHolder.Size = UDim2.new(0, 280, 0, 45)
+    NotifHolder.ClipsDescendants = true
+    NotifHolder.BackgroundTransparency = 1
+    NotifHolder.ZIndex = 100
+    NotifHolder.AutomaticSize = Enum.AutomaticSize.Y
+
+    local NotifCorner = Instance.new("UICorner")
+    NotifCorner.CornerRadius = UDim.new(0, 6)
+    NotifCorner.Parent = NotifHolder
+
+    local NotifTitle = Instance.new("TextLabel")
+    NotifTitle.Parent = NotifHolder
+    NotifTitle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    NotifTitle.BackgroundTransparency = 1.000
+    NotifTitle.Position = UDim2.new(0, 10, 0, 8)
+    NotifTitle.Size = UDim2.new(0, 260, 0, 18)
+    NotifTitle.Font = Enum.Font.GothamBold
+    NotifTitle.Text = title
+    NotifTitle.TextColor3 = currentTheme.Text
+    NotifTitle.TextSize = 15.000
+    NotifTitle.TextXAlignment = Enum.TextXAlignment.Left
+    NotifTitle.TextTransparency = 1
+    NotifTitle.ZIndex = 101
+
+    local NotifDesc = Instance.new("TextLabel")
+    NotifDesc.Parent = NotifHolder
+    NotifDesc.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    NotifDesc.BackgroundTransparency = 1.000
+    NotifDesc.Position = UDim2.new(0, 10, 0, 30)
+    NotifDesc.Size = UDim2.new(0, 260, 0, 16)
+    NotifDesc.Font = Enum.Font.Gotham
+    NotifDesc.Text = desc
+    NotifDesc.TextColor3 = currentTheme.TextMuted
+    NotifDesc.TextSize = 13.000
+    NotifDesc.TextWrapped = true
+    NotifDesc.TextXAlignment = Enum.TextXAlignment.Left
+    NotifDesc.TextYAlignment = Enum.TextYAlignment.Top
+    NotifDesc.TextTransparency = 1
+    NotifDesc.ZIndex = 101
+    NotifDesc.RichText = true
+    NotifDesc.AutomaticSize = Enum.AutomaticSize.Y
+
+    NotifDesc:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+        NotifHolder.Size = UDim2.new(0, 280, 0, 30 + NotifDesc.AbsoluteSize.Y + 10)
+    end)
+
+    registerThemeUpdate(function()
+        NotifHolder.BackgroundColor3 = currentTheme.Main
+        NotifTitle.TextColor3 = currentTheme.Text
+        NotifDesc.TextColor3 = currentTheme.TextMuted
+    end)
+
+    local notifData = {
+        frame = NotifHolder,
+        yPosition = newYPos
+    }
+    table.insert(activeNotifications, notifData)
+    NotifHolder.Position = UDim2.new(1, -310, 0, newYPos - 80)
+    TweenService:Create(NotifHolder, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+        Position = UDim2.new(1, -310, 0, newYPos),
+        BackgroundTransparency = 0
+    }):Play()
+    TweenService:Create(NotifTitle, TweenInfo.new(0.3), {TextTransparency = 0}):Play()
+    TweenService:Create(NotifDesc, TweenInfo.new(0.3), {TextTransparency = 0}):Play()
+    task.spawn(function()
+        wait(time)
+
+        for i, data in ipairs(activeNotifications) do
+            if data.frame == NotifHolder then
+                table.remove(activeNotifications, i)
+                break
+            end
+        end
+
+        TweenService:Create(NotifHolder, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
+            Position = UDim2.new(1, -310, 0, newYPos - 80),
+            BackgroundTransparency = 1
+        }):Play()
+        TweenService:Create(NotifTitle, TweenInfo.new(0.2), {TextTransparency = 1}):Play()
+        TweenService:Create(NotifDesc, TweenInfo.new(0.2), {TextTransparency = 1}):Play()
+
+        task.wait(0.3)
+        NotifHolder:Destroy()
+        reorganizeNotifications()
+    end)
+
+    return NotifHolder
+end
+
 function DiscordLib:SetTransparency(transparency)
     transparency = math.clamp(transparency, 0, 1)
     currentTransparency = transparency
