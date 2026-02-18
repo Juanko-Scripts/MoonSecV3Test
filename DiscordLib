@@ -3260,4 +3260,37 @@ function DiscordLib:CreateAcrylicBlur()
     return acrylicObject
 end
 
+
+local currentTransparency = 0
+function DiscordLib:SetTransparency(transparency)
+    transparency = math.clamp(transparency, 0, 1)
+    currentTransparency = transparency
+
+    local discordGui = game:GetService("CoreGui"):FindFirstChild("Discord")
+    if not discordGui then return end
+    
+local mainFrame = discordGui:FindFirstChild("MainFrame")
+    if not mainFrame then return end
+    mainFrame.BackgroundTransparency = transparency
+    
+    local serversHoldFrame = mainFrame:FindFirstChild("ServersHoldFrame")
+    if serversHoldFrame then
+        serversHoldFrame.BackgroundTransparency = transparency
+    end
+    local channelsHoldFrame = mainFrame:FindFirstChild("ChannelsHoldFrame")
+    if channelsHoldFrame then
+        channelsHoldFrame.BackgroundTransparency = transparency
+    end
+    for _, sectionFrame in pairs(Sections) do
+        if sectionFrame and sectionFrame.Parent then
+            sectionFrame.BackgroundTransparency = transparency
+        end
+    end
+    
+local userpad = mainFrame:FindFirstChild("Userpad", true)
+    if userpad then
+        userpad.BackgroundTransparency = math.min(transparency + 0.2, 1)
+    end
+end
+
 return DiscordLib
