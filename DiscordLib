@@ -863,6 +863,7 @@ function Section:Paragraph(title, content)
     ParagraphFrame.BorderSizePixel = 0
     ParagraphFrame.Size = UDim2.new(0, 370, 0, 45)
     ParagraphFrame.ZIndex = 6
+    ParagraphFrame.AutomaticSize = Enum.AutomaticSize.Y
 
     local ParagraphCorner = Instance.new("UICorner")
     ParagraphCorner.CornerRadius = UDim.new(0, 4)
@@ -894,9 +895,18 @@ function Section:Paragraph(title, content)
     ContentLabel.TextColor3 = currentTheme.TextMuted
     ContentLabel.TextSize = 11.000
     ContentLabel.TextXAlignment = Enum.TextXAlignment.Left
+    ContentLabel.TextYAlignment = Enum.TextYAlignment.Top
     ContentLabel.ZIndex = 7
+    ContentLabel.AutomaticSize = Enum.AutomaticSize.Y
+    ContentLabel.RichText = true
 
-    -- IMPORTANTE: Devolvemos un objeto con métodos, NO el Frame
+    ContentLabel:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+        local contentHeight = ContentLabel.TextBounds.Y + 6
+        ContentLabel.Size = UDim2.new(0, 354, 0, contentHeight)
+        ParagraphFrame.Size = UDim2.new(0, 370, 0, 23 + contentHeight + 8)
+        SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
+    end)
+
     local paragraphObject = {}
 
     function paragraphObject:SetTitle(newTitle)
@@ -905,11 +915,21 @@ function Section:Paragraph(title, content)
 
     function paragraphObject:SetContent(newContent)
         ContentLabel.Text = newContent
+        task.wait()
+        local contentHeight = ContentLabel.TextBounds.Y + 6
+        ContentLabel.Size = UDim2.new(0, 354, 0, contentHeight)
+        ParagraphFrame.Size = UDim2.new(0, 370, 0, 23 + contentHeight + 8)
+        SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
     end
 
     function paragraphObject:SetBoth(newTitle, newContent)
         TitleLabel.Text = newTitle
         ContentLabel.Text = newContent
+        task.wait()
+        local contentHeight = ContentLabel.TextBounds.Y + 6
+        ContentLabel.Size = UDim2.new(0, 354, 0, contentHeight)
+        ParagraphFrame.Size = UDim2.new(0, 370, 0, 23 + contentHeight + 8)
+        SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
     end
 
     function paragraphObject:SetVisible(visible)
@@ -920,8 +940,13 @@ function Section:Paragraph(title, content)
         ParagraphFrame:Destroy()
     end
 
-    SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 30)
-    return paragraphObject 
+    task.wait()
+    local contentHeight = ContentLabel.TextBounds.Y + 6
+    ContentLabel.Size = UDim2.new(0, 354, 0, contentHeight)
+    ParagraphFrame.Size = UDim2.new(0, 370, 0, 23 + contentHeight + 8)
+    SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
+
+    return paragraphObject
 end
 
         function Section:Seperator()
