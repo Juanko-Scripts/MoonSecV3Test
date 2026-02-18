@@ -58,6 +58,7 @@ local currentTheme = Themes.Dark
 local activeNotifications = {}
 local currentServer = ""
 local currentChannel = ""
+local currentTransparency = 0
 
 for _, XP in pairs(game:GetService("CoreGui"):GetChildren()) do
     if XP.Name == "Discord" then
@@ -134,6 +135,9 @@ local minimizedSize = UDim2.new(0, 250, 0, 60)
 local originalPosition = UDim2.new(0.5, 0, 0.5, 0)
 local minimizedPosition = UDim2.new(1, -260, 1, -70)
 local minimizeAnimating = false
+local minimizeButton = nil
+local currentSize = originalSize
+local currentPos = originalPosition
 
 function DiscordLib:MinimizeUI()
     if minimizeAnimating then return end
@@ -145,16 +149,28 @@ function DiscordLib:MinimizeUI()
         return
     end
     
+    if not isMinimized then
+        currentSize = mainFrame.Size
+        currentPos = mainFrame.Position
+    end
+    
     isMinimized = not isMinimized
     
     local targetSize = isMinimized and minimizedSize or originalSize
-    local targetPosition = isMinimized and minimizedPosition or originalPosition
+    local targetPosition = isMinimized and minimizedPosition or currentPos
     
     local serversFrame = mainFrame:FindFirstChild("ServersHoldFrame")
     local channelsFrame = mainFrame:FindFirstChild("ChannelsHoldFrame")
     local userpad = mainFrame:FindFirstChild("Userpad", true)
     
     if isMinimized then
+        TweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
+            Size = targetSize,
+            Position = targetPosition
+        }):Play()
+        
+        task.wait(0.15)
+        
         if serversFrame then
             serversFrame.Visible = false
         end
@@ -201,15 +217,14 @@ function DiscordLib:MinimizeUI()
         if title then
             title.Text = "Discord UI"
         end
+        
+        TweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
+            Size = targetSize,
+            Position = targetPosition
+        }):Play()
     end
     
-    local tween = TweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
-        Size = targetSize,
-        Position = targetPosition
-    })
-    
-    tween:Play()
-    tween.Completed:Wait()
+    task.wait(0.3)
     minimizeAnimating = false
 end
 
@@ -287,6 +302,7 @@ local function createMinimizeButton()
     TS:Create(bf, TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {BackgroundTransparency = 0.3}):Play()
     
     local u = function()
+        if minimizeAnimating then return end
         local c, t
         if e then 
             c, t = Color3.fromRGB(255,255,255), "Hide"
@@ -330,6 +346,8 @@ local function createMinimizeButton()
         btn.BackgroundColor3 = Color3.fromRGB(0,0,0)
         btn.TextColor3 = Color3.fromRGB(255,255,255)
     end
+    
+    minimizeButton = btn
 end
 
 function DiscordLib:Window(text)
@@ -787,6 +805,7 @@ function DiscordLib:Window(text)
         ServersHold.CanvasSize = UDim2.new(0, 0, 0, ServersHoldLayout.AbsoluteContentSize.Y)
 
         ServerBtn.MouseButton1Click:Connect(function()
+            if minimizeAnimating then return end
             for i, v in pairs(ServersHold:GetChildren()) do
                 if v:IsA("TextButton") then
                     TweenService:Create(v, TweenInfo.new(0.2), {BackgroundTransparency = 0.5}):Play()
@@ -888,6 +907,7 @@ function DiscordLib:Window(text)
         }
 
         ChannelBtn.MouseButton1Click:Connect(function()
+            if minimizeAnimating then return end
             for _, channelData in pairs(ServerChannels[serverName]) do
                 if channelData.Button then
                     channelData.Button.BackgroundColor3 = currentTheme.Tertiary
@@ -932,7 +952,7 @@ function DiscordLib:Window(text)
         SectionFrame.Name = fullName .. "SectionFrame"
         SectionFrame.Parent = MainFrame
         SectionFrame.BackgroundColor3 = currentTheme.Secondary
-        SectionFrame.BackgroundTransparency = 0
+        SectionFrame.BackgroundTransparency = currentTransparency
         SectionFrame.BorderSizePixel = 0
         SectionFrame.Position = UDim2.new(0.35, 0, 0.08, 0)
         SectionFrame.Size = UDim2.new(0, 390, 0, 350)
@@ -1243,6 +1263,7 @@ function DiscordLib:Window(text)
             end)
 
             Button.MouseButton1Click:Connect(function()
+                if minimizeAnimating then return end
                 if isAnimating then return end
                 playClickAnimation()
                 if callback then
@@ -1362,6 +1383,7 @@ function DiscordLib:Window(text)
                 end
 
                 local function updateToggle()
+                    if minimizeAnimating then return end
                     toggled = not toggled
                     
                     if toggled then
@@ -1453,6 +1475,7 @@ function DiscordLib:Window(text)
                 end
 
                 local function updateToggle()
+                    if minimizeAnimating then return end
                     toggled = not toggled
                     
                     if toggled then
@@ -1486,7 +1509,7 @@ function DiscordLib:Window(text)
             local descY = 30
             local toggleY = 5
             local valueX = 270
-            local sliderY = 55
+            local sliderY = 50
 
             if desc then
                 local tempLabel = Instance.new("TextLabel")
@@ -1501,7 +1524,7 @@ function DiscordLib:Window(text)
                 local textHeight = tempLabel.TextBounds.Y
                 baseHeight = 85 + textHeight + 12
                 descY = 30
-                sliderY = 55 + textHeight + 5
+                sliderY = 50 + textHeight + 5
 
                 tempLabel:Destroy()
             end
@@ -1673,6 +1696,7 @@ function DiscordLib:Window(text)
             end
 
             local function updateSlider(input)
+                if minimizeAnimating then return end
                 local pos = input.Position.X - SliderBar.AbsolutePosition.X
                 local size = SliderBar.AbsoluteSize.X
                 local percent = math.clamp(pos / size, 0, 1)
@@ -1687,6 +1711,7 @@ function DiscordLib:Window(text)
             end
 
             SliderButton.InputBegan:Connect(function(input)
+                if minimizeAnimating then return end
                 if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                     dragging = true
                     updateSlider(input)
@@ -1695,13 +1720,14 @@ function DiscordLib:Window(text)
 
             SliderButton.InputChanged:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-                    if dragging then
+                    if dragging and not minimizeAnimating then
                         updateSlider(input)
                     end
                 end
             end)
 
             SliderBar.InputBegan:Connect(function(input)
+                if minimizeAnimating then return end
                 if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                     updateSlider(input)
                 end
@@ -1714,6 +1740,7 @@ function DiscordLib:Window(text)
             end)
 
             SliderButton.MouseEnter:Connect(function()
+                if minimizeAnimating then return end
                 TweenService:Create(SliderButton, TweenInfo.new(0.2), {
                     Size = UDim2.new(0, 14, 0, 16),
                     Position = UDim2.new((value - min) / (max - min), -6, 0, -4)
@@ -1721,6 +1748,7 @@ function DiscordLib:Window(text)
             end)
 
             SliderButton.MouseLeave:Connect(function()
+                if minimizeAnimating then return end
                 TweenService:Create(SliderButton, TweenInfo.new(0.2), {
                     Size = UDim2.new(0, 12, 0, 14),
                     Position = UDim2.new((value - min) / (max - min), -5, 0, -3)
@@ -1728,6 +1756,7 @@ function DiscordLib:Window(text)
             end)
 
             local function updateToggle()
+                if minimizeAnimating then return end
                 toggled = not toggled
 
                 if toggled then
@@ -1799,7 +1828,7 @@ function DiscordLib:Window(text)
                     SliderValue.Text = tostring(roundedValue)
                     SliderFill.Size = UDim2.new(percent, 0, 1, 0)
                     SliderButton.Position = UDim2.new(percent, -5, 0, -3)
-                    if toggled and callback then
+                    if toggled and callback and not minimizeAnimating then
                         callback(true, roundedValue)
                     end
                 end
@@ -1962,6 +1991,7 @@ function DiscordLib:Window(text)
             local dragging = false
 
             local function updateSlider(input)
+                if minimizeAnimating then return end
                 local pos = input.Position.X - SliderBar.AbsolutePosition.X
                 local size = SliderBar.AbsoluteSize.X
                 local percent = math.clamp(pos / size, 0, 1)
@@ -1974,6 +2004,7 @@ function DiscordLib:Window(text)
             end
 
             SliderButton.InputBegan:Connect(function(input)
+                if minimizeAnimating then return end
                 if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                     dragging = true
                     updateSlider(input)
@@ -1982,13 +2013,14 @@ function DiscordLib:Window(text)
 
             SliderButton.InputChanged:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-                    if dragging then
+                    if dragging and not minimizeAnimating then
                         updateSlider(input)
                     end
                 end
             end)
 
             SliderBar.InputBegan:Connect(function(input)
+                if minimizeAnimating then return end
                 if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                     updateSlider(input)
                 end
@@ -2001,6 +2033,7 @@ function DiscordLib:Window(text)
             end)
 
             SliderButton.MouseEnter:Connect(function()
+                if minimizeAnimating then return end
                 TweenService:Create(SliderButton, TweenInfo.new(0.2), {
                     Size = UDim2.new(0, 16, 0, 16),
                     Position = UDim2.new((value - min) / (max - min), -7, 0, -4)
@@ -2008,6 +2041,7 @@ function DiscordLib:Window(text)
             end)
 
             SliderButton.MouseLeave:Connect(function()
+                if minimizeAnimating then return end
                 TweenService:Create(SliderButton, TweenInfo.new(0.2), {
                     Size = UDim2.new(0, 14, 0, 14),
                     Position = UDim2.new((value - min) / (max - min), -6, 0, -3)
@@ -2178,7 +2212,7 @@ function DiscordLib:Window(text)
             end
 
             local function createColorPickerPopup()
-                if picking then 
+                if picking or minimizeAnimating then 
                     closeColorPicker()
                     return 
                 end
@@ -2791,6 +2825,7 @@ function DiscordLib:Window(text)
                 end)
 
                 confirmButton.MouseButton1Click:Connect(function()
+                    if minimizeAnimating then return end
                     selectedColor = previewDisplay.BackgroundColor3
                     ColorDisplay.BackgroundColor3 = selectedColor
                     if callback then
@@ -2800,6 +2835,7 @@ function DiscordLib:Window(text)
                 end)
 
                 cancelButton.MouseButton1Click:Connect(function()
+                    if minimizeAnimating then return end
                     closeColorPicker()
                 end)
 
@@ -2919,6 +2955,7 @@ function DiscordLib:Window(text)
                 OptionCorner.Parent = OptionButton
 
                 OptionButton.MouseButton1Click:Connect(function()
+                    if minimizeAnimating then return end
                     selected = option
                     DropdownLabel.Text = text .. ": " .. selected
                     if callback then
@@ -2932,6 +2969,7 @@ function DiscordLib:Window(text)
                 end)
 
                 OptionButton.MouseEnter:Connect(function()
+                    if minimizeAnimating then return end
                     TweenService:Create(OptionButton, TweenInfo.new(0.2), {
                         BackgroundColor3 = currentTheme.Hover,
                         BackgroundTransparency = 0
@@ -2939,6 +2977,7 @@ function DiscordLib:Window(text)
                 end)
 
                 OptionButton.MouseLeave:Connect(function()
+                    if minimizeAnimating then return end
                     TweenService:Create(OptionButton, TweenInfo.new(0.2), {
                         BackgroundColor3 = currentTheme.Tertiary,
                         BackgroundTransparency = 0.3
@@ -2961,6 +3000,7 @@ function DiscordLib:Window(text)
             end
 
             DropdownButton.MouseButton1Click:Connect(function()
+                if minimizeAnimating then return end
                 expanded = not expanded
                 
                 if expanded then
@@ -3036,6 +3076,7 @@ function DiscordLib:Window(text)
             end
 
             Textbox.FocusLost:Connect(function(enterPressed)
+                if minimizeAnimating then return end
                 if enterPressed then
                     if numbersOnly then
                         local num = tonumber(Textbox.Text) or 0
@@ -3103,6 +3144,7 @@ function DiscordLib:Window(text)
             BindButtonCorner.Parent = BindButton
 
             BindButton.MouseButton1Click:Connect(function()
+                if minimizeAnimating then return end
                 binding = true
                 BindButton.Text = "..."
             end)
@@ -3110,7 +3152,7 @@ function DiscordLib:Window(text)
             UserInputService.InputBegan:Connect(function(input, gameProcessed)
                 if gameProcessed then return end
                 
-                if binding then
+                if binding and not minimizeAnimating then
                     if input.UserInputType == Enum.UserInputType.Keyboard then
                         currentKey = input.KeyCode
                         keyName = currentKey.Name
@@ -3121,7 +3163,7 @@ function DiscordLib:Window(text)
                         end
                     end
                 else
-                    if input.KeyCode == currentKey then
+                    if input.KeyCode == currentKey and not minimizeAnimating then
                         if callback then
                             callback(currentKey)
                         end
@@ -3137,6 +3179,7 @@ function DiscordLib:Window(text)
     end
 
     function Servers:Select(Name)
+        if minimizeAnimating then return end
         for i, v in pairs(ServersHold:GetChildren()) do
             if v:IsA("TextButton") then
                 if v.Name == Name then
@@ -3177,6 +3220,7 @@ function DiscordLib:Window(text)
     end
 
     function Servers:SelectChannel(serverName, channelName)
+        if minimizeAnimating then return end
         if serverName and channelName and ServerChannels[serverName] and ServerChannels[serverName][channelName] then
             ServerChannels[serverName][channelName].Button.BackgroundColor3 = currentTheme.Accent
             ServerChannels[serverName][channelName].Button.BackgroundTransparency = 0
@@ -3489,7 +3533,6 @@ function DiscordLib:CreateAcrylicBlur()
     return acrylicObject
 end
 
-local currentTransparency = 0
 function DiscordLib:SetTransparency(transparency)
     transparency = math.clamp(transparency, 0, 1)
     currentTransparency = transparency
