@@ -2578,9 +2578,11 @@ end
         SetTheme = DiscordLib.SetTheme
     }
 end
+
 local activeNotifications = {}
-local notificationSpacing = 75
+local notificationSpacing = 80
 local baseY = 10
+
 local function reorganizeNotifications()
     local yPos = baseY
     for i, notifData in ipairs(activeNotifications) do
@@ -2589,7 +2591,7 @@ local function reorganizeNotifications()
                 Position = UDim2.new(1, -310, 0, yPos)
             }):Play()
             notifData.yPosition = yPos
-            yPos = yPos + notificationSpacing
+            yPos = yPos + notifData.frame.AbsoluteSize.Y + 10
         else
             table.remove(activeNotifications, i)
         end
@@ -2603,28 +2605,27 @@ function DiscordLib:Notification(data)
     local newYPos = baseY
     for _, notifData in ipairs(activeNotifications) do
         if notifData.frame and notifData.frame.Parent then
-            newYPos = math.max(newYPos, notifData.yPosition + notificationSpacing)
+            newYPos = math.max(newYPos, notifData.yPosition + notifData.frame.AbsoluteSize.Y + 10)
         end
     end
 
     local NotifHolder = Instance.new("Frame")
-    local NotifTitle = Instance.new("TextLabel")
-    local NotifDesc = Instance.new("TextLabel")
-    local NotifCorner = Instance.new("UICorner")
-
     NotifHolder.Name = "Notification"
     NotifHolder.Parent = Discord
     NotifHolder.BackgroundColor3 = currentTheme.Main
     NotifHolder.BorderSizePixel = 0
     NotifHolder.Position = UDim2.new(1, -310, 0, newYPos)
-    NotifHolder.Size = UDim2.new(0, 280, 0, 65)
+    NotifHolder.Size = UDim2.new(0, 280, 0, 45)
     NotifHolder.ClipsDescendants = true
     NotifHolder.BackgroundTransparency = 1
     NotifHolder.ZIndex = 100
+    NotifHolder.AutomaticSize = Enum.AutomaticSize.Y
 
+    local NotifCorner = Instance.new("UICorner")
     NotifCorner.CornerRadius = UDim.new(0, 6)
     NotifCorner.Parent = NotifHolder
 
+    local NotifTitle = Instance.new("TextLabel")
     NotifTitle.Parent = NotifHolder
     NotifTitle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     NotifTitle.BackgroundTransparency = 1.000
@@ -2638,11 +2639,12 @@ function DiscordLib:Notification(data)
     NotifTitle.TextTransparency = 1
     NotifTitle.ZIndex = 101
 
+    local NotifDesc = Instance.new("TextLabel")
     NotifDesc.Parent = NotifHolder
     NotifDesc.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     NotifDesc.BackgroundTransparency = 1.000
     NotifDesc.Position = UDim2.new(0, 10, 0, 30)
-    NotifDesc.Size = UDim2.new(0, 260, 0, 25)
+    NotifDesc.Size = UDim2.new(0, 260, 0, 16)
     NotifDesc.Font = Enum.Font.Gotham
     NotifDesc.Text = desc
     NotifDesc.TextColor3 = currentTheme.TextMuted
@@ -2652,6 +2654,13 @@ function DiscordLib:Notification(data)
     NotifDesc.TextYAlignment = Enum.TextYAlignment.Top
     NotifDesc.TextTransparency = 1
     NotifDesc.ZIndex = 101
+    NotifDesc.RichText = true
+    NotifDesc.AutomaticSize = Enum.AutomaticSize.Y
+
+    NotifDesc:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+        NotifHolder.Size = UDim2.new(0, 280, 0, 30 + NotifDesc.AbsoluteSize.Y + 10)
+    end)
+
     local notifData = {
         frame = NotifHolder,
         yPosition = newYPos
@@ -2673,6 +2682,7 @@ function DiscordLib:Notification(data)
                 break
             end
         end
+
         TweenService:Create(NotifHolder, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
             Position = UDim2.new(1, -310, 0, newYPos - 80),
             BackgroundTransparency = 1
