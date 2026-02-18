@@ -896,6 +896,7 @@ function Section:Paragraph(title, content)
     ContentLabel.TextXAlignment = Enum.TextXAlignment.Left
     ContentLabel.ZIndex = 7
 
+    -- IMPORTANTE: Devolvemos un objeto con métodos, NO el Frame
     local paragraphObject = {}
 
     function paragraphObject:SetTitle(newTitle)
@@ -911,14 +912,6 @@ function Section:Paragraph(title, content)
         ContentLabel.Text = newContent
     end
 
-    function paragraphObject:GetTitle()
-        return TitleLabel.Text
-    end
-
-    function paragraphObject:GetContent()
-        return ContentLabel.Text
-    end
-
     function paragraphObject:SetVisible(visible)
         ParagraphFrame.Visible = visible
     end
@@ -928,7 +921,7 @@ function Section:Paragraph(title, content)
     end
 
     SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 30)
-    return paragraphObject
+    return paragraphObject 
 end
 
         function Section:Seperator()
