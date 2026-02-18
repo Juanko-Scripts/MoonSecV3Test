@@ -56,6 +56,8 @@ local Themes = {
 
 local currentTheme = Themes.Dark
 local activeNotifications = {}
+local currentServer = ""
+local currentChannel = ""
 
 for _, XP in pairs(game:GetService("CoreGui"):GetChildren()) do
     if XP.Name == "Discord" then
@@ -184,9 +186,14 @@ function DiscordLib:MinimizeUI()
             userpad.Visible = true
         end
         
-        for _, section in pairs(Sections) do
+        local fullName = currentServer .. ":" .. currentChannel
+        for sectionName, section in pairs(Sections) do
             if section and section.Parent then
-                section.Visible = true
+                if sectionName == fullName then
+                    section.Visible = true
+                else
+                    section.Visible = false
+                end
             end
         end
         
@@ -787,6 +794,7 @@ function DiscordLib:Window(text)
             end
             TweenService:Create(ServerBtn, TweenInfo.new(0.2), {BackgroundTransparency = 0}):Play()
 
+            currentServer = Name
             currentservertoggled = Name
             
             for channelName, channelData in pairs(ServerChannels[Name]) do
@@ -805,10 +813,10 @@ function DiscordLib:Window(text)
                 end
             end
             
-            if currentchanneltoggled and ServerChannels[Name][currentchanneltoggled] then
-                ServerChannels[Name][currentchanneltoggled].Button.BackgroundColor3 = currentTheme.Accent
+            if currentChannel and ServerChannels[Name][currentChannel] then
+                ServerChannels[Name][currentChannel].Button.BackgroundColor3 = currentTheme.Accent
                 for sectionName, section in pairs(Sections) do
-                    if sectionName:match("^" .. Name .. ":" .. currentchanneltoggled) then
+                    if sectionName == Name .. ":" .. currentChannel then
                         section.Visible = true
                     else
                         section.Visible = false
@@ -889,6 +897,7 @@ function DiscordLib:Window(text)
             
             ChannelBtn.BackgroundColor3 = currentTheme.Accent
             ChannelBtn.BackgroundTransparency = 0
+            currentChannel = channelName
             currentchanneltoggled = channelName
             
             local fullName = serverName .. ":" .. channelName
@@ -3137,6 +3146,7 @@ function DiscordLib:Window(text)
                 end
             end
         end
+        currentServer = Name
         currentservertoggled = Name
         
         for channelName, channelData in pairs(ServerChannels[Name]) do
@@ -3170,6 +3180,7 @@ function DiscordLib:Window(text)
         if serverName and channelName and ServerChannels[serverName] and ServerChannels[serverName][channelName] then
             ServerChannels[serverName][channelName].Button.BackgroundColor3 = currentTheme.Accent
             ServerChannels[serverName][channelName].Button.BackgroundTransparency = 0
+            currentChannel = channelName
             currentchanneltoggled = channelName
             
             local fullName = serverName .. ":" .. channelName
@@ -3498,15 +3509,16 @@ function DiscordLib:SetTransparency(transparency)
     if channelsHoldFrame then
         channelsHoldFrame.BackgroundTransparency = transparency
     end
-    for _, sectionFrame in pairs(Sections) do
-        if sectionFrame and sectionFrame.Parent then
-            sectionFrame.BackgroundTransparency = transparency
-        end
-    end
     
     local userpad = mainFrame:FindFirstChild("Userpad", true)
     if userpad then
         userpad.BackgroundTransparency = math.min(transparency + 0.2, 1)
+    end
+    
+    for _, sectionFrame in pairs(Sections) do
+        if sectionFrame and sectionFrame.Parent then
+            sectionFrame.BackgroundTransparency = transparency
+        end
     end
 end
 
