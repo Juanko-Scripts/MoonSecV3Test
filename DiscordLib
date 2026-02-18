@@ -1126,7 +1126,7 @@ function Section:Toggle(text, desc, default, callback)
         desc = nil
     end
 
-    local baseHeight = 28
+    local baseHeight = 32 
     local finalHeight = baseHeight
     
     if desc then
@@ -1134,13 +1134,13 @@ function Section:Toggle(text, desc, default, callback)
         tempLabel.Font = Enum.Font.Gotham
         tempLabel.TextSize = 12.000
         tempLabel.Text = desc
-        tempLabel.Size = UDim2.new(0, 310, 0, 1000)
+        tempLabel.Size = UDim2.new(0, 300, 0, 1000) 
         tempLabel.TextWrapped = true
         tempLabel.RichText = true
         tempLabel.LineHeight = 1.2
         
         local textHeight = tempLabel.TextBounds.Y
-        finalHeight = baseHeight + textHeight + 12
+        finalHeight = baseHeight + textHeight + 12  -- 32 + texto + padding
     end
 
     local Toggle = Instance.new("TextButton")
@@ -1166,12 +1166,12 @@ function Section:Toggle(text, desc, default, callback)
         ToggleLabel.Parent = Toggle
         ToggleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         ToggleLabel.BackgroundTransparency = 1.000
-        ToggleLabel.Position = UDim2.new(0, 5, 0, 0)
+        ToggleLabel.Position = UDim2.new(0, 10, 0, 0)
         ToggleLabel.Size = UDim2.new(0, 310, 1, 0)
         ToggleLabel.Font = Enum.Font.Gotham
         ToggleLabel.Text = text
         ToggleLabel.TextColor3 = currentTheme.Text
-        ToggleLabel.TextSize = 13.000
+        ToggleLabel.TextSize = 14.000 
         ToggleLabel.TextXAlignment = Enum.TextXAlignment.Left
         ToggleLabel.TextYAlignment = Enum.TextYAlignment.Center
         ToggleLabel.ZIndex = 7
@@ -1182,12 +1182,12 @@ function Section:Toggle(text, desc, default, callback)
         ToggleFrame.BackgroundColor3 = currentTheme.Secondary
         ToggleFrame.BorderSizePixel = 1
         ToggleFrame.BorderColor3 = currentTheme.Border
-        ToggleFrame.Position = UDim2.new(0, 340, 0, 5)
-        ToggleFrame.Size = UDim2.new(0, 18, 0, 18)
+        ToggleFrame.Position = UDim2.new(0, 335, 0, (finalHeight/2) - 10)
+        ToggleFrame.Size = UDim2.new(0, 20, 0, 20)
         ToggleFrame.ZIndex = 7
 
         local ToggleFrameCorner = Instance.new("UICorner")
-        ToggleFrameCorner.CornerRadius = UDim.new(0, 3)
+        ToggleFrameCorner.CornerRadius = UDim.new(0, 4)
         ToggleFrameCorner.Parent = ToggleFrame
 
         local ToggleFill = Instance.new("Frame")
@@ -1201,9 +1201,9 @@ function Section:Toggle(text, desc, default, callback)
         ToggleFill.Visible = false
 
         local ToggleFillCorner = Instance.new("UICorner")
-        ToggleFillCorner.CornerRadius = UDim.new(0, 2)
+        ToggleFillCorner.CornerRadius = UDim.new(0, 3)
         ToggleFillCorner.Parent = ToggleFill
-
+        
         local toggled = default or false
         if toggled then
             ToggleFill.Visible = true
@@ -1239,12 +1239,12 @@ function Section:Toggle(text, desc, default, callback)
         ToggleLabel.Parent = Toggle
         ToggleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         ToggleLabel.BackgroundTransparency = 1.000
-        ToggleLabel.Position = UDim2.new(0, 5, 0, 6)
-        ToggleLabel.Size = UDim2.new(0, 310, 0, 18)
-        ToggleLabel.Font = Enum.Font.Gotham
+        ToggleLabel.Position = UDim2.new(0, 10, 0, 8)
+        ToggleLabel.Size = UDim2.new(0, 300, 0, 18)
+        ToggleLabel.Font = Enum.Font.GothamBold  -- Negrita para el título
         ToggleLabel.Text = text
         ToggleLabel.TextColor3 = currentTheme.Text
-        ToggleLabel.TextSize = 13.000
+        ToggleLabel.TextSize = 14.000  -- Mismo que Button
         ToggleLabel.TextXAlignment = Enum.TextXAlignment.Left
         ToggleLabel.TextYAlignment = Enum.TextYAlignment.Center
         ToggleLabel.ZIndex = 7
@@ -1254,8 +1254,8 @@ function Section:Toggle(text, desc, default, callback)
         DescLabel.Parent = Toggle
         DescLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         DescLabel.BackgroundTransparency = 1.000
-        DescLabel.Position = UDim2.new(0, 5, 0, 24)
-        DescLabel.Size = UDim2.new(0, 310, 0, finalHeight - 32)
+        DescLabel.Position = UDim2.new(0, 10, 0, 28)
+        DescLabel.Size = UDim2.new(0, 300, 0, finalHeight - 40)
         DescLabel.Font = Enum.Font.Gotham
         DescLabel.Text = desc
         DescLabel.TextColor3 = currentTheme.TextMuted
@@ -1273,12 +1273,12 @@ function Section:Toggle(text, desc, default, callback)
         ToggleFrame.BackgroundColor3 = currentTheme.Secondary
         ToggleFrame.BorderSizePixel = 1
         ToggleFrame.BorderColor3 = currentTheme.Border
-        ToggleFrame.Position = UDim2.new(0, 340, 0, 5)
-        ToggleFrame.Size = UDim2.new(0, 18, 0, 18)
+        ToggleFrame.Position = UDim2.new(0, 335, 0, (finalHeight/2) - 10)
+        ToggleFrame.Size = UDim2.new(0, 20, 0, 20)
         ToggleFrame.ZIndex = 7
 
         local ToggleFrameCorner = Instance.new("UICorner")
-        ToggleFrameCorner.CornerRadius = UDim.new(0, 3)
+        ToggleFrameCorner.CornerRadius = UDim.new(0, 4)
         ToggleFrameCorner.Parent = ToggleFrame
 
         local ToggleFill = Instance.new("Frame")
@@ -1292,7 +1292,7 @@ function Section:Toggle(text, desc, default, callback)
         ToggleFill.Visible = false
 
         local ToggleFillCorner = Instance.new("UICorner")
-        ToggleFillCorner.CornerRadius = UDim.new(0, 2)
+        ToggleFillCorner.CornerRadius = UDim.new(0, 3)
         ToggleFillCorner.Parent = ToggleFill
 
         local toggled = default or false
