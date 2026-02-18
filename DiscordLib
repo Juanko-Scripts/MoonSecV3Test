@@ -1505,11 +1505,12 @@ function DiscordLib:Window(text)
         end
 
 function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, callback)
-    local baseHeight = 65
+    local baseHeight = 70
     local titleY = 8
     local descY = 26
     local toggleY = 5
-    local sliderY = 35
+    local sliderY = 30
+    local valueY = 45
 
     if desc then
         local tempLabel = Instance.new("TextLabel")
@@ -1522,8 +1523,10 @@ function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, ca
         tempLabel.LineHeight = 1.2
 
         local textHeight = tempLabel.TextBounds.Y
-        baseHeight = 65 + textHeight + 8
-        sliderY = 35 + textHeight + 8
+        baseHeight = 70 + textHeight + 15
+        descY = 26
+        sliderY = 30 + textHeight + 8
+        valueY = 45 + textHeight + 8
 
         tempLabel:Destroy()
     end
@@ -1602,7 +1605,7 @@ function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, ca
         DescLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         DescLabel.BackgroundTransparency = 1.000
         DescLabel.Position = UDim2.new(0, 10, 0, descY)
-        DescLabel.Size = UDim2.new(0, 340, 0, baseHeight - 48)
+        DescLabel.Size = UDim2.new(0, 340, 0, baseHeight - 58)
         DescLabel.Font = Enum.Font.Gotham
         DescLabel.Text = desc
         DescLabel.TextColor3 = currentTheme.TextMuted
@@ -1622,7 +1625,7 @@ function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, ca
     SliderFrame.BackgroundColor3 = currentTheme.Tertiary
     SliderFrame.BorderSizePixel = 0
     SliderFrame.Position = UDim2.new(0, 5, 0, sliderY)
-    SliderFrame.Size = UDim2.new(0, 360, 0, 25)
+    SliderFrame.Size = UDim2.new(0, 360, 0, 40)
     SliderFrame.ZIndex = 6
     SliderFrame.ClipsDescendants = true
 
@@ -1635,8 +1638,8 @@ function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, ca
     SliderBar.Parent = SliderFrame
     SliderBar.BackgroundColor3 = currentTheme.Secondary
     SliderBar.BorderSizePixel = 0
-    SliderBar.Position = UDim2.new(0, 10, 0, 3)
-    SliderBar.Size = UDim2.new(0, 290, 0, 8)
+    SliderBar.Position = UDim2.new(0, 10, 0, 5)
+    SliderBar.Size = UDim2.new(0, 340, 0, 8)
     SliderBar.ZIndex = 7
 
     local SliderBarCorner = Instance.new("UICorner")
@@ -1675,8 +1678,8 @@ function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, ca
     SliderValue.Parent = SliderFrame
     SliderValue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     SliderValue.BackgroundTransparency = 1.000
-    SliderValue.Position = UDim2.new(0, 310, 0, 0)
-    SliderValue.Size = UDim2.new(0, 45, 0, 18)
+    SliderValue.Position = UDim2.new(0, 315, 0, valueY - sliderY)
+    SliderValue.Size = UDim2.new(0, 40, 0, 18)
     SliderValue.Font = Enum.Font.GothamBold
     SliderValue.Text = tostring(defaultVal)
     SliderValue.TextColor3 = currentTheme.Accent
@@ -1780,6 +1783,32 @@ function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, ca
     end
 
     ToggleButton.MouseButton1Click:Connect(updateToggle)
+    local function updateThemeColors()
+        MainFrame.BackgroundColor3 = currentTheme.Tertiary
+        TitleLabel.TextColor3 = currentTheme.Text
+        ToggleContainer.BackgroundColor3 = toggled and currentTheme.Accent or currentTheme.Secondary
+        ToggleContainer.BorderColor3 = currentTheme.Border
+        ToggleFill.BackgroundColor3 = currentTheme.Accent
+        SliderFrame.BackgroundColor3 = currentTheme.Tertiary
+        SliderBar.BackgroundColor3 = currentTheme.Secondary
+        SliderFill.BackgroundColor3 = currentTheme.Accent
+        SliderButton.BackgroundColor3 = currentTheme.Text
+        SliderValue.TextColor3 = currentTheme.Accent
+        
+        if desc then
+            local DescLabel = MainFrame:FindFirstChild("ToggleSliderDesc")
+            if DescLabel then
+                DescLabel.TextColor3 = currentTheme.TextMuted
+            end
+        end
+    end
+    if not Section.__toggleSliders then
+        Section.__toggleSliders = {}
+    end
+    table.insert(Section.__toggleSliders, {
+        update = updateThemeColors
+    })
+    updateThemeColors()
 
     local toggleSliderObject = {}
 
