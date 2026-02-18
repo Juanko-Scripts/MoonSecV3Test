@@ -1063,25 +1063,28 @@ function Section:Button(text, desc, callback)
     end
 
     local isAnimating = false
-    local originalColor = currentTheme.Tertiary
-    local hoverColor = currentTheme.Hover
 
-    local function updateColors()
-        originalColor = currentTheme.Tertiary
-        hoverColor = currentTheme.Hover
-        ButtonFrame.BackgroundColor3 = originalColor
+    local function getCurrentColor()
+        return currentTheme.Tertiary
+    end
+
+    local function getCurrentHoverColor()
+        return currentTheme.Hover
     end
 
     local function playClickAnimation()
         if isAnimating then return end
         isAnimating = true
-
+        
+        local hoverColor = getCurrentHoverColor()
+        
         TweenService:Create(ButtonFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
             BackgroundColor3 = hoverColor
         }):Play()
         
         task.wait(0.1)
         
+        local originalColor = getCurrentColor()
         TweenService:Create(ButtonFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
             BackgroundColor3 = originalColor
         }):Play()
@@ -1093,7 +1096,7 @@ function Section:Button(text, desc, callback)
     Button.MouseEnter:Connect(function()
         if not isAnimating then
             TweenService:Create(ButtonFrame, TweenInfo.new(0.2), {
-                BackgroundColor3 = hoverColor
+                BackgroundColor3 = getCurrentHoverColor()
             }):Play()
         end
     end)
@@ -1101,7 +1104,7 @@ function Section:Button(text, desc, callback)
     Button.MouseLeave:Connect(function()
         if not isAnimating then
             TweenService:Create(ButtonFrame, TweenInfo.new(0.2), {
-                BackgroundColor3 = originalColor
+                BackgroundColor3 = getCurrentColor()
             }):Play()
         end
     end)
@@ -1114,13 +1117,20 @@ function Section:Button(text, desc, callback)
         end
     end)
 
-    SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
-    local buttonObject = {}
-    function buttonObject:UpdateColors()
-        updateColors()
+    local function onThemeChanged()
+        ButtonFrame.BackgroundColor3 = getCurrentColor()
     end
     
-    return ButtonFrame, buttonObject
+    if not Section.__buttons then
+        Section.__buttons = {}
+    end
+    table.insert(Section.__buttons, {
+        frame = ButtonFrame,
+        update = onThemeChanged
+    })
+
+    SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
+    return ButtonFrame
 end
 
 function Section:Toggle(text, desc, default, callback)
@@ -2810,6 +2820,16 @@ end
             end
         end
     end
+    
+for _, sectionFrame in pairs(Sections) do
+    if sectionFrame and sectionFrame.__buttons then
+    for _, buttonData in ipairs(sectionFrame.__buttons) do
+    if buttonData.frame and buttonData.frame.Parent then
+buttonData.frame.BackgroundColor3 = currentTheme.Tertiary
+            end
+        end
+    end
+end
 
     function Servers:SelectChannel(serverName, channelName)
         if serverName and channelName and ServerChannels[serverName] and ServerChannels[serverName][channelName] then
