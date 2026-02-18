@@ -1505,11 +1505,11 @@ function DiscordLib:Window(text)
         end
 
 function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, callback)
-    local baseHeight = 60
+    local baseHeight = 65
     local titleY = 8
     local descY = 26
     local toggleY = 5
-    local sliderY = 40
+    local sliderY = 35
 
     if desc then
         local tempLabel = Instance.new("TextLabel")
@@ -1522,8 +1522,8 @@ function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, ca
         tempLabel.LineHeight = 1.2
 
         local textHeight = tempLabel.TextBounds.Y
-        baseHeight = 60 + textHeight + 8
-        sliderY = 40 + textHeight + 8
+        baseHeight = 65 + textHeight + 8
+        sliderY = 35 + textHeight + 8
 
         tempLabel:Destroy()
     end
@@ -1622,7 +1622,7 @@ function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, ca
     SliderFrame.BackgroundColor3 = currentTheme.Tertiary
     SliderFrame.BorderSizePixel = 0
     SliderFrame.Position = UDim2.new(0, 5, 0, sliderY)
-    SliderFrame.Size = UDim2.new(0, 360, 0, 30)
+    SliderFrame.Size = UDim2.new(0, 360, 0, 25)
     SliderFrame.ZIndex = 6
     SliderFrame.ClipsDescendants = true
 
@@ -1630,28 +1630,13 @@ function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, ca
     SliderCorner.CornerRadius = UDim.new(0, 4)
     SliderCorner.Parent = SliderFrame
 
-    local SliderValue = Instance.new("TextLabel")
-    SliderValue.Name = "SliderValue"
-    SliderValue.Parent = SliderFrame
-    SliderValue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    SliderValue.BackgroundTransparency = 1.000
-    SliderValue.Position = UDim2.new(0, 315, 0, 0)
-    SliderValue.Size = UDim2.new(0, 40, 0, 18)
-    SliderValue.Font = Enum.Font.GothamBold
-    SliderValue.Text = tostring(defaultVal)
-    SliderValue.TextColor3 = currentTheme.Accent
-    SliderValue.TextSize = 13.000
-    SliderValue.TextXAlignment = Enum.TextXAlignment.Right
-    SliderValue.TextYAlignment = Enum.TextYAlignment.Center
-    SliderValue.ZIndex = 7
-
     local SliderBar = Instance.new("Frame")
     SliderBar.Name = "SliderBar"
     SliderBar.Parent = SliderFrame
     SliderBar.BackgroundColor3 = currentTheme.Secondary
     SliderBar.BorderSizePixel = 0
-    SliderBar.Position = UDim2.new(0, 10, 0, 10)
-    SliderBar.Size = UDim2.new(0, 340, 0, 8)
+    SliderBar.Position = UDim2.new(0, 10, 0, 3)
+    SliderBar.Size = UDim2.new(0, 290, 0, 8)
     SliderBar.ZIndex = 7
 
     local SliderBarCorner = Instance.new("UICorner")
@@ -1684,6 +1669,21 @@ function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, ca
     local SliderButtonCorner = Instance.new("UICorner")
     SliderButtonCorner.CornerRadius = UDim.new(0, 5)
     SliderButtonCorner.Parent = SliderButton
+
+    local SliderValue = Instance.new("TextLabel")
+    SliderValue.Name = "SliderValue"
+    SliderValue.Parent = SliderFrame
+    SliderValue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    SliderValue.BackgroundTransparency = 1.000
+    SliderValue.Position = UDim2.new(0, 310, 0, 0)
+    SliderValue.Size = UDim2.new(0, 45, 0, 18)
+    SliderValue.Font = Enum.Font.GothamBold
+    SliderValue.Text = tostring(defaultVal)
+    SliderValue.TextColor3 = currentTheme.Accent
+    SliderValue.TextSize = 13.000
+    SliderValue.TextXAlignment = Enum.TextXAlignment.Right
+    SliderValue.TextYAlignment = Enum.TextYAlignment.Center
+    SliderValue.ZIndex = 7
 
     local toggled = defaultState or false
     local value = defaultVal or min
