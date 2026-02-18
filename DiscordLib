@@ -1441,12 +1441,12 @@ function DiscordLib:Window(text)
         end
 
         function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, callback)
-            local baseHeight = 40
+            local baseHeight = 35
             local titleY = 8
             local descY = 30
             local toggleY = 5
             local valueX = 270
-            local sliderY = 20
+            local sliderY = 15
 
             if desc then
                 local tempLabel = Instance.new("TextLabel")
