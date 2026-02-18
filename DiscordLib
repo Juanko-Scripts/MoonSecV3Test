@@ -1369,11 +1369,19 @@ function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, ca
         tempLabel.Parent = SectionFrame
         tempLabel.Visible = false
         
-        local textHeight = tempLabel.TextBounds.Y
-        if textHeight and type(textHeight) == "number" then
-            baseHeight = 80 + textHeight + 12
-            sliderY = 45 + textHeight + 12
+        local textHeight = 0
+        local success, result = pcall(function()
+            return tempLabel.TextBounds.Y
+        end)
+        
+        if success and type(result) == "number" then
+            textHeight = result
+        else
+            textHeight = #desc * 6
         end
+        
+        baseHeight = 80 + textHeight + 12
+        sliderY = 45 + textHeight + 12
         
         tempLabel:Destroy()
     end
