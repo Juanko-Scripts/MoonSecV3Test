@@ -888,8 +888,6 @@ function DiscordLib:Window(text)
         SectionPadding.PaddingTop = UDim.new(0, 30)
 
         Sections[fullName] = SectionFrame
-
-        -- Registrar sección para actualización de tema
         registerThemeUpdate(function()
             SectionFrame.BackgroundColor3 = currentTheme.Secondary
             SectionTitle.TextColor3 = currentTheme.Text
@@ -970,7 +968,6 @@ function DiscordLib:Window(text)
                 SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
             end)
 
-            -- Registrar para actualización de tema
             registerThemeUpdate(function()
                 ParagraphFrame.BackgroundColor3 = currentTheme.Tertiary
                 TitleLabel.TextColor3 = currentTheme.Text
@@ -1202,7 +1199,6 @@ function DiscordLib:Window(text)
                 end
             end)
 
-            -- Registrar para actualización de tema
             registerThemeUpdate(function()
                 ButtonFrame.BackgroundColor3 = currentTheme.Tertiary
             end)
@@ -1450,7 +1446,7 @@ function DiscordLib:Window(text)
             local descY = 30
             local toggleY = 5
             local valueX = 270
-            local sliderY = 50
+            local sliderY = 35
 
             if desc then
                 local tempLabel = Instance.new("TextLabel")
@@ -1729,8 +1725,6 @@ function DiscordLib:Window(text)
             end
 
             ToggleButton.MouseButton1Click:Connect(updateToggle)
-
-            -- Registrar para actualización de tema
             registerThemeUpdate(function()
                 MainFrame.BackgroundColor3 = currentTheme.Tertiary
                 TitleLabel.TextColor3 = currentTheme.Text
