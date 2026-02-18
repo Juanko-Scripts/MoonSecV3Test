@@ -196,7 +196,7 @@ function GrobalSettingsLibXP:CreateSettingsInChannel(channel, discordLib)
 
     channel:Label("THEME SETTINGS")
     channel:Seperator()
-channel:Colorpicker("Pick Color", Color3.fromRGB(32, 34, 37), function(color)
+channel:Colorpicker("Custom Theme", Color3.fromRGB(32, 34, 37), function(color)
         discordLib:SetTheme(color)
     end)
     local themeNames = self:GetThemeNames()
@@ -246,6 +246,46 @@ end)
         self:SetTransparency(transparency, discordLib)
     end)
 
+channel:Seperator()
+channel:Label("INFORMACION PLAYERS OR SERVER") 
+local UpdateAbc123 = channel:Paragraph("INFORMATION", "No Informacion Detect")
+channel:Toggle("Auto Update Information", false, function(Y)
+      ABC2717171727727271772ABC = Y
+while ABC2717171727727271772ABC do
+game:GetService("RunService").RenderStepped:Wait()
+pcall(function()
+if Players.LocalPlayer.Character and Players.LocalPlayer.Character ~= nil and Players.LocalPlayer.Character:FindFirstChild("Humanoid") and Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+UpdateAbc123:SetContent([[Your Fps | ]]..math.floor(workspace:GetRealPhysicsFPS())..[[ 
+Player In Server | ]]..#Players:GetPlayers()..[[ / ]]..Players.MaxPlayers..[[ 
+Join Client | ]]..math.floor(workspace.DistributedGameTime / 60 / 60)..[[ Hour | ]]..math.floor(workspace.DistributedGameTime / 60) - (math.floor(workspace.DistributedGameTime / 60 / 60) * 60)..[[ Minute | ]]..math.floor(workspace.DistributedGameTime) - (math.floor(workspace.DistributedGameTime / 60) * 60)..[[ Second 
+Your Ping | ]]..game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()..[[ 
+Your Account Age | ]]..Players.LocalPlayer.AccountAge..[[ 
+Velocity | ]]..math.round(Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Velocity.X)..[[, ]]..math.round(Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Velocity.Y)..[[, ]]..math.round(Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Velocity.Z)..[[ 
+Position | ]]..math.round(Players.LocalPlayer.Character.HumanoidRootPart.Position.X)..[[, ]]..math.round(Players.LocalPlayer.Character.HumanoidRootPart.Position.Y)..[[, ]]..math.round(Players.LocalPlayer.Character.HumanoidRootPart.Position.Z)..[[ 
+Walk Speed | ]]..Players.LocalPlayer.Character.Humanoid.WalkSpeed..[[ 
+Jump Power | ]]..Players.LocalPlayer.Character.Humanoid.JumpPower..[[ 
+Health You | ]]..Players.LocalPlayer.Character.Humanoid.Health..[[ 
+Hip Height |]]..Players.LocalPlayer.Character.Humanoid.HipHeight..[[ 
+Gravity | ]]..game.Workspace.Gravity..[[ 
+Hwid | ]]..gethwid()..[[ 
+Client Id | ]]..tostring(game:GetService("RbxAnalyticsService"):GetClientId())..[[ 
+Executor Name | ]]..identifyexecutor()..[[ 
+Game Id | ]]..game.PlaceId..[[ 
+Job Id | ]]..game.JobId..[[ 
+Display Name | ]]..Players.LocalPlayer.DisplayName..[[ 
+Player Name | ]]..Players.LocalPlayer.Name..[[ 
+Player Id | ]]..Players.LocalPlayer.UserId..[[ 
+Fallen Parts Destroy Height | ]]..workspace.FallenPartsDestroyHeight..[[ 
+Move Direction | ]]..math.round(Players.LocalPlayer.Character.Humanoid.MoveDirection.X)..[[, ]]..math.round(Players.LocalPlayer.Character.Humanoid.MoveDirection.Y)..[[, ]]..math.round(Players.LocalPlayer.Character.Humanoid.MoveDirection.Z)..[[ 
+Camera CFrame | ]]..math.round(workspace.CurrentCamera.CFrame.Position.X)..[[, ]]..math.round(workspace.CurrentCamera.CFrame.Position.Y)..[[, ]]..math.round(workspace.CurrentCamera.CFrame.Position.Z)..[[ 
+Camera Field Fov | ]]..workspace.CurrentCamera.FieldOfView..[[ 
+Health | ]]..Players.LocalPlayer.Character.Humanoid.Health..[[
+Max Health | ]]..Players.LocalPlayer.Character.Humanoid.MaxHealth..[[
+]])
+end
+end)
+end
+end)
     return channel
 end
 
