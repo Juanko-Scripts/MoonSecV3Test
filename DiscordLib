@@ -1608,139 +1608,252 @@ function Section:ToggleSlider(text, defaultState, min, max, defaultVal, callback
     return toggleSliderObject
 end
 
-        function Section:Slider(text, min, max, default, callback)
-            local SliderFrame = Instance.new("Frame")
-            local SliderLabel = Instance.new("TextLabel")
-            local SliderValue = Instance.new("TextLabel")
-            local SliderBar = Instance.new("Frame")
-            local SliderButton = Instance.new("TextButton")
-            local SliderFill = Instance.new("Frame")
+function Section:Slider(text, desc, min, max, default, callback)
+    if type(desc) == "number" then
+        callback = max
+        default = max
+        max = min
+        min = desc
+        desc = nil
+    end
 
-            local value = default or min
-            local dragging = false
+    local baseHeight = 52
+    local finalHeight = baseHeight
+    
+    if desc then
+        local tempLabel = Instance.new("TextLabel")
+        tempLabel.Font = Enum.Font.Gotham
+        tempLabel.TextSize = 12.000
+        tempLabel.Text = desc
+        tempLabel.Size = UDim2.new(0, 340, 0, 1000)
+        tempLabel.TextWrapped = true
+        tempLabel.RichText = true
+        tempLabel.LineHeight = 1.2
+        
+        local textHeight = tempLabel.TextBounds.Y
+        finalHeight = baseHeight + textHeight + 12
+    end
 
-            SliderFrame.Parent = SectionFrame
-            SliderFrame.BackgroundColor3 = currentTheme.Tertiary
-            SliderFrame.BorderSizePixel = 0
-            SliderFrame.Size = UDim2.new(0, 370, 0, 45)
-            SliderFrame.ZIndex = 6
+    local SliderFrame = Instance.new("Frame")
+    SliderFrame.Name = "Slider_" .. text:gsub("%s+", "")
+    SliderFrame.Parent = SectionFrame
+    SliderFrame.BackgroundColor3 = currentTheme.Tertiary
+    SliderFrame.BorderSizePixel = 0
+    SliderFrame.Size = UDim2.new(0, 370, 0, finalHeight)
+    SliderFrame.ZIndex = 6
+    SliderFrame.ClipsDescendants = true
 
-            local SliderCorner = Instance.new("UICorner")
-            SliderCorner.CornerRadius = UDim.new(0, 4)
-            SliderCorner.Parent = SliderFrame
+    local SliderCorner = Instance.new("UICorner")
+    SliderCorner.CornerRadius = UDim.new(0, 4)
+    SliderCorner.Parent = SliderFrame
 
-            SliderLabel.Parent = SliderFrame
-            SliderLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            SliderLabel.BackgroundTransparency = 1.000
-            SliderLabel.Position = UDim2.new(0, 5, 0, 5)
-            SliderLabel.Size = UDim2.new(0, 220, 0, 18)
-            SliderLabel.Font = Enum.Font.Gotham
-            SliderLabel.Text = text
-            SliderLabel.TextColor3 = currentTheme.Text
-            SliderLabel.TextSize = 13.000
-            SliderLabel.TextXAlignment = Enum.TextXAlignment.Left
-            SliderLabel.ZIndex = 7
+    local TitleLabel = Instance.new("TextLabel")
+    TitleLabel.Name = "SliderTitle"
+    TitleLabel.Parent = SliderFrame
+    TitleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    TitleLabel.BackgroundTransparency = 1.000
+    TitleLabel.Position = UDim2.new(0, 10, 0, desc and 8 or 6)
+    TitleLabel.Size = UDim2.new(0, 250, 0, 18)
+    TitleLabel.Font = Enum.Font.Gotham
+    TitleLabel.Text = text
+    TitleLabel.TextColor3 = currentTheme.Text
+    TitleLabel.TextSize = 14.000
+    TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    TitleLabel.TextYAlignment = Enum.TextYAlignment.Center
+    TitleLabel.ZIndex = 7
 
-            SliderValue.Parent = SliderFrame
-            SliderValue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            SliderValue.BackgroundTransparency = 1.000
-            SliderValue.Position = UDim2.new(0, 330, 0, 5)
-            SliderValue.Size = UDim2.new(0, 35, 0, 18)
-            SliderValue.Font = Enum.Font.Gotham
-            SliderValue.Text = tostring(value)
-            SliderValue.TextColor3 = currentTheme.Text
-            SliderValue.TextSize = 13.000
-            SliderValue.ZIndex = 7
+    local ValueLabel = Instance.new("TextLabel")
+    ValueLabel.Name = "SliderValue"
+    ValueLabel.Parent = SliderFrame
+    ValueLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    ValueLabel.BackgroundTransparency = 1.000
+    ValueLabel.Position = UDim2.new(0, 310, 0, desc and 8 or 6)
+    ValueLabel.Size = UDim2.new(0, 50, 0, 18)
+    ValueLabel.Font = Enum.Font.GothamBold
+    ValueLabel.Text = tostring(default)
+    ValueLabel.TextColor3 = currentTheme.Accent
+    ValueLabel.TextSize = 14.000
+    ValueLabel.TextXAlignment = Enum.TextXAlignment.Right
+    ValueLabel.TextYAlignment = Enum.TextYAlignment.Center
+    ValueLabel.ZIndex = 7
 
-            SliderBar.Parent = SliderFrame
-            SliderBar.BackgroundColor3 = currentTheme.Secondary
-            SliderBar.BorderSizePixel = 0
-            SliderBar.Position = UDim2.new(0, 10, 0, 26)
-            SliderBar.Size = UDim2.new(0, 350, 0, 10)
-            SliderBar.ZIndex = 7
+    if desc then
+        local DescLabel = Instance.new("TextLabel")
+        DescLabel.Name = "SliderDesc"
+        DescLabel.Parent = SliderFrame
+        DescLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        DescLabel.BackgroundTransparency = 1.000
+        DescLabel.Position = UDim2.new(0, 10, 0, 28)
+        DescLabel.Size = UDim2.new(0, 340, 0, finalHeight - 40)
+        DescLabel.Font = Enum.Font.Gotham
+        DescLabel.Text = desc
+        DescLabel.TextColor3 = currentTheme.TextMuted
+        DescLabel.TextSize = 12.000
+        DescLabel.TextXAlignment = Enum.TextXAlignment.Left
+        DescLabel.TextYAlignment = Enum.TextYAlignment.Top
+        DescLabel.ZIndex = 7
+        DescLabel.TextWrapped = true
+        DescLabel.RichText = true
+        DescLabel.LineHeight = 1.2
+    end
 
-            local SliderBarCorner = Instance.new("UICorner")
-            SliderBarCorner.CornerRadius = UDim.new(0, 5)
-            SliderBarCorner.Parent = SliderBar
+    local SliderBar = Instance.new("Frame")
+    SliderBar.Name = "SliderBar"
+    SliderBar.Parent = SliderFrame
+    SliderBar.BackgroundColor3 = currentTheme.Secondary
+    SliderBar.BorderSizePixel = 0
+    SliderBar.Position = UDim2.new(0, 10, 0, desc and (finalHeight - 24) or (baseHeight - 16))
+    SliderBar.Size = UDim2.new(0, 330, 0, 8)
+    SliderBar.ZIndex = 7
 
-            SliderFill.Parent = SliderBar
-            SliderFill.BackgroundColor3 = currentTheme.Accent
-            SliderFill.BorderSizePixel = 0
-            SliderFill.Size = UDim2.new((value - min) / (max - min), 0, 1, 0)
-            SliderFill.ZIndex = 8
+    local SliderBarCorner = Instance.new("UICorner")
+    SliderBarCorner.CornerRadius = UDim.new(0, 4)
+    SliderBarCorner.Parent = SliderBar
 
-            local SliderFillCorner = Instance.new("UICorner")
-            SliderFillCorner.CornerRadius = UDim.new(0, 5)
-            SliderFillCorner.Parent = SliderFill
+    local SliderFill = Instance.new("Frame")
+    SliderFill.Name = "SliderFill"
+    SliderFill.Parent = SliderBar
+    SliderFill.BackgroundColor3 = currentTheme.Accent
+    SliderFill.BorderSizePixel = 0
+    SliderFill.Size = UDim2.new((default - min) / (max - min), 0, 1, 0)
+    SliderFill.ZIndex = 8
 
-            SliderButton.Parent = SliderBar
-            SliderButton.BackgroundColor3 = currentTheme.Text
-            SliderButton.BorderSizePixel = 0
-            SliderButton.Position = UDim2.new((value - min) / (max - min), -5, 0, -2)
-            SliderButton.Size = UDim2.new(0, 10, 0, 14)
-            SliderButton.Text = ""
-            SliderButton.AutoButtonColor = false
-            SliderButton.ZIndex = 9
+    local SliderFillCorner = Instance.new("UICorner")
+    SliderFillCorner.CornerRadius = UDim.new(0, 4)
+    SliderFillCorner.Parent = SliderFill
 
-            local SliderButtonCorner = Instance.new("UICorner")
-            SliderButtonCorner.CornerRadius = UDim.new(0, 5)
-            SliderButtonCorner.Parent = SliderButton
+    local SliderButton = Instance.new("TextButton")
+    SliderButton.Name = "SliderButton"
+    SliderButton.Parent = SliderBar
+    SliderButton.BackgroundColor3 = currentTheme.Text
+    SliderButton.BorderSizePixel = 0
+    SliderButton.Position = UDim2.new((default - min) / (max - min), -6, 0, -3)
+    SliderButton.Size = UDim2.new(0, 14, 0, 14)
+    SliderButton.Text = ""
+    SliderButton.ZIndex = 9
+    SliderButton.AutoButtonColor = false
 
-            local function updateSlider(input)
-                local pos = input.Position.X - SliderBar.AbsolutePosition.X
-                local size = SliderBar.AbsoluteSize.X
-                local percent = math.clamp(pos / size, 0, 1)
-                value = min + (max - min) * percent
-                SliderValue.Text = tostring(math.floor(value))
-                SliderFill.Size = UDim2.new(percent, 0, 1, 0)
-                SliderButton.Position = UDim2.new(percent, -5, 0, -2)
-                if callback then
-                    callback(math.floor(value))
-                end
-            end
+    local SliderButtonCorner = Instance.new("UICorner")
+    SliderButtonCorner.CornerRadius = UDim.new(0, 7)
+    SliderButtonCorner.Parent = SliderButton
 
-            SliderButton.InputBegan:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                    dragging = true
-                    updateSlider(input)
-                end
-            end)
+    local value = default
+    local dragging = false
+    local isAnimating = false
 
-            SliderButton.InputChanged:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-                    if dragging then
-                        updateSlider(input)
-                    end
-                end
-            end)
+    local function animateValueChange(newValue)
+        if isAnimating then return end
+        isAnimating = true
+        
+        TweenService:Create(ValueLabel, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
+            TextColor3 = currentTheme.Text,
+            TextSize = 16
+        }):Play()
+        
+        TweenService:Create(SliderFill, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
+            BackgroundColor3 = currentTheme.Text
+        }):Play()
+        
+        task.wait(0.1)
+        
+        TweenService:Create(ValueLabel, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
+            TextColor3 = currentTheme.Accent,
+            TextSize = 14
+        }):Play()
+        
+        TweenService:Create(SliderFill, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
+            BackgroundColor3 = currentTheme.Accent
+        }):Play()
+        
+        task.wait(0.1)
+        isAnimating = false
+    end
 
-            UserInputService.InputEnded:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                    dragging = false
-                end
-            end)
-
-            SliderBar.InputBegan:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                    updateSlider(input)
-                end
-            end)
-
-            local sliderObject = {}
-            function sliderObject:Change(newValue)
-                value = math.clamp(newValue, min, max)
-                local percent = (value - min) / (max - min)
-                SliderValue.Text = tostring(math.floor(value))
-                SliderFill.Size = UDim2.new(percent, 0, 1, 0)
-                SliderButton.Position = UDim2.new(percent, -5, 0, -2)
-                if callback then
-                    callback(math.floor(value))
-                end
-            end
-
-            SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 30)
-            return sliderObject
+    local function updateSlider(input)
+        local pos = input.Position.X - SliderBar.AbsolutePosition.X
+        local size = SliderBar.AbsoluteSize.X
+        local percent = math.clamp(pos / size, 0, 1)
+        value = min + (max - min) * percent
+        ValueLabel.Text = tostring(math.floor(value))
+        SliderFill.Size = UDim2.new(percent, 0, 1, 0)
+        SliderButton.Position = UDim2.new(percent, -6, 0, -3)
+        if callback then
+            callback(math.floor(value))
         end
+        animateValueChange(value)
+    end
+
+    SliderButton.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            updateSlider(input)
+        end
+    end)
+
+    SliderButton.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            if dragging then
+                updateSlider(input)
+            end
+        end
+    end)
+
+    SliderBar.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            updateSlider(input)
+        end
+    end)
+
+    UserInputService.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = false
+        end
+    end)
+
+    SliderButton.MouseEnter:Connect(function()
+        TweenService:Create(SliderButton, TweenInfo.new(0.2), {
+            Size = UDim2.new(0, 16, 0, 16),
+            Position = UDim2.new((value - min) / (max - min), -7, 0, -4)
+        }):Play()
+    end)
+
+    SliderButton.MouseLeave:Connect(function()
+        TweenService:Create(SliderButton, TweenInfo.new(0.2), {
+            Size = UDim2.new(0, 14, 0, 14),
+            Position = UDim2.new((value - min) / (max - min), -6, 0, -3)
+        }):Play()
+    end)
+
+    local sliderObject = {}
+    function sliderObject:Change(newValue)
+        value = math.clamp(newValue, min, max)
+        local percent = (value - min) / (max - min)
+        ValueLabel.Text = tostring(math.floor(value))
+        SliderFill.Size = UDim2.new(percent, 0, 1, 0)
+        SliderButton.Position = UDim2.new(percent, -6, 0, -3)
+        if callback then
+            callback(math.floor(value))
+        end
+        animateValueChange(value)
+    end
+
+    function sliderObject:GetValue()
+        return value
+    end
+
+    function sliderObject:SetRange(newMin, newMax)
+        min = newMin
+        max = newMax
+        value = math.clamp(value, min, max)
+        local percent = (value - min) / (max - min)
+        ValueLabel.Text = tostring(math.floor(value))
+        SliderFill.Size = UDim2.new(percent, 0, 1, 0)
+        SliderButton.Position = UDim2.new(percent, -6, 0, -3)
+    end
+
+    SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
+    return sliderObject
+end
 
         function Section:Colorpicker(text, default, callback)
             local ColorPickerFrame = Instance.new("Frame")
