@@ -1741,10 +1741,11 @@ function Section:Slider(text, desc, min, max, default, callback)
         local size = SliderBar.AbsoluteSize.X
         local percent = math.clamp(pos / size, 0, 1)
         value = min + (max - min) * percent
-        ValueLabel.Text = tostring(math.floor(value))
+        local roundedValue = math.floor(value * 100) / 100
+        ValueLabel.Text = tostring(roundedValue)
         SliderFill.Size = UDim2.new(percent, 0, 1, 0)
         SliderButton.Position = UDim2.new(percent, -6, 0, -3)
-        callback(math.floor(value))
+        callback(roundedValue)
     end
 
     SliderButton.InputBegan:Connect(function(input)
@@ -1794,10 +1795,11 @@ function Section:Slider(text, desc, min, max, default, callback)
         newValue = math.clamp(newValue, min, max)
         local targetPercent = (newValue - min) / (max - min)
         value = newValue
-        ValueLabel.Text = tostring(math.floor(value))
+        local roundedValue = math.floor(value * 100) / 100
+        ValueLabel.Text = tostring(roundedValue)
         SliderFill.Size = UDim2.new(targetPercent, 0, 1, 0)
         SliderButton.Position = UDim2.new(targetPercent, -6, 0, -3)
-        callback(math.floor(value))
+        callback(roundedValue)
     end
 
     function sliderObject:GetValue()
@@ -1807,7 +1809,6 @@ function Section:Slider(text, desc, min, max, default, callback)
     SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
     return sliderObject
 end
-
         function Section:Colorpicker(text, default, callback)
             local ColorPickerFrame = Instance.new("Frame")
             local ColorPickerLabel = Instance.new("TextLabel")
@@ -3181,9 +3182,20 @@ function DiscordLib:CreateAcrylicBlur()
     end
 
     function acrylicObject:SetIntensity(intensity)
-        intensity = math.clamp(intensity, 0, 1)
-        acrylicIntensity = intensity
+    intensity = math.clamp(intensity, 0, 1)
+    acrylicIntensity = intensity
+    local blur = Lighting:FindFirstChild("AcrylicBlurEffect")
+    if blur then
+        blur.Size = 12 * intensity
     end
+    if acrylicFrame then
+        local noise = acrylicFrame:FindFirstChild("Noise")
+        if noise then
+            noise.ImageTransparency = 0.96 * (1 - intensity * 0.3)
+        end
+        acrylicFrame.BackgroundTransparency = 0.85 + (intensity * 0.1)
+    end
+end
 
     function acrylicObject:SetNoiseEnabled(enabled)
         acrylicNoiseEnabled = enabled
