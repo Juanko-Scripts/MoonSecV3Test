@@ -1749,7 +1749,7 @@ function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, ca
         SliderValue.Text = tostring(roundedValue)
         SliderFill.Size = UDim2.new(percent, 0, 1, 0)
         SliderButton.Position = UDim2.new(percent, -5, 0, -3)
-        if toggled then
+        if toggled and callback then
             callback(true, roundedValue)
         end
     end
@@ -1806,8 +1806,10 @@ function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, ca
             TweenService:Create(ToggleContainer, TweenInfo.new(0.15), {
                 BackgroundColor3 = currentTheme.Accent
             }):Play()
-            local roundedValue = math.floor(value * 100) / 100
-            callback(true, roundedValue)
+            if callback then
+                local roundedValue = math.floor(value * 100) / 100
+                callback(true, roundedValue)
+            end
         else
             TweenService:Create(ToggleFill, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
                 Size = UDim2.new(0, 0, 0, 0)
@@ -1817,7 +1819,9 @@ function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, ca
             }):Play()
             task.wait(0.1)
             ToggleFill.Visible = false
-            callback(false, nil)
+            if callback then
+                callback(false, nil)
+            end
         end
     end
 
@@ -1834,7 +1838,7 @@ function Section:ToggleSlider(text, desc, defaultState, min, max, defaultVal, ca
             SliderValue.Text = tostring(roundedValue)
             SliderFill.Size = UDim2.new(percent, 0, 1, 0)
             SliderButton.Position = UDim2.new(percent, -5, 0, -3)
-            if toggled then
+            if toggled and callback then
                 callback(true, roundedValue)
             end
         end
