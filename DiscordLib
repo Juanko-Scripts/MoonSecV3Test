@@ -1683,29 +1683,15 @@ function DiscordLib:Window(text)
 
             local toggleTextboxObject = {}
 
-            function toggleTextboxObject:SetState(state)
-                if state ~= toggled then
-                    updateToggle()
-                end
-            end
-
-            function toggleTextboxObject:GetState()
-                return toggled
-            end
-
-            function toggleTextboxObject:SetValue(newValue)
+            function toggleTextboxObject:SetText(newText)
                 if numbersOnly then
-                    newValue = tonumber(newValue) or 0
-                    Textbox.Text = tostring(newValue)
-                    textValue = newValue
+                    newText = tonumber(newText) or 0
+                    Textbox.Text = tostring(newText)
+                    textValue = newText
                 else
-                    Textbox.Text = tostring(newValue)
-                    textValue = tostring(newValue)
+                    Textbox.Text = tostring(newText)
+                    textValue = tostring(newText)
                 end
-            end
-
-            function toggleTextboxObject:GetValue()
-                return textValue
             end
 
             function toggleTextboxObject:Clear()
@@ -1716,6 +1702,10 @@ function DiscordLib:Window(text)
                     Textbox.Text = ""
                     textValue = ""
                 end
+            end
+
+            function toggleTextboxObject:State()
+                return toggled
             end
 
             SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 40)
