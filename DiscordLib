@@ -1462,10 +1462,10 @@ function Section:Textbox(text, desc, placeholder, numbersOnly, callback)
         text = "Textbox"
     end
 
-    local baseHeight = 58
+    local baseHeight = 75
     local titleY = 8
-    local descY = 26
-    local textboxY = 45
+    local descY = 28
+    local textboxY = 48
 
     if desc then
         local tempLabel = Instance.new("TextLabel")
@@ -1478,9 +1478,9 @@ function Section:Textbox(text, desc, placeholder, numbersOnly, callback)
         tempLabel.LineHeight = 1.2
 
         local textHeight = tempLabel.TextBounds.Y
-        baseHeight = 58 + textHeight + 8
-        descY = 26
-        textboxY = 45 + textHeight + 5
+        baseHeight = 75 + textHeight + 15
+        descY = 28
+        textboxY = 48 + textHeight + 8
 
         tempLabel:Destroy()
     end
@@ -1504,7 +1504,7 @@ function Section:Textbox(text, desc, placeholder, numbersOnly, callback)
     TitleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     TitleLabel.BackgroundTransparency = 1.000
     TitleLabel.Position = UDim2.new(0, 10, 0, titleY)
-    TitleLabel.Size = UDim2.new(0, 250, 0, 18)
+    TitleLabel.Size = UDim2.new(0, 250, 0, 20)
     TitleLabel.Font = Enum.Font.GothamBold
     TitleLabel.Text = text
     TitleLabel.TextColor3 = currentTheme.Text
@@ -1519,7 +1519,7 @@ function Section:Textbox(text, desc, placeholder, numbersOnly, callback)
     DescLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     DescLabel.BackgroundTransparency = 1.000
     DescLabel.Position = UDim2.new(0, 10, 0, descY)
-    DescLabel.Size = UDim2.new(0, 340, 0, baseHeight - 46)
+    DescLabel.Size = UDim2.new(0, 340, 0, baseHeight - 52)
     DescLabel.Font = Enum.Font.Gotham
     DescLabel.Text = desc or ""
     DescLabel.TextColor3 = currentTheme.TextMuted
@@ -1538,7 +1538,7 @@ function Section:Textbox(text, desc, placeholder, numbersOnly, callback)
     Textbox.BackgroundColor3 = currentTheme.Secondary
     Textbox.BorderSizePixel = 0
     Textbox.Position = UDim2.new(0, 10, 0, textboxY)
-    Textbox.Size = UDim2.new(0, 350, 0, 24)
+    Textbox.Size = UDim2.new(0, 350, 0, 28)
     Textbox.Font = Enum.Font.Gotham
     Textbox.PlaceholderText = tostring(placeholder or "")
     Textbox.Text = ""
@@ -1580,7 +1580,7 @@ function Section:Textbox(text, desc, placeholder, numbersOnly, callback)
         end
     end)
 
-    SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 40)
+    SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 45)
     
     local textboxObject = {}
     
