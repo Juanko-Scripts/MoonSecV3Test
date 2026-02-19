@@ -1607,7 +1607,16 @@ function Section:Textbox(text, desc, placeholder, numbersOnly, callback)
     return textboxObject
 end
 
-function Section:ToggleTextbox(defaultState, title, desc, placeholder, numbersOnly, callback)
+function Section:ToggleTextbox(defaultState, title, desc, placeholder, numbersOnly, defaultValue, callback)
+    if type(defaultValue) == "function" then
+        callback = defaultValue
+        defaultValue = numbersOnly
+        numbersOnly = placeholder
+        placeholder = desc
+        desc = title
+        title = "ToggleTextbox"
+    end
+
     local baseHeight = 85
     local titleY = 8
     local descY = 28
@@ -1740,8 +1749,7 @@ function Section:ToggleTextbox(defaultState, title, desc, placeholder, numbersOn
     Textbox.Position = UDim2.new(0, 5, 0, 5)
     Textbox.Size = UDim2.new(0, 350, 0, 24)
     Textbox.Font = Enum.Font.Gotham
-    Textbox.PlaceholderText = tostring(placeholder)
-    Textbox.Text = ""
+    Textbox.PlaceholderText = tostring(placeholder or "")
     Textbox.TextColor3 = currentTheme.Text
     Textbox.PlaceholderColor3 = currentTheme.TextMuted
     Textbox.TextSize = 13.000
@@ -1752,12 +1760,26 @@ function Section:ToggleTextbox(defaultState, title, desc, placeholder, numbersOn
     TextboxInnerCorner.CornerRadius = UDim.new(0, 4)
     TextboxInnerCorner.Parent = Textbox
 
+    -- Establecer el valor por defecto
+    local textValue
     if numbersOnly then
-        Textbox.Text = "0"
+        if defaultValue then
+            textValue = tonumber(defaultValue) or 0
+        else
+            textValue = 0
+        end
+        Textbox.Text = tostring(textValue)
+    else
+        if defaultValue then
+            textValue = tostring(defaultValue)
+        else
+            textValue = ""
+        end
+        Textbox.Text = textValue
     end
 
     local toggled = defaultState or false
-    local textValue = numbersOnly and 0 or ""
+    local isUpdating = false
 
     if toggled then
         ToggleFill.Visible = true
@@ -1766,7 +1788,7 @@ function Section:ToggleTextbox(defaultState, title, desc, placeholder, numbersOn
     end
 
     local function updateToggle(ignoreCallback)
-        if minimizeAnimating then return end
+        if minimizeAnimating or isUpdating then return end
         toggled = not toggled
 
         if toggled then
@@ -1798,7 +1820,7 @@ function Section:ToggleTextbox(defaultState, title, desc, placeholder, numbersOn
     end)
 
     Textbox.FocusLost:Connect(function(enterPressed)
-        if minimizeAnimating then return end
+        if minimizeAnimating or isUpdating then return end
         local oldValue = textValue
         if numbersOnly then
             local num = tonumber(Textbox.Text) or 0
@@ -1846,6 +1868,9 @@ function Section:ToggleTextbox(defaultState, title, desc, placeholder, numbersOn
     local toggleTextboxObject = {}
 
     function toggleTextboxObject:SetText(newText)
+        if isUpdating then return end
+        isUpdating = true
+        
         if numbersOnly then
             newText = tonumber(newText) or 0
             Textbox.Text = tostring(newText)
@@ -1854,9 +1879,18 @@ function Section:ToggleTextbox(defaultState, title, desc, placeholder, numbersOn
             Textbox.Text = tostring(newText)
             textValue = tostring(newText)
         end
+        
+        if toggled and callback then
+            callback(toggled, textValue)
+        end
+        
+        isUpdating = false
     end
 
     function toggleTextboxObject:Clear()
+        if isUpdating then return end
+        isUpdating = true
+        
         if numbersOnly then
             Textbox.Text = "0"
             textValue = 0
@@ -1864,6 +1898,12 @@ function Section:ToggleTextbox(defaultState, title, desc, placeholder, numbersOn
             Textbox.Text = ""
             textValue = ""
         end
+        
+        if toggled and callback then
+            callback(toggled, textValue)
+        end
+        
+        isUpdating = false
     end
 
     function toggleTextboxObject:State()
@@ -1874,9 +1914,10 @@ function Section:ToggleTextbox(defaultState, title, desc, placeholder, numbersOn
         return textValue
     end
 
-    function toggleTextboxObject:SetState(newState)
+    function toggleTextboxObject:SetState(newState, ignoreCallback)
+        if isUpdating then return end
         if newState ~= toggled then
-            updateToggle(true)
+            updateToggle(ignoreCallback or false)
         end
     end
 
