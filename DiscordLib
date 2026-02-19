@@ -1214,238 +1214,167 @@ function DiscordLib:Window(text)
             return ButtonFrame
         end
 
-        function Section:Toggle(text, desc, default, callback)
-            if type(desc) == "boolean" then
-                callback = default
-                default = desc
-                desc = nil
-            elseif type(desc) == "function" then
-                callback = desc
-                default = false
-                desc = nil
-            end
+function Section:Toggle(text, desc, default, callback)
+    if type(desc) == "boolean" then
+        callback = default
+        default = desc
+        desc = nil
+    elseif type(desc) == "function" then
+        callback = desc
+        default = false
+        desc = nil
+    end
 
-            local baseHeight = 32 
-            local finalHeight = baseHeight
-            
-            if desc then
-                local tempLabel = Instance.new("TextLabel")
-                tempLabel.Font = Enum.Font.Gotham
-                tempLabel.TextSize = 12.000
-                tempLabel.Text = desc
-                tempLabel.Size = UDim2.new(0, 300, 0, 1000) 
-                tempLabel.TextWrapped = true
-                tempLabel.RichText = true
-                tempLabel.LineHeight = 1.2
-                
-                local textHeight = tempLabel.TextBounds.Y
-                finalHeight = baseHeight + textHeight + 12
-            end
+    local baseHeight = 38
+    local titleY = 8
+    local descY = 26
+    local toggleY = 5
+    
+    if desc then
+        local tempLabel = Instance.new("TextLabel")
+        tempLabel.Font = Enum.Font.Gotham
+        tempLabel.TextSize = 12.000
+        tempLabel.Text = desc
+        tempLabel.Size = UDim2.new(0, 300, 0, 1000)
+        tempLabel.TextWrapped = true
+        tempLabel.RichText = true
+        tempLabel.LineHeight = 1.2
+        
+        local textHeight = tempLabel.TextBounds.Y
+        baseHeight = 38 + textHeight + 15
+        descY = 22
+        toggleY = 8
+        
+        tempLabel:Destroy()
+    end
 
-            local Toggle = Instance.new("TextButton")
-            Toggle.Name = "Toggle_" .. text:gsub("%s+", "")
-            Toggle.Parent = SectionFrame
-            Toggle.BackgroundColor3 = currentTheme.Tertiary
-            Toggle.BorderSizePixel = 0
-            Toggle.Size = UDim2.new(0, 370, 0, finalHeight)
-            Toggle.AutoButtonColor = false
-            Toggle.Text = ""
-            Toggle.Font = Enum.Font.Gotham
-            Toggle.TextColor3 = currentTheme.Text
-            Toggle.TextSize = 13.000
-            Toggle.ZIndex = 6
+    local Toggle = Instance.new("TextButton")
+    Toggle.Name = "Toggle_" .. text:gsub("%s+", "")
+    Toggle.Parent = SectionFrame
+    Toggle.BackgroundColor3 = currentTheme.Tertiary
+    Toggle.BorderSizePixel = 0
+    Toggle.Size = UDim2.new(0, 370, 0, baseHeight)
+    Toggle.AutoButtonColor = false
+    Toggle.Text = ""
+    Toggle.Font = Enum.Font.Gotham
+    Toggle.TextColor3 = currentTheme.Text
+    Toggle.TextSize = 13.000
+    Toggle.ZIndex = 6
+    Toggle.ClipsDescendants = true
 
-            local ToggleCorner = Instance.new("UICorner")
-            ToggleCorner.CornerRadius = UDim.new(0, 4)
-            ToggleCorner.Parent = Toggle
+    local ToggleCorner = Instance.new("UICorner")
+    ToggleCorner.CornerRadius = UDim.new(0, 4)
+    ToggleCorner.Parent = Toggle
 
-            if not desc then
-                local ToggleLabel = Instance.new("TextLabel")
-                ToggleLabel.Name = "ToggleLabel"
-                ToggleLabel.Parent = Toggle
-                ToggleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-                ToggleLabel.BackgroundTransparency = 1.000
-                ToggleLabel.Position = UDim2.new(0, 10, 0, 0)
-                ToggleLabel.Size = UDim2.new(0, 310, 1, 0)
-                ToggleLabel.Font = Enum.Font.Gotham
-                ToggleLabel.Text = text
-                ToggleLabel.TextColor3 = currentTheme.Text
-                ToggleLabel.TextSize = 14.000 
-                ToggleLabel.TextXAlignment = Enum.TextXAlignment.Left
-                ToggleLabel.TextYAlignment = Enum.TextYAlignment.Center
-                ToggleLabel.ZIndex = 7
+    local ToggleLabel = Instance.new("TextLabel")
+    ToggleLabel.Name = "ToggleLabel"
+    ToggleLabel.Parent = Toggle
+    ToggleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    ToggleLabel.BackgroundTransparency = 1.000
+    ToggleLabel.Position = UDim2.new(0, 10, 0, titleY)
+    ToggleLabel.Size = UDim2.new(0, 280, 0, 18)
+    ToggleLabel.Font = Enum.Font.GothamBold
+    ToggleLabel.Text = text
+    ToggleLabel.TextColor3 = currentTheme.Text
+    ToggleLabel.TextSize = 14.000
+    ToggleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    ToggleLabel.TextYAlignment = Enum.TextYAlignment.Center
+    ToggleLabel.ZIndex = 7
 
-                local ToggleFrame = Instance.new("Frame")
-                ToggleFrame.Name = "ToggleFrame"
-                ToggleFrame.Parent = Toggle
-                ToggleFrame.BackgroundColor3 = currentTheme.Secondary
-                ToggleFrame.BorderSizePixel = 1
-                ToggleFrame.BorderColor3 = currentTheme.Border
-                ToggleFrame.Position = UDim2.new(0, 335, 0, (finalHeight/2) - 10)
-                ToggleFrame.Size = UDim2.new(0, 20, 0, 20)
-                ToggleFrame.ZIndex = 7
+    local DescLabel
+    if desc then
+        DescLabel = Instance.new("TextLabel")
+        DescLabel.Name = "ToggleDesc"
+        DescLabel.Parent = Toggle
+        DescLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        DescLabel.BackgroundTransparency = 1.000
+        DescLabel.Position = UDim2.new(0, 10, 0, descY)
+        DescLabel.Size = UDim2.new(0, 300, 0, baseHeight - 38)
+        DescLabel.Font = Enum.Font.Gotham
+        DescLabel.Text = desc
+        DescLabel.TextColor3 = currentTheme.TextMuted
+        DescLabel.TextSize = 12.000
+        DescLabel.TextXAlignment = Enum.TextXAlignment.Left
+        DescLabel.TextYAlignment = Enum.TextYAlignment.Top
+        DescLabel.ZIndex = 7
+        DescLabel.TextWrapped = true
+        DescLabel.RichText = true
+        DescLabel.LineHeight = 1.2
+        DescLabel.AutomaticSize = Enum.AutomaticSize.Y
+    end
 
-                local ToggleFrameCorner = Instance.new("UICorner")
-                ToggleFrameCorner.CornerRadius = UDim.new(0, 4)
-                ToggleFrameCorner.Parent = ToggleFrame
+    local ToggleFrame = Instance.new("Frame")
+    ToggleFrame.Name = "ToggleFrame"
+    ToggleFrame.Parent = Toggle
+    ToggleFrame.BackgroundColor3 = currentTheme.Secondary
+    ToggleFrame.BorderSizePixel = 1
+    ToggleFrame.BorderColor3 = currentTheme.Border
+    ToggleFrame.Position = UDim2.new(0, 330, 0, toggleY)
+    ToggleFrame.Size = UDim2.new(0, 24, 0, 24)
+    ToggleFrame.ZIndex = 7
 
-                local ToggleFill = Instance.new("Frame")
-                ToggleFill.Name = "ToggleFill"
-                ToggleFill.Parent = ToggleFrame
-                ToggleFill.BackgroundColor3 = currentTheme.Accent
-                ToggleFill.BorderSizePixel = 0
-                ToggleFill.Size = UDim2.new(0, 0, 0, 0)
-                ToggleFill.Position = UDim2.new(0, 2, 0, 2)
-                ToggleFill.ZIndex = 8
-                ToggleFill.Visible = false
+    local ToggleFrameCorner = Instance.new("UICorner")
+    ToggleFrameCorner.CornerRadius = UDim.new(0, 4)
+    ToggleFrameCorner.Parent = ToggleFrame
 
-                local ToggleFillCorner = Instance.new("UICorner")
-                ToggleFillCorner.CornerRadius = UDim.new(0, 3)
-                ToggleFillCorner.Parent = ToggleFill
-                
-                local toggled = default or false
-                if toggled then
-                    ToggleFill.Visible = true
-                    ToggleFill.Size = UDim2.new(1, -4, 1, -4)
-                end
+    local ToggleFill = Instance.new("Frame")
+    ToggleFill.Name = "ToggleFill"
+    ToggleFill.Parent = ToggleFrame
+    ToggleFill.BackgroundColor3 = currentTheme.Accent
+    ToggleFill.BorderSizePixel = 0
+    ToggleFill.Size = UDim2.new(0, 0, 0, 0)
+    ToggleFill.Position = UDim2.new(0, 2, 0, 2)
+    ToggleFill.ZIndex = 8
+    ToggleFill.Visible = false
 
-                local function updateToggle()
-                    if minimizeAnimating then return end
-                    toggled = not toggled
-                    
-                    if toggled then
-                        ToggleFill.Visible = true
-                        TweenService:Create(ToggleFill, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-                            Size = UDim2.new(1, -4, 1, -4)
-                        }):Play()
-                    else
-                        TweenService:Create(ToggleFill, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-                            Size = UDim2.new(0, 0, 0, 0)
-                        }):Play()
-                        task.wait(0.2)
-                        ToggleFill.Visible = false
-                    end
-                    
-                    if callback then
-                        callback(toggled)
-                    end
-                end
+    local ToggleFillCorner = Instance.new("UICorner")
+    ToggleFillCorner.CornerRadius = UDim.new(0, 3)
+    ToggleFillCorner.Parent = ToggleFill
 
-                Toggle.MouseButton1Click:Connect(updateToggle)
-                
-                registerThemeUpdate(function()
-                    Toggle.BackgroundColor3 = currentTheme.Tertiary
-                    ToggleLabel.TextColor3 = currentTheme.Text
-                    ToggleFrame.BackgroundColor3 = currentTheme.Secondary
-                    ToggleFrame.BorderColor3 = currentTheme.Border
-                    ToggleFill.BackgroundColor3 = currentTheme.Accent
-                end)
-                
-            else
-                local ToggleLabel = Instance.new("TextLabel")
-                ToggleLabel.Name = "ToggleLabel"
-                ToggleLabel.Parent = Toggle
-                ToggleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-                ToggleLabel.BackgroundTransparency = 1.000
-                ToggleLabel.Position = UDim2.new(0, 10, 0, 8)
-                ToggleLabel.Size = UDim2.new(0, 300, 0, 18)
-                ToggleLabel.Font = Enum.Font.GothamBold
-                ToggleLabel.Text = text
-                ToggleLabel.TextColor3 = currentTheme.Text
-                ToggleLabel.TextSize = 14.000
-                ToggleLabel.TextXAlignment = Enum.TextXAlignment.Left
-                ToggleLabel.TextYAlignment = Enum.TextYAlignment.Center
-                ToggleLabel.ZIndex = 7
+    local toggled = default or false
+    if toggled then
+        ToggleFill.Visible = true
+        ToggleFill.Size = UDim2.new(1, -4, 1, -4)
+    end
 
-                local DescLabel = Instance.new("TextLabel")
-                DescLabel.Name = "ToggleDesc"
-                DescLabel.Parent = Toggle
-                DescLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-                DescLabel.BackgroundTransparency = 1.000
-                DescLabel.Position = UDim2.new(0, 10, 0, 28)
-                DescLabel.Size = UDim2.new(0, 300, 0, finalHeight - 40)
-                DescLabel.Font = Enum.Font.Gotham
-                DescLabel.Text = desc
-                DescLabel.TextColor3 = currentTheme.TextMuted
-                DescLabel.TextSize = 12.000
-                DescLabel.TextXAlignment = Enum.TextXAlignment.Left
-                DescLabel.TextYAlignment = Enum.TextYAlignment.Top
-                DescLabel.ZIndex = 7
-                DescLabel.TextWrapped = true
-                DescLabel.RichText = true
-                DescLabel.LineHeight = 1.2
-
-                local ToggleFrame = Instance.new("Frame")
-                ToggleFrame.Name = "ToggleFrame"
-                ToggleFrame.Parent = Toggle
-                ToggleFrame.BackgroundColor3 = currentTheme.Secondary
-                ToggleFrame.BorderSizePixel = 1
-                ToggleFrame.BorderColor3 = currentTheme.Border
-                ToggleFrame.Position = UDim2.new(0, 335, 0, (finalHeight/2) - 10)
-                ToggleFrame.Size = UDim2.new(0, 20, 0, 20)
-                ToggleFrame.ZIndex = 7
-
-                local ToggleFrameCorner = Instance.new("UICorner")
-                ToggleFrameCorner.CornerRadius = UDim.new(0, 4)
-                ToggleFrameCorner.Parent = ToggleFrame
-
-                local ToggleFill = Instance.new("Frame")
-                ToggleFill.Name = "ToggleFill"
-                ToggleFill.Parent = ToggleFrame
-                ToggleFill.BackgroundColor3 = currentTheme.Accent
-                ToggleFill.BorderSizePixel = 0
-                ToggleFill.Size = UDim2.new(0, 0, 0, 0)
-                ToggleFill.Position = UDim2.new(0, 2, 0, 2)
-                ToggleFill.ZIndex = 8
-                ToggleFill.Visible = false
-
-                local ToggleFillCorner = Instance.new("UICorner")
-                ToggleFillCorner.CornerRadius = UDim.new(0, 3)
-                ToggleFillCorner.Parent = ToggleFill
-
-                local toggled = default or false
-                if toggled then
-                    ToggleFill.Visible = true
-                    ToggleFill.Size = UDim2.new(1, -4, 1, -4)
-                end
-
-                local function updateToggle()
-                    if minimizeAnimating then return end
-                    toggled = not toggled
-                    
-                    if toggled then
-                        ToggleFill.Visible = true
-                        TweenService:Create(ToggleFill, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-                            Size = UDim2.new(1, -4, 1, -4)
-                        }):Play()
-                    else
-                        TweenService:Create(ToggleFill, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
-                            Size = UDim2.new(0, 0, 0, 0)
-                        }):Play()
-                        task.wait(0.2)
-                        ToggleFill.Visible = false
-                    end
-                    
-                    if callback then
-                        callback(toggled)
-                    end
-                end
-
-                Toggle.MouseButton1Click:Connect(updateToggle)
-                
-                registerThemeUpdate(function()
-                    Toggle.BackgroundColor3 = currentTheme.Tertiary
-                    ToggleLabel.TextColor3 = currentTheme.Text
-                    DescLabel.TextColor3 = currentTheme.TextMuted
-                    ToggleFrame.BackgroundColor3 = currentTheme.Secondary
-                    ToggleFrame.BorderColor3 = currentTheme.Border
-                    ToggleFill.BackgroundColor3 = currentTheme.Accent
-                end)
-            end
-
-            SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
-            return Toggle
+    local function updateToggle()
+        if minimizeAnimating then return end
+        toggled = not toggled
+        
+        if toggled then
+            ToggleFill.Visible = true
+            TweenService:Create(ToggleFill, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+                Size = UDim2.new(1, -4, 1, -4)
+            }):Play()
+        else
+            TweenService:Create(ToggleFill, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {
+                Size = UDim2.new(0, 0, 0, 0)
+            }):Play()
+            task.wait(0.2)
+            ToggleFill.Visible = false
         end
+        
+        if callback then
+            callback(toggled)
+        end
+    end
+
+    Toggle.MouseButton1Click:Connect(updateToggle)
+    
+    registerThemeUpdate(function()
+        Toggle.BackgroundColor3 = currentTheme.Tertiary
+        ToggleLabel.TextColor3 = currentTheme.Text
+        if DescLabel then
+            DescLabel.TextColor3 = currentTheme.TextMuted
+        end
+        ToggleFrame.BackgroundColor3 = currentTheme.Secondary
+        ToggleFrame.BorderColor3 = currentTheme.Border
+        ToggleFill.BackgroundColor3 = currentTheme.Accent
+    end)
+
+    SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
+    return Toggle
+end
 
 function Section:Textbox(text, desc, placeholder, numbersOnly, callback)
     if type(desc) == "function" then
