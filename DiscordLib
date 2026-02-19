@@ -1447,6 +1447,154 @@ function DiscordLib:Window(text)
             return Toggle
         end
 
+        function Section:Textbox(text, desc, placeholder, numbersOnly, callback)
+            if type(desc) == "string" then
+                -- desc is provided
+            else
+                callback = numbersOnly
+                numbersOnly = placeholder
+                placeholder = desc
+                desc = text
+                text = "Textbox"
+            end
+
+            local baseHeight = 58
+            local titleY = 8
+            local descY = 26
+            local textboxY = 45
+
+            if desc then
+                local tempLabel = Instance.new("TextLabel")
+                tempLabel.Font = Enum.Font.Gotham
+                tempLabel.TextSize = 12.000
+                tempLabel.Text = desc
+                tempLabel.Size = UDim2.new(0, 340, 0, 1000)
+                tempLabel.TextWrapped = true
+                tempLabel.RichText = true
+                tempLabel.LineHeight = 1.2
+
+                local textHeight = tempLabel.TextBounds.Y
+                baseHeight = 58 + textHeight + 8
+                descY = 26
+                textboxY = 45 + textHeight + 5
+
+                tempLabel:Destroy()
+            end
+
+            local TextboxFrame = Instance.new("Frame")
+            TextboxFrame.Name = "Textbox_" .. text:gsub("%s+", "")
+            TextboxFrame.Parent = SectionFrame
+            TextboxFrame.BackgroundColor3 = currentTheme.Tertiary
+            TextboxFrame.BorderSizePixel = 0
+            TextboxFrame.Size = UDim2.new(0, 370, 0, baseHeight)
+            TextboxFrame.ZIndex = 6
+            TextboxFrame.ClipsDescendants = true
+
+            local TextboxFrameCorner = Instance.new("UICorner")
+            TextboxFrameCorner.CornerRadius = UDim.new(0, 4)
+            TextboxFrameCorner.Parent = TextboxFrame
+
+            local TitleLabel = Instance.new("TextLabel")
+            TitleLabel.Name = "TextboxTitle"
+            TitleLabel.Parent = TextboxFrame
+            TitleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            TitleLabel.BackgroundTransparency = 1.000
+            TitleLabel.Position = UDim2.new(0, 10, 0, titleY)
+            TitleLabel.Size = UDim2.new(0, 250, 0, 18)
+            TitleLabel.Font = Enum.Font.GothamBold
+            TitleLabel.Text = text
+            TitleLabel.TextColor3 = currentTheme.Text
+            TitleLabel.TextSize = 14.000
+            TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+            TitleLabel.TextYAlignment = Enum.TextYAlignment.Center
+            TitleLabel.ZIndex = 7
+
+            local DescLabel = Instance.new("TextLabel")
+            DescLabel.Name = "TextboxDesc"
+            DescLabel.Parent = TextboxFrame
+            DescLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            DescLabel.BackgroundTransparency = 1.000
+            DescLabel.Position = UDim2.new(0, 10, 0, descY)
+            DescLabel.Size = UDim2.new(0, 340, 0, baseHeight - 46)
+            DescLabel.Font = Enum.Font.Gotham
+            DescLabel.Text = desc
+            DescLabel.TextColor3 = currentTheme.TextMuted
+            DescLabel.TextSize = 12.000
+            DescLabel.TextXAlignment = Enum.TextXAlignment.Left
+            DescLabel.TextYAlignment = Enum.TextYAlignment.Top
+            DescLabel.ZIndex = 7
+            DescLabel.TextWrapped = true
+            DescLabel.RichText = true
+            DescLabel.LineHeight = 1.2
+            DescLabel.AutomaticSize = Enum.AutomaticSize.Y
+
+            local Textbox = Instance.new("TextBox")
+            Textbox.Name = "Textbox"
+            Textbox.Parent = TextboxFrame
+            Textbox.BackgroundColor3 = currentTheme.Secondary
+            Textbox.BorderSizePixel = 0
+            Textbox.Position = UDim2.new(0, 10, 0, textboxY)
+            Textbox.Size = UDim2.new(0, 350, 0, 24)
+            Textbox.Font = Enum.Font.Gotham
+            Textbox.PlaceholderText = tostring(placeholder)
+            Textbox.Text = ""
+            Textbox.TextColor3 = currentTheme.Text
+            Textbox.PlaceholderColor3 = currentTheme.TextMuted
+            Textbox.TextSize = 13.000
+            Textbox.ClearTextOnFocus = false
+            Textbox.ZIndex = 7
+
+            local TextboxCorner = Instance.new("UICorner")
+            TextboxCorner.CornerRadius = UDim.new(0, 4)
+            TextboxCorner.Parent = Textbox
+
+            if numbersOnly then
+                Textbox.Text = "0"
+            end
+
+            registerThemeUpdate(function()
+                TextboxFrame.BackgroundColor3 = currentTheme.Tertiary
+                TitleLabel.TextColor3 = currentTheme.Text
+                DescLabel.TextColor3 = currentTheme.TextMuted
+                Textbox.BackgroundColor3 = currentTheme.Secondary
+                Textbox.TextColor3 = currentTheme.Text
+                Textbox.PlaceholderColor3 = currentTheme.TextMuted
+            end)
+
+            Textbox.FocusLost:Connect(function(enterPressed)
+                if minimizeAnimating then return end
+                if numbersOnly then
+                    local num = tonumber(Textbox.Text) or 0
+                    Textbox.Text = tostring(num)
+                    if callback then
+                        callback(num)
+                    end
+                else
+                    if callback then
+                        callback(Textbox.Text)
+                    end
+                end
+            end)
+
+            SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 40)
+            
+            local textboxObject = {}
+            
+            function textboxObject:SetText(newText)
+                Textbox.Text = tostring(newText)
+            end
+            
+            function textboxObject:GetText()
+                return Textbox.Text
+            end
+            
+            function textboxObject:Clear()
+                Textbox.Text = ""
+            end
+            
+            return textboxObject
+        end
+
         function Section:ToggleTextbox(defaultState, title, desc, placeholder, numbersOnly, callback)
             local baseHeight = 85
             local titleY = 8
@@ -1580,7 +1728,7 @@ function DiscordLib:Window(text)
             Textbox.Position = UDim2.new(0, 5, 0, 5)
             Textbox.Size = UDim2.new(0, 350, 0, 24)
             Textbox.Font = Enum.Font.Gotham
-            Textbox.PlaceholderText = placeholder
+            Textbox.PlaceholderText = tostring(placeholder)
             Textbox.Text = ""
             Textbox.TextColor3 = currentTheme.Text
             Textbox.PlaceholderColor3 = currentTheme.TextMuted
@@ -1617,9 +1765,6 @@ function DiscordLib:Window(text)
                     TweenService:Create(ToggleContainer, TweenInfo.new(0.15), {
                         BackgroundColor3 = currentTheme.Accent
                     }):Play()
-                    if callback then
-                        callback(toggled, textValue)
-                    end
                 else
                     TweenService:Create(ToggleFill, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
                         Size = UDim2.new(0, 0, 0, 0)
@@ -1629,9 +1774,10 @@ function DiscordLib:Window(text)
                     }):Play()
                     task.wait(0.1)
                     ToggleFill.Visible = false
-                    if callback then
-                        callback(toggled, textValue)
-                    end
+                end
+                
+                if callback then
+                    callback(toggled, textValue)
                 end
             end
 
@@ -1706,6 +1852,10 @@ function DiscordLib:Window(text)
 
             function toggleTextboxObject:State()
                 return toggled
+            end
+
+            function toggleTextboxObject:Value()
+                return textValue
             end
 
             SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 40)
@@ -1977,10 +2127,6 @@ function DiscordLib:Window(text)
                     TweenService:Create(ToggleContainer, TweenInfo.new(0.15), {
                         BackgroundColor3 = currentTheme.Accent
                     }):Play()
-                    if callback then
-                        local roundedValue = math.floor(value * 100) / 100
-                        callback(toggled, roundedValue)
-                    end
                 else
                     TweenService:Create(ToggleFill, TweenInfo.new(0.1, Enum.EasingStyle.Quad), {
                         Size = UDim2.new(0, 0, 0, 0)
@@ -1990,9 +2136,10 @@ function DiscordLib:Window(text)
                     }):Play()
                     task.wait(0.1)
                     ToggleFill.Visible = false
-                    if callback then
-                        callback(toggled, value)
-                    end
+                end
+                
+                if callback then
+                    callback(toggled, value)
                 end
             end
 
@@ -2053,6 +2200,10 @@ function DiscordLib:Window(text)
 
             function toggleSliderObject:GetState()
                 return toggled
+            end
+
+            function toggleSliderObject:Value()
+                return value
             end
 
             SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
@@ -3336,232 +3487,6 @@ function DiscordLib:Window(text)
 
             SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 40)
             return dropdownObject
-        end
-
-        function Section:Textbox(text, desc, placeholder, numbersOnly, callback)
-            local baseHeight = 58
-            local titleY = 8
-            local descY = 26
-            local textboxY = 45
-
-            if desc then
-                local tempLabel = Instance.new("TextLabel")
-                tempLabel.Font = Enum.Font.Gotham
-                tempLabel.TextSize = 12.000
-                tempLabel.Text = desc
-                tempLabel.Size = UDim2.new(0, 340, 0, 1000)
-                tempLabel.TextWrapped = true
-                tempLabel.RichText = true
-                tempLabel.LineHeight = 1.2
-
-                local textHeight = tempLabel.TextBounds.Y
-                baseHeight = 58 + textHeight + 8
-                descY = 26
-                textboxY = 45 + textHeight + 5
-
-                tempLabel:Destroy()
-            end
-
-            local TextboxFrame = Instance.new("Frame")
-            TextboxFrame.Name = "Textbox_" .. text:gsub("%s+", "")
-            TextboxFrame.Parent = SectionFrame
-            TextboxFrame.BackgroundColor3 = currentTheme.Tertiary
-            TextboxFrame.BorderSizePixel = 0
-            TextboxFrame.Size = UDim2.new(0, 370, 0, baseHeight)
-            TextboxFrame.ZIndex = 6
-            TextboxFrame.ClipsDescendants = true
-
-            local TextboxFrameCorner = Instance.new("UICorner")
-            TextboxFrameCorner.CornerRadius = UDim.new(0, 4)
-            TextboxFrameCorner.Parent = TextboxFrame
-
-            local TitleLabel = Instance.new("TextLabel")
-            TitleLabel.Name = "TextboxTitle"
-            TitleLabel.Parent = TextboxFrame
-            TitleLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            TitleLabel.BackgroundTransparency = 1.000
-            TitleLabel.Position = UDim2.new(0, 10, 0, titleY)
-            TitleLabel.Size = UDim2.new(0, 250, 0, 18)
-            TitleLabel.Font = Enum.Font.GothamBold
-            TitleLabel.Text = text
-            TitleLabel.TextColor3 = currentTheme.Text
-            TitleLabel.TextSize = 14.000
-            TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
-            TitleLabel.TextYAlignment = Enum.TextYAlignment.Center
-            TitleLabel.ZIndex = 7
-
-            local DescLabel = Instance.new("TextLabel")
-            DescLabel.Name = "TextboxDesc"
-            DescLabel.Parent = TextboxFrame
-            DescLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            DescLabel.BackgroundTransparency = 1.000
-            DescLabel.Position = UDim2.new(0, 10, 0, descY)
-            DescLabel.Size = UDim2.new(0, 340, 0, baseHeight - 46)
-            DescLabel.Font = Enum.Font.Gotham
-            DescLabel.Text = desc
-            DescLabel.TextColor3 = currentTheme.TextMuted
-            DescLabel.TextSize = 12.000
-            DescLabel.TextXAlignment = Enum.TextXAlignment.Left
-            DescLabel.TextYAlignment = Enum.TextYAlignment.Top
-            DescLabel.ZIndex = 7
-            DescLabel.TextWrapped = true
-            DescLabel.RichText = true
-            DescLabel.LineHeight = 1.2
-            DescLabel.AutomaticSize = Enum.AutomaticSize.Y
-
-            local Textbox = Instance.new("TextBox")
-            Textbox.Name = "Textbox"
-            Textbox.Parent = TextboxFrame
-            Textbox.BackgroundColor3 = currentTheme.Secondary
-            Textbox.BorderSizePixel = 0
-            Textbox.Position = UDim2.new(0, 10, 0, textboxY)
-            Textbox.Size = UDim2.new(0, 350, 0, 24)
-            Textbox.Font = Enum.Font.Gotham
-            Textbox.PlaceholderText = placeholder
-            Textbox.Text = ""
-            Textbox.TextColor3 = currentTheme.Text
-            Textbox.PlaceholderColor3 = currentTheme.TextMuted
-            Textbox.TextSize = 13.000
-            Textbox.ClearTextOnFocus = false
-            Textbox.ZIndex = 7
-
-            local TextboxCorner = Instance.new("UICorner")
-            TextboxCorner.CornerRadius = UDim.new(0, 4)
-            TextboxCorner.Parent = Textbox
-
-            if numbersOnly then
-                Textbox.Text = "0"
-            end
-
-            registerThemeUpdate(function()
-                TextboxFrame.BackgroundColor3 = currentTheme.Tertiary
-                TitleLabel.TextColor3 = currentTheme.Text
-                DescLabel.TextColor3 = currentTheme.TextMuted
-                Textbox.BackgroundColor3 = currentTheme.Secondary
-                Textbox.TextColor3 = currentTheme.Text
-                Textbox.PlaceholderColor3 = currentTheme.TextMuted
-            end)
-
-            Textbox.FocusLost:Connect(function(enterPressed)
-                if minimizeAnimating then return end
-                if enterPressed then
-                    if numbersOnly then
-                        local num = tonumber(Textbox.Text) or 0
-                        Textbox.Text = tostring(num)
-                        if callback then
-                            callback(num)
-                        end
-                    else
-                        if callback then
-                            callback(Textbox.Text)
-                        end
-                    end
-                end
-            end)
-
-            SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 40)
-            
-            local textboxObject = {}
-            
-            function textboxObject:SetText(newText)
-                Textbox.Text = tostring(newText)
-            end
-            
-            function textboxObject:GetText()
-                return Textbox.Text
-            end
-            
-            function textboxObject:Clear()
-                Textbox.Text = ""
-            end
-            
-            return textboxObject
-        end
-
-        function Section:Bind(text, defaultKey, callback)
-            local BindFrame = Instance.new("Frame")
-            local BindLabel = Instance.new("TextLabel")
-            local BindButton = Instance.new("TextButton")
-
-            local binding = false
-            local currentKey = defaultKey or Enum.KeyCode.RightShift
-            local keyName = currentKey.Name or "RightShift"
-
-            BindFrame.Parent = SectionFrame
-            BindFrame.BackgroundColor3 = currentTheme.Tertiary
-            BindFrame.BorderSizePixel = 0
-            BindFrame.Size = UDim2.new(0, 370, 0, 28)
-            BindFrame.ZIndex = 6
-
-            local BindFrameCorner = Instance.new("UICorner")
-            BindFrameCorner.CornerRadius = UDim.new(0, 4)
-            BindFrameCorner.Parent = BindFrame
-
-            BindLabel.Parent = BindFrame
-            BindLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            BindLabel.BackgroundTransparency = 1.000
-            BindLabel.Position = UDim2.new(0, 5, 0, 0)
-            BindLabel.Size = UDim2.new(0, 260, 0, 28)
-            BindLabel.Font = Enum.Font.Gotham
-            BindLabel.Text = text
-            BindLabel.TextColor3 = currentTheme.Text
-            BindLabel.TextSize = 13.000
-            BindLabel.TextXAlignment = Enum.TextXAlignment.Left
-            BindLabel.ZIndex = 7
-
-            BindButton.Parent = BindFrame
-            BindButton.BackgroundColor3 = currentTheme.Secondary
-            BindButton.BorderSizePixel = 0
-            BindButton.Position = UDim2.new(0, 280, 0, 3)
-            BindButton.Size = UDim2.new(0, 80, 0, 22)
-            BindButton.Text = keyName
-            BindButton.Font = Enum.Font.Gotham
-            BindButton.TextColor3 = currentTheme.Text
-            BindButton.TextSize = 12.000
-            BindButton.AutoButtonColor = false
-            BindButton.ZIndex = 7
-
-            local BindButtonCorner = Instance.new("UICorner")
-            BindButtonCorner.CornerRadius = UDim.new(0, 3)
-            BindButtonCorner.Parent = BindButton
-
-            registerThemeUpdate(function()
-                BindFrame.BackgroundColor3 = currentTheme.Tertiary
-                BindLabel.TextColor3 = currentTheme.Text
-                BindButton.BackgroundColor3 = currentTheme.Secondary
-                BindButton.TextColor3 = currentTheme.Text
-            end)
-
-            BindButton.MouseButton1Click:Connect(function()
-                if minimizeAnimating then return end
-                binding = true
-                BindButton.Text = "..."
-            end)
-
-            UserInputService.InputBegan:Connect(function(input, gameProcessed)
-                if gameProcessed then return end
-                
-                if binding and not minimizeAnimating then
-                    if input.UserInputType == Enum.UserInputType.Keyboard then
-                        currentKey = input.KeyCode
-                        keyName = currentKey.Name
-                        BindButton.Text = keyName
-                        binding = false
-                        if callback then
-                            callback(currentKey)
-                        end
-                    end
-                else
-                    if input.KeyCode == currentKey and not minimizeAnimating then
-                        if callback then
-                            callback(currentKey)
-                        end
-                    end
-                end
-            end)
-
-            SectionFrame.CanvasSize = UDim2.new(0, 0, 0, SectionLayout.AbsoluteContentSize.Y + 35)
-            return BindFrame
         end
 
         return Section
