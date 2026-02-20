@@ -188,7 +188,7 @@ function DiscordLib:MinimizeUI()
             end
         end
         
-        local title = mainFrame:FindFirstChild("Title", true)
+    local title = mainFrame:FindFirstChild("Title", true)
         if title then
             title.Text = "[Minimized]"
         end
@@ -214,9 +214,9 @@ function DiscordLib:MinimizeUI()
             end
         end
         
-        local title = mainFrame:FindFirstChild("Title", true)
+    local title = mainFrame:FindFirstChild("Title", true)
         if title then
-            title.Text = "Discord UI"
+            title.Text = TitleSetHub
         end
         
         TweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {
@@ -354,6 +354,7 @@ end
 function DiscordLib:Window(text)
     local currentservertoggled = ""
     local currentchanneltoggled = ""
+    TitleSetHub = text
     local minimized = false
     local MainFrame = Instance.new("Frame")
     local TopFrame = Instance.new("Frame")
