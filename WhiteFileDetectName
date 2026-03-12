@@ -80,46 +80,11 @@ local ABCDE = {
       ShutDown = false
  },
 
-   ForeverHD = {
-     CheckGame = true,
-     StartFixed = true,
-     CheckRank = true,
-     StrictMode = true
- },
-
    ZombieMichael = {
      Verification = true,
      Verzion = "V1.3",
      ForceBypass = false
- }, 
-
-   WackyBat = {
-     GameID = 111848023078926
- }, 
-
-   EstadoFallidoMexico = {
-     Verzion = "1.0"
- },
-
-   LifeInPrison = {
-      ForceBypass = true,
-      Team = 1,
-      Give = 7,
-      Tool = 11,
-      Punch = 28,
-      Call = 4, 
-         ModListXP = {
-              336061882,
-              1871014654,
-              1732783996,
-              1389391378,
-              7502020457,
-              3095462392,
-              1693103290,
-              1215858332,
-              78206284
-   }
- }
+} 
 } 
 function EncryptTextXP()
     local length = math.random(5,20)
