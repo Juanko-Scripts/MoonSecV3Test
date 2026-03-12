@@ -82,7 +82,7 @@ local ABCDE = {
 
    ZombieMichael = {
      Verification = true,
-     Verzion = "V1.3",
+     Verzion = "V1.5",
      ForceBypass = false
 } 
 } 
