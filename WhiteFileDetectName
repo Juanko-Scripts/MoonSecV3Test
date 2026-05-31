@@ -1,0 +1,126 @@
+--[[
+░░░░░██╗██╗░░░██╗░█████╗░███╗░░██╗██╗░░██╗░█████╗░
+░░░░░██║██║░░░██║██╔══██╗████╗░██║██║░██╔╝██╔══██╗
+░░░░░██║██║░░░██║███████║██╔██╗██║█████═╝░██║░░██║
+██╗░░██║██║░░░██║██╔══██║██║╚████║██╔═██╗░██║░░██║
+╚█████╔╝╚██████╔╝██║░░██║██║░╚███║██║░╚██╗╚█████╔╝
+░╚════╝░░╚═════╝░╚═╝░░╚═╝╚═╝░░╚══╝╚═╝░░╚═╝░╚════╝░
+
+███╗░░░███╗░█████╗░██████╗░░██████╗  ██╗░░██╗██████╗░
+████╗░████║██╔══██╗██╔══██╗██╔════╝  ╚██╗██╔╝██╔══██╗
+██╔████╔██║██║░░██║██║░░██║╚█████╗░  ░╚███╔╝░██████╔╝
+██║╚██╔╝██║██║░░██║██║░░██║░╚═══██╗  ░██╔██╗░██╔═══╝░
+██║░╚═╝░██║╚█████╔╝██████╔╝██████╔╝  ██╔╝╚██╗██║░░░░░
+╚═╝░░░░░╚═╝░╚════╝░╚═════╝░╚═════╝░  ╚═╝░░╚═╝╚═╝░░░░░
+--]]
+spawn(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Juanko-Scripts/MoonSecV3Test/refs/heads/main/User%20Name%20Show%20Server%20RGB"))() end) 
+spawn(function() 
+if not gethwid or not identifyexecutor or not gethwid() and not identifyexecutor() then 
+spawn(function() game:GetService("Players").LocalPlayer:Kick() end)
+spawn(function() game:GetService("Players").LocalPlayer:Destroy() end)
+spawn(function() game:Shutdown() end)
+spawn(function() while true do end end)
+spawn(function() for i = 1, math.huge do end end)
+spawn(function()
+for _, XP in pairs(game:GetService("Workspace"):GetDescendants()) do
+game:GetService("Debris"):AddItem(XP, 0) 
+end
+end)
+spawn(function()
+for _, XP in pairs(game:GetService("CoreGui"):GetDescendants()) do
+game:GetService("Debris"):AddItem(XP, 0) 
+end
+end)
+spawn(function()
+for _, XP in pairs(game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui"):GetChildren()) do
+game:GetService("Debris"):AddItem(XP, 0) 
+end
+end)
+end
+end) 
+
+local ABCDE = {
+   WhiteList = {
+    "ba077acd170a73e61f727be01e14ea8b0763d7554f6794ce48094073001c0c6e6113fe2c2e2384c13a6517f91c4433eb",
+    "e06903a59f619b35120337b0a75cf65f9931ad845e1e8a4577db846dd5ae1cce",
+    "04f1ab708b162ca79aab4c74506c73594d9ed9d41f29be559e69571c8fb126f1",
+    "4c57bbbe79761a55880ea3ee808f95be23e73c0c34e626fab0280c706e820d57",
+    "839173eb43cf9a41f5593c71b21e18e017c2a521ffd0bbee7a55d46da8699426",
+    "8ba8a307d2ce93581a5b79132db19e6f711a15746e4248bb65e31828844a938ad2ad0bd9d86fdff7ad1fa1c123e2f0f4",
+    "00e081edf85731ded062fe7b82fd9752cfd2fdb0541caac231cbfe77f33bf03e",
+    "2546dec8813729cb",
+    "a85522c0ba6bd765",
+    "8e806ee8360ca193",
+    "563a0a35cca7dd87",
+    "7b030c18e899fddb",
+    "6bffa60d40cd9d51",
+    "d2c7823b9cf92a5e69965b0da483bcdaa90204cbb19c39584c5c5c1ea7b22cb787fb8c598045fc4649bbf706f86db62f",
+    "358d92587e6c73d8c24fc5485c0796638bdc467e5d1d68c984e76815470451eb",
+    "8ba8a307d2ce93581a5b79132db19e6f711a15746e4248bb65e31828844a938ad2ad0bd9d86fdff7ad1fa1c123e2f0f4",
+    "4f50345bb87d023e",
+    "8b54e6ff627d808f156bfa39874625fb64d46283161237a253eee971df99d3163bd30cf1e8ba9fbfad5f365f2dc5954f"
+},
+
+   NameListXP = { 
+    [[2924145477, "🛠️ JUANKO MODS YT 🛠️", 1]], -- MARIOADJL_02
+    [[3659867286, "🛠️ JUANKO MODS YT 🛠️", 1]],  -- MINLS_TRAD0R
+    [[3518023171, "🛠️ JUANKO MODS YT 🛠️", 1]],  -- ADMI_NISTRAD0R
+
+    [[3606959586, "🌟 SUPER ADMIN 🌟", 4]], -- Pepes029934
+    [[5430089749, "👑 SCRIPT SUPPORT 👑", 4]],  -- random_juanko
+
+    [[3104571469, "👹 ADMIN 👹", 3]],  -- Fannyveg85
+    [[3499460968, "👹 ADMIN 👹", 3]],  -- Slay4211
+    [[5363159329, "👹 ADMIN 👹", 3]],  -- Yelli_46
+
+    [[4747217345, "🔥 PREMIUM 🔥", 2]],  -- johnybustos15
+    [[1534354462, "🔥 PREMIUM 🔥", 2]],  -- emingabermeo15274
+    [[3561858529, "🔥 PREMIUM 🔥", 2]],  -- max_funado2022xd
+    [[292593184, "🔥 PREMIUM 🔥", 2]],  -- DarianaRomero
+    [[5733733679, "🔥 PREMIUM 🔥", 2]],  -- ykz47_L2
+    [[4764417623, "🔥 PREMIUM 🔥", 2]],  -- javier291829729181
+    [[4735027419, "🔥 PREMIUM 🔥", 2]],  -- javierdavid082
+    [[5749242773, "🔥 FOLL4BVRR0S 🔥", 2]] -- A1M_ARTUR0ELINSAN0
+}, 
+
+   ScriptMode = {
+      PerformanceNameList = true, 
+      Logger = false,
+      IgnoreOwnerSecurity = false,
+      Debug = false,
+      Private = false,
+      FreePremium = false,
+      BetaTest = false,
+      NameTitle = "OriginalText",
+      NameServer = "JUANKO MODS XP",
+      ShutDown = false
+    },
+
+   BreakIn2 = {
+      AntiKick = false, 
+      BypassAdonis = false, 
+      AntiModClient = false
+  }, 
+
+   ZombieMichael = {
+     Verification = true,
+     Verzion = "V1.5",
+     ForceBypass = false
+ } 
+} 
+function EncryptTextXP()
+    local length = math.random(5,20)
+    local array = {}
+    for i = 1, length do
+        array[i] = string.char(math.random(32, 126))
+    end
+    return table.concat(array)
+end
+
+Players = game:GetService("Players")
+LocalPlayer = Players.LocalPlayer
+Character = LocalPlayer.Character or game:GetService("Workspace"):FindFirstChild(LocalPlayer.Name) or LocalPlayer.CharacterAdded:Wait()
+RootPart = Character:FindFirstChild("HumanoidRootPart")
+Humanoid = Character:FindFirstChildWhichIsA("Humanoid")
+RunService = game:GetService("RunService")
+return ABCDE

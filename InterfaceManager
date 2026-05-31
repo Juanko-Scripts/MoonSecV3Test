@@ -1,0 +1,258 @@
+local httpService = game:GetService("HttpService")
+local RunService = game:GetService("RunService")
+
+local InterfaceManager = {} do
+	InterfaceManager.Folder = "FluentSettings"
+    InterfaceManager.Settings = {
+        Theme = "Dark",
+        Acrylic = true,
+        Transparency = true,
+        MenuKeybind = "LeftControl"
+    }
+    
+    -- Variables
+    local isBlackWhiteTheme = false
+    local dynamicConnection = nil
+    local FluentCreator = nil -- Para guardar el Creator de FluentXP
+
+    function InterfaceManager:SetFolder(folder)
+		self.Folder = folder;
+		self:BuildFolderTree()
+	end
+
+    function InterfaceManager:SetLibrary(library)
+		self.Library = library
+		-- Intentar obtener el Creator de FluentXP
+		FluentCreator = library and library.Creator
+		if not FluentCreator then
+			-- Buscar en el objeto global
+			FluentCreator = FluentXP and FluentXP.Creator
+		end
+	end
+
+    function InterfaceManager:BuildFolderTree()
+		local paths = {}
+
+		local parts = self.Folder:split("/")
+		for idx = 1, #parts do
+			paths[#paths + 1] = table.concat(parts, "/", 1, idx)
+		end
+
+		table.insert(paths, self.Folder)
+		table.insert(paths, self.Folder .. "/settings")
+
+		for i = 1, #paths do
+			local str = paths[i]
+			if not isfolder(str) then
+				makefolder(str)
+			end
+		end
+	end
+
+    function InterfaceManager:SaveSettings()
+        writefile(self.Folder .. "/options.json", httpService:JSONEncode(InterfaceManager.Settings))
+    end
+
+    function InterfaceManager:LoadSettings()
+        local path = self.Folder .. "/options.json"
+        if isfile(path) then
+            local data = readfile(path)
+            local success, decoded = pcall(httpService.JSONDecode, httpService, data)
+
+            if success then
+                for i, v in next, decoded do
+                    InterfaceManager.Settings[i] = v
+                end
+            end
+        end
+    end
+    
+    function InterfaceManager:StopDynamicColor()
+        if dynamicConnection then
+            dynamicConnection:Disconnect()
+            dynamicConnection = nil
+        end
+        isBlackWhiteTheme = false
+    end
+    
+    function InterfaceManager:ForceUpdate()
+        if FluentCreator and FluentCreator.UpdateTheme then
+            FluentCreator.UpdateTheme()
+        end
+    end
+    
+    function InterfaceManager:StartDynamicColor()
+        self:StopDynamicColor()
+        isBlackWhiteTheme = true
+        
+        dynamicConnection = RunService.Heartbeat:Connect(function()
+            if not isBlackWhiteTheme then return end
+            
+            -- Generar colores RGB aleatorios
+            local r = math.random(0, 50)
+            local g = math.random(0, 50)
+            local b = math.random(0, 50)
+            
+            local r2 = math.random(150, 255)
+            local g2 = math.random(150, 255)
+            local b2 = math.random(150, 255)
+            
+            -- Aplicar colores a getgenv()
+            getgenv().BackgroundXP = Color3.fromRGB(r, g, b)
+            getgenv().OthersColorsFunctions = Color3.fromRGB(r + 20, g + 20, b + 20)
+            getgenv().FullColorOthers = Color3.fromRGB(r2, g2, b2)
+            getgenv().DialogColorY = Color3.fromRGB(math.max(0, r - 5), math.max(0, g - 5), math.max(0, b - 5))
+            getgenv().SubTextX = Color3.fromRGB(math.min(255, r2 - 50), math.min(255, g2 - 50), math.min(255, b2 - 50))
+            getgenv().FrameDialogBorder = Color3.fromRGB(r + 10, g + 10, b + 10)
+            getgenv().TitleXP = Color3.fromRGB(r + 15, g + 15, b + 15)
+            getgenv().DialogIndicator = Color3.fromRGB(math.max(0, r2 - 100), math.max(0, g2 - 100), math.max(0, b2 - 100))
+            getgenv().ButtonBorderY = Color3.fromRGB(r + 25, g + 25, b + 25)
+            getgenv().DialogBorderY = Color3.fromRGB(r + 20, g + 20, b + 20)
+            
+            -- Valores estáticos
+            getgenv().ElementTransparecyY = 0.95
+            getgenv().HoverChangeV = 0.04
+            getgenv().AcrylicNoiseY = 1
+            
+            -- Forzar actualización
+            self:ForceUpdate()
+        end)
+    end
+    
+    function InterfaceManager:ApplyStaticBlackWhite()
+        getgenv().BackgroundXP = Color3.fromRGB(0, 0, 0)
+        getgenv().OthersColorsFunctions = Color3.fromRGB(40, 40, 40)
+        getgenv().FullColorOthers = Color3.fromRGB(255, 255, 255)
+        getgenv().DialogColorY = Color3.fromRGB(15, 15, 15)
+        getgenv().SubTextX = Color3.fromRGB(170, 170, 170)
+        getgenv().FrameDialogBorder = Color3.fromRGB(20, 20, 20)
+        getgenv().TitleXP = Color3.fromRGB(25, 25, 25)
+        getgenv().DialogIndicator = Color3.fromRGB(60, 60, 60)
+        getgenv().ElementTransparecyY = 0.95
+        getgenv().HoverChangeV = 0.04
+        getgenv().ButtonBorderY = Color3.fromRGB(30, 30, 30)
+        getgenv().DialogBorderY = Color3.fromRGB(27, 27, 27)
+        getgenv().AcrylicNoiseY = 1
+        
+        self:ForceUpdate()
+    end
+
+    function InterfaceManager:BuildInterfaceSection(tab)
+        assert(self.Library, "Must set InterfaceManager.Library")
+		local Library = self.Library
+        local Settings = InterfaceManager.Settings
+
+        InterfaceManager:LoadSettings()
+
+		local section = tab:AddSection("Interface")
+		
+		section:AddButton({
+			Title = "🌈 BlackWhite Dinámico",
+			Description = "Colores RGB aleatorios cambiantes",
+			Callback = function()
+				-- Cambiar tema
+				Library:SetTheme("BlackWhite")
+				Settings.Theme = "BlackWhite"
+				InterfaceManager:SaveSettings()
+				
+				-- Iniciar dinámico
+				InterfaceManager:StartDynamicColor()
+				
+				print("🌈 BlackWhite Dinámico ACTIVADO")
+			end
+		})
+		
+		-- BOTÓN: BlackWhite Estático
+		section:AddButton({
+			Title = "⚫ BlackWhite Estático",
+			Description = "Colores fijos originales",
+			Callback = function()
+				-- Cambiar tema
+				Library:SetTheme("BlackWhite")
+				Settings.Theme = "BlackWhite"
+				InterfaceManager:SaveSettings()
+				
+				-- Aplicar estático
+				InterfaceManager:StopDynamicColor()
+				InterfaceManager:ApplyStaticBlackWhite()
+				
+				print("⚫ BlackWhite Estático ACTIVADO")
+			end
+		})
+		
+		-- BOTÓN: Tema Dark
+		section:AddButton({
+			Title = "🌙 Tema Dark",
+			Description = "Volver al tema oscuro normal",
+			Callback = function()
+				Library:SetTheme("Dark")
+				Settings.Theme = "Dark"
+				InterfaceManager:SaveSettings()
+				InterfaceManager:StopDynamicColor()
+				self:ForceUpdate()
+				print("🌙 Tema Dark ACTIVADO")
+			end
+		})
+
+		-- Dropdown original
+		local InterfaceTheme = section:AddDropdown("InterfaceTheme", {
+			Title = "Theme",
+			Description = "Changes the interface theme.",
+			Values = Library.Themes,
+			Default = Settings.Theme,
+			Callback = function(Value)
+				Library:SetTheme(Value)
+                Settings.Theme = Value
+                InterfaceManager:SaveSettings()
+                
+                if Value == "BlackWhite" then
+                    InterfaceManager:StartDynamicColor()
+                else
+                    InterfaceManager:StopDynamicColor()
+                end
+                self:ForceUpdate()
+			end
+		})
+        
+        -- Iniciar según tema actual
+        if Settings.Theme == "BlackWhite" then
+            task.spawn(function()
+                task.wait(0.5)
+                InterfaceManager:StartDynamicColor()
+            end)
+        end
+	
+		if Library.UseAcrylic then
+			section:AddToggle("AcrylicToggle", {
+				Title = "Acrylic",
+				Description = "The blurred background requires graphic quality 8+",
+				Default = Settings.Acrylic,
+				Callback = function(Value)
+					Library:ToggleAcrylic(Value)
+                    Settings.Acrylic = Value
+                    InterfaceManager:SaveSettings()
+				end
+			})
+		end
+	
+		section:AddToggle("TransparentToggle", {
+			Title = "Transparency",
+			Description = "Makes the interface transparent.",
+			Default = Settings.Transparency,
+			Callback = function(Value)
+				Library:ToggleTransparency(Value)
+				Settings.Transparency = Value
+                InterfaceManager:SaveSettings()
+			end
+		})
+	
+		local MenuKeybind = section:AddKeybind("MenuKeybind", { Title = "Minimize Bind", Default = Settings.MenuKeybind })
+		MenuKeybind:OnChanged(function()
+			Settings.MenuKeybind = MenuKeybind.Value
+            InterfaceManager:SaveSettings()
+		end)
+		Library.MinimizeKeybind = MenuKeybind
+    end
+end
+
+return InterfaceManager
