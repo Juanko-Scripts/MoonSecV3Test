@@ -30,5 +30,5 @@ Solo colaboro con seguidores que es algo que no hacen, solo contactame en Signal
 
 # 𝐉𝐔𝐀𝐍𝐊𝐎 𝐌𝐎𝐃𝐒 𝐗𝐏/𝐘𝐓
 
-![ME BTW](https://i.ibb.co/Mxy7CJnv/3cb22fb5-5314-4103-a297-d5e44b247e1b.jpg)
+[![ME BTW](https://i.ibb.co/Mxy7CJnv/3cb22fb5-5314-4103-a297-d5e44b247e1b.jpg)](https://youtube.com/@juankomodsxp)
 [![MUSIC BTW](https://i.ibb.co/q3pdTC07/file-00000000a3c871fdbf0b418ef86c0810.png)](https://youtu.be/e9de2dEXWUw)
