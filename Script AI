@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Prompt Builder</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      /* height: 100vh; */
+    }
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      height: 100%;
+      background: #ffcc00;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+       overflow-y: auto; 
+    }
+    .section-title {
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .section-title button{
+      height:28px;
+    }
+    .item {
+      position: relative;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .item img {
+      width: 100%;
+      display: block;
+      border-radius: 6px;
+    }
+    .item:hover .overlay {
+      opacity: 1;
+    }
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      transition: 0.3s;
+    }
+    .overlay button {
+      background: white;
+      border: none;
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    /* Active border */
+    .active {
+      border: 3px solid #008800;
+    }
+    /* Main preview */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .preview {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #777;
+    }
+    /* Bottom bar */
+    .bottom-bar {
+      background: white;
+      border-top: 1px solid #ddd;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .bottom-bar input {
+      flex: 1;
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .bottom-bar select {
+      padding: 6px;
+    }
+    .generate-btn {
+      background: #ffcc00;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); }
+    #modal .inner { background:#FFD700; width:600px; height:470px; margin:50px auto; padding:20px; border-radius:15px; }
+	  #preview {  display: flex;  align-items: center;  border-color: #222; background: #FFD600;  /* kuning */  border-radius: 8px;  padding: 10px;  margin-bottom: 10px;}
+    #preview img { width:100%; height:100%; object-fit:cover; }
+    #userPrompt textarea { width:100%; height:60px; border-radius:8px; border:1px solid #ccc; padding:5px; margin-bottom:10px; }
+    button { padding:8px 15px; border:none; border-radius:8px; cursor:pointer; }
+    .ok-btn { background:#888; color:#fff; }
+    .close-btn { background:#999; color:#fff; float:right; }
+    .list { font-size: 13px; margin-top: 10px; }
+    #viewer{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;z-index:100}
+    #viewer img{max-width:95%;max-height:95%;border-radius:8px;box-shadow:0 0 12px rgba(255,255,255,0.8)}
+
+    .reference-box {
+  display: flex;
+  align-items: center;
+  background: #FFD600;  /* kuning */
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.reference-img {
+  position: relative;
+  width: 256px;
+  height: 256px;
+  flex-shrink: 0;
+  border-style:dotted;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.reference-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.reference-text {
+  position: relative;
+  margin-left:20px;
+  width: 256px;
+  height: 256px;
+  flex-shrink: 0;
+  border-color:#999;
+  border-style:solid;
+  border-radius: 8px;
+  overflow: hidden;
+}
+  .checkbox-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: #ccc;
+    border: none;
+    border-radius: 6px;
+    width: 12px;
+    height: 12px;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 5px;
+    text-align: left;
+  }
+  .checkbox-btn.active {
+    background: #ffcc00;
+    color: #000;
+    font-weight: bold;
+  }
+  .delete-btn {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    background: #ccc;
+    border: none;
+    border-radius: 6px;
+    width: 12px;
+    height: 12px;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 5px;
+    text-align: left;
+  }
+
+  .edit-btn {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    background: #ccc;
+    border: none;
+    border-radius: 6px;
+    width: 12px;
+    height: 12px;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 5px;
+    text-align: left;
+  }
+    
+    
+  </style>
+</head>
+<body>
+  
+  <!---- ///////// SIDEBAR //////////// -->
+  <div class="sidebar">
+    <div>
+      <h3>References</h3>
+  		<textarea style="width:100%" id="userPrompt" onchange="userPrompt=this.value;" placeholder="Describe your prompt idea here..."></textarea>    
+      <button onclick="generate()">Create Prompt</button>
+    </div>
+    <div>
+      <div class="section-title">SUBJECT <button title="Add Subject Reference" onclick="addReference('subject')">+</button></div>
+      <div id="subject-list"></div>
+    </div>
+    <div>
+      <div class="section-title">SCENE <button title="Add Scene Reference" onclick="addReference('scene')">+</button></div>
+      <div id="scene-list"></div>
+    </div>
+    <div>
+      <div class="section-title">STYLE <button "Add Style Reference" onclick="addReference('style')">+</button></div>
+      <div id="style-list"></div>
+    </div>
+  </div>
+  <!---- ///////// MAIN //////////// -->
+  <div id="main" style="display:block">
+    [imagen(settings)]
+  </div>
+  
+  <!---- ///////// MODAL DIALOG //////////// -->
+	<div id="modal">
+	  <div class="inner">
+		<button class="close-btn" onclick="closeDlgReference()">X</button>
+		<h3 id="modalTitle">Add Detail</h3>
+		<div id="preview">
+  		<div id="reference-img" class="reference-img"></div>
+			<div id="reference-text" class="reference-text"></div>
+		</div>
+		<textarea style="width:100%" id="promptInput" placeholder="Describe your prompt here..."></textarea>
+        <button onclick="generateReference()">Preview</button>
+		<button class="ok-btn" onclick="confirmReference()">OK</button>
+	  </div>
+	</div>
+  
+<!-//////- Viewer Modal -////////->
+<div id="viewer"><div class="viewerImage" style="width:768px; height:768px;"><img style="width:100%; height:100%;" src=""></div></div>
+
+<script>
+
+  /* ===== Image Viewer ===== */
+  const viewer = document.getElementById("viewer");
+  viewer.onclick = ()=> viewer.style.display="none";
+  document.addEventListener("keydown", e=>{if(e.key==="Escape")viewer.style.display="none"});
+
+  window.onload = function() {
+    const stylebtn = document.querySelector('select[data-name="artStyle"]');
+    //alert(stylebtn);
+    stylebtn.addEventListener("change", function (e) {
+      alert("Tambahan dulu");
+    }, { capture: true }); // 🔥 ini bikin jalan duluan  
+  }
+  
+  function showViewer(src){
+    let img = viewer.querySelector("img");
+    img.src = src;
+    viewer.style.display="flex";
+  }
+
+  let active_subject = {};
+  let active_scene = "";
+  let active_style = "";
+  
+  let data = JSON.parse(localStorage.getItem("promptBuilderData")) || {
+    subject: [],
+    scene: [],
+    style: []
+  };
+
+  async function generate(){
+    promptDescription = document.querySelector('textarea[data-name="description"]');
+    promptDescription.value = "Creating prompt.. please wait";
+    ai_result = await ai(aiSettings);
+    promptDescription.value = ai_result.text;
+    input.description = ai_result.text;
+  }
+  
+  function saveReference() {
+    localStorage.setItem("promptBuilderData", JSON.stringify(data));
+    showReference();
+  }
+
+  async function addReference(type) {
+    let result = await dlgReference(type);
+    if (!result) return;
+    let url = result.url;
+    let prompt = result.prompt;
+  
+    if (type === "subject") {
+      // langsung tambahkan dengan active:true
+      data[type].push({ url, prompt, active: true });
+    } else {
+      // scene / style → nonaktifkan semua lama dulu
+      data[type].forEach(i => i.active = false);
+      // lalu tambahkan yg baru sebagai active:true
+      data[type].push({ url, prompt, active: true });
+    }
+  
+    saveReference();
+  }
+
+  function EditReference(type, index) {
+    let item = data[type][index];
+    currentType = type;
+    currentEditIndex = index;   // simpan index
+    currentUrl = item.url;
+    currentPrompt = item.prompt;
+  
+    // Tampilkan modal dengan isi existing
+    document.getElementById("modalTitle").innerText = "Edit " + type;
+    document.getElementById("reference-img").innerHTML = `<img src="${item.url}" alt="${item.prompt}">`;
+    document.getElementById("reference-text").innerHTML = item.prompt;
+    document.getElementById("promptInput").value = item.prompt;
+  
+    document.getElementById("modal").style.display = "block";
+  
+    promptResolve = (result)=>{
+      if (!result) return;
+      // Update data
+      data[type][index] = { 
+        url: result.url || currentUrl, 
+        prompt: result.prompt || currentPrompt, 
+        active: item.active 
+      };
+      saveReference();
+    };
+  }
+
+  
+  function closeDlgReference(){
+    document.getElementById("modal").style.display = "none";
+    promptResolve(null);
+  }
+  
+  function dlgReference(type){
+    document.getElementById("reference-img").innerHTML = "";
+    document.getElementById("reference-text").innerHTML = "";
+    promptInput = document.getElementById("promptInput");
+    promptInput.value = "";
+    promptInput.style = "width:100%";
+    return new Promise((resolve)=>{
+      currentType = type;
+      document.getElementById("modalTitle").innerText = "Masukkan prompt untuk " + type;
+      document.getElementById("promptInput").value = "";
+      // document.getElementById("previewArea").style.display = "none";
+      document.getElementById("modal").style.display = "block";
+      promptResolve = resolve;
+    });
+  }
+  
+  async function generateReference(){
+    currentUrl="";
+    currentPrompt = document.getElementById("promptInput").value;
+    if(!currentPrompt) return;
+    referenceImg = document.getElementById("reference-img");
+    referenceImg.innerHTML = "Creating image..."
+    let result = await image(currentPrompt + ((active_style)? active_style : ""));
+    referenceImg.innerHTML = "";
+    let img = document.createElement("img");
+    img.src = result.dataUrl;
+    img.alt = currentPrompt;
+    referenceImg.append(img);
+    referenceTxt = document.getElementById("reference-text");
+    referenceTxt.innerHTML = currentPrompt;
+    currentUrl = result.dataUrl;           //"https://image.pollinations.ai/prompt/"+encodeURIComponent(currentPrompt);
+  }
+  
+  function confirmReference(){
+    document.getElementById("modal").style.display = "none";
+    promptResolve({prompt: currentPrompt, url: currentUrl, type: currentType});
+  }
+
+  function toggleActive(type, index) {
+    if (type === "subject") {
+      // Subject bisa lebih dari satu, max 3
+      let activeCount = data.subject.filter(i => i.active).length;
+      if (!data[type][index].active && activeCount >= 3) {
+        alert("Maksimal 3 Subject aktif!");
+        return;
+      }
+      data[type][index].active = !data[type][index].active;
+  
+    } else {
+      // Scene / Style
+      if (data[type][index].active) {
+        // kalau item ini sedang aktif → matikan (biar semua non-aktif)
+        data[type][index].active = false;
+      } else {
+        // aktifkan hanya item yg diklik, nonaktifkan semua lainnya
+        data[type].forEach((i, idx) => i.active = (idx === index));
+      }
+    }
+  
+    saveReference();
+  }
+
+  function deleteReference(type, index) {
+    if (confirm("Hapus item ini?")) {
+      data[type].splice(index, 1);
+      saveReference();
+    }
+  }
+
+  function updateActiveVariables() {
+    // reset
+    active_subject = {};
+    active_scene = "";
+    active_style = "";
+
+    // subjects
+    let activeSubs = data.subject.filter(i => i.active);
+    activeSubs.forEach((s, idx) => {
+      active_subject[idx+1] = s.prompt;
+    });
+
+    // scene
+    let activeScene = data.scene.find(i => i.active);
+    if (activeScene) active_scene = activeScene.prompt;
+
+    // style
+    let activeStyle = data.style.find(i => i.active);
+    if (activeStyle) active_style = activeStyle.prompt;
+  }
+
+  function showReference() {
+    ["subject","scene","style"].forEach(type => {
+      let container = document.getElementById(type+"-list");
+      container.innerHTML = "";
+      data[type].forEach((item, i) => {
+        let div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `
+          <img onclick="showViewer('${item.url}');" src="${item.url}" alt="${item.prompt}" title="${item.prompt}">
+          <button class="checkbox-btn ${item.active ? 'active':''}" title="Toggle Active/Non-active Reference"
+            onclick="event.stopPropagation();toggleActive('${type}',${i})">${item.active ? "✔" : "&nbsp;"}</button>
+          <button class="delete-btn" title="Delete Reference"
+            onclick="event.stopPropagation();deleteReference('${type}',${i})">🗑</button>
+          <button class="edit-btn" title="Edit Reference"
+            onclick="event.stopPropagation();EditReference('${type}',${i})">✎</button>
+        `;
+        container.appendChild(div);
+      });
+    });
+    updateActiveVariables();
+    console.log("active_subject:", active_subject, 
+                "active_scene:", active_scene, 
+                "active_style:", active_style);
+  }
+
+  showReference();
+
+</script>
+
+</body>
+</html>
